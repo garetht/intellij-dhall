@@ -1,0 +1,881 @@
+{
+    parserClass="org.intellij.plugins.dhall.parser.DhallParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="Dhall"
+    psiImplClassSuffix="Impl"
+    psiPackage="org.intellij.plugins.dhall.psi"
+    psiImplPackage="org.intellij.plugins.dhall.psi.impl"
+
+    elementTypeHolderClass="org.intellij.plugins.dhall.psi.DhallTypes"
+    elementTypeClass="org.intellij.plugins.dhall.psi.DhallElementType"
+    tokenTypeClass="org.intellij.plugins.dhall.psi.DhallTokenType"
+
+    tokens=[
+        // stringlike entities to be manually parsed
+        // 1. labels, keywords, builtins
+        // 2. braced and non-braced comments
+        // 3. single and double-quoted strings
+        // Flyweight entities for characters
+        TAB = "regexp:\x09"
+        SPACE="regexp:\x20" // Space
+        EXCLAMATION="!" // Exclamation mark regexp:\x21
+        DOUBLE_QUOTE="regexp:\x22" // Double quotes (or speech marks)
+        HASH_SIGN="#" // Number regexp:\x23
+        DOLLAR="$" // Dollar regexp:\x24
+        PERCENT="%" // Percent sign regexp:\x25
+        AMPERSAND="&" // Ampersand regexp:\x26
+        SINGLE_QUOTE="'" // Single quote regexp:\x27
+        LEFT_PAREN="(" // Open parenthesis (or open bracket) regexp:\x28
+        RIGHT_PAREN=")" // Close parenthesis (or close bracket) regexp:\x29
+        ASTERISK="*" // Asterisk regexp:\x2A
+        PLUS="+" // Plus regexp:\x2B
+        COMMA="," // Comma regexp:\x2C
+        MINUS="-" // Hyphen regexp:\x2D
+        DOT="." // Period, dot or full stop regexp:\x2E
+        SLASH="/" // Slash or divide regexp:\x2F
+        ZERO="0" // Zero regexp:\x30
+        ONE="1" // One regexp:\x31
+        TWO="2" // Two regexp:\x32
+        THREE="3" // Three regexp:\x33
+        FOUR="4" // Four regexp:\x34
+        FIVE="5" // Five regexp:\x35
+        SIX="6" // Six regexp:\x36
+        SEVEN="7" // Seven regexp:\x37
+        EIGHT="8" // Eight regexp:\x38
+        NINE="9" // Nine regexp:\x39
+        COLON=":" // Colon regexp:\x3A
+        SEMICOLON=";" // Semicolon regexp:\x3B
+        LT="<" // ess than (or open angled bracket) regexp:\x3C
+        EQUALS="=" // Equals regexp:\x3D
+        GT=">" // Greater than (or close angled bracket) regexp:\x3E
+        QUESTION="?" // Question mark. regexp:\x3F
+        AT="@" // At symbol. regexp:\x40
+        UA="A" // Uppercase. regexp:\x41
+        UB="B" // Uppercase. regexp:\x42
+        UC="C" // Uppercase. regexp:\x43
+        UD="D" // Uppercase. regexp:\x44
+        UE="E" // Uppercase. regexp:\x45
+        UF="F" // Uppercase. regexp:\x46
+//        UG="G" // Uppercase. regexp:\x47
+//        UH="H" // Uppercase. regexp:\x48
+        UI="I" // Uppercase. regexp:\x49
+//        UJ="J" // Uppercase. regexp:\x4A
+        UK="K" // Uppercase. regexp:\x4B
+        UL="L" // Uppercase. regexp:\x4C
+        UM="M" // Uppercase. regexp:\x4D
+        UN="N" // Uppercase. regexp:\x4E
+        UO="O" // Uppercase. regexp:\x4F
+//        UP="P" // Uppercase. regexp:\x50
+//        UQ="Q" // Uppercase. regexp:\x51
+//        UR="R" // Uppercase. regexp:\x52
+        US="S" // Uppercase. regexp:\x53
+        UT="T" // Uppercase. regexp:\x54
+//        UU="U" // Uppercase. regexp:\x55
+//        UV="V" // Uppercase. regexp:\x56
+//        UW="W" // Uppercase. regexp:\x57
+//        UX="X" // Uppercase. regexp:\x58
+//        UY="Y" // Uppercase. regexp:\x59
+        UZ="Z" // Uppercase. regexp:\x5A
+        UALPHA="regexp:[GHJPQRUVWXY]" // catchall for all other uppercase letters
+        LEFT_SQUARE_BRACKET="[" // Opening bracket regexp:\x5B
+        BACKSLASH="regexp:\x5C" // Backslash
+        RIGHT_SQUARE_BRACKET="]" // Closing bracket regexp:\x5D
+        CIRCUMFLEX="^" // Caret - circumflex regexp:\x5E
+        UNDERSCORE="_" // Underscore regexp:\x5F
+        GRAVE="regexp:\x60" // Grave accent
+        a="a" // Lowercase. regexp:\x61
+        b="b" // Lowercase. regexp:\x62
+        c="c" // Lowercase. regexp:\x63
+        d="d" // Lowercase. regexp:\x64
+        e="e" // Lowercase. regexp:\x65
+        f="f" // Lowercase. regexp:\x66
+        g="g" // Lowercase. regexp:\x67
+        h="h" // Lowercase. regexp:\x68
+        i="i" // Lowercase. regexp:\x69
+//        j="j" // Lowercase. regexp:\x6A
+        k="k" // Lowercase. regexp:\x6B
+        l="l" // Lowercase. regexp:\x6C
+        m="m" // Lowercase. regexp:\x6D
+        n="n" // Lowercase. regexp:\x6E
+        o="o" // Lowercase. regexp:\x6F
+        p="p" // Lowercase. regexp:\x70
+//        q="q" // Lowercase. regexp:\x71
+        r="r" // Lowercase. regexp:\x72
+        s="s" // Lowercase. regexp:\x73
+        t="t" // Lowercase. regexp:\x74
+        u="u" // Lowercase. regexp:\x75
+        v="v" // Lowercase. regexp:\x76
+        w="w" // Lowercase. regexp:\x77
+        x="x" // Lowercase. regexp:\x78
+        y="y" // Lowercase. regexp:\x79
+//        z="z" // Lowercase. regexp:\x7A
+        LALPHA="regexp:[jqz]"
+        LEFT_BRACE="{" // Opening brace regexp:\x7B
+        PIPE="|" // Vertical bar regexp:\x7C
+        RIGHT_BRACE="}" // Closing brace regexp:\x7D
+        TILDE="~" // Equivalency sign - tilde regexp:\x7E
+        DELETE="regexp:\x7F" // Delete - counted as a printable character here
+        // These only tokenize the special characters. The definition
+        // including regular characters is given as grammar rules.
+        UNICODE_FORALL = "regexp:\u2200" // ∀
+        UNICODE_COMBINE       = "regexp:\u2227" // Combine. /\
+        UNICODE_COMBINE_TYPES = "regexp:\u2A53" // Combine types. //\\
+        UNICODE_EQUIVALENT    = "regexp:\u2261" // Equivalent. ===
+        UNICODE_PREFER        = "regexp:\u2AFD" // Prefer: //
+        UNICODE_LAMBDA        = "regexp:\u03BB" // Lambda: \
+        UNICODE_ARROW         = "regexp:\u2192" // Arrow: ->
+        NEW_LINE =      "regexp:\x0a" // \n
+        CARRIAGE_RETURN = "regexp:\x0d" // \r
+        // we can encode all of valid-non-ascii in here - any other significant character
+        // will be filtered out through precedence
+        // valid-non-ascii =
+        //       %x80-D7FF
+        //     ; %xD800-DFFF = surrogate pairs
+        //     / %xE000-FFFD
+        //     ; %xFFFE-FFFF = non-characters
+        //     / %x10000-1FFFD
+        //     ; %x1FFFE-1FFFF = non-characters
+        //     / %x20000-2FFFD
+        //     ; %x2FFFE-2FFFF = non-characters
+        //     / %x30000-3FFFD
+        //     ; %x3FFFE-3FFFF = non-characters
+        //     / %x40000-4FFFD
+        //     ; %x4FFFE-4FFFF = non-characters
+        //     / %x50000-5FFFD
+        //     ; %x5FFFE-5FFFF = non-characters
+        //     / %x60000-6FFFD
+        //     ; %x6FFFE-6FFFF = non-characters
+        //     / %x70000-7FFFD
+        //     ; %x7FFFE-7FFFF = non-characters
+        //     / %x80000-8FFFD
+        //     ; %x8FFFE-8FFFF = non-characters
+        //     / %x90000-9FFFD
+        //     ; %x9FFFE-9FFFF = non-characters
+        //     / %xA0000-AFFFD
+        //     ; %xAFFFE-AFFFF = non-characters
+        //     / %xB0000-BFFFD
+        //     ; %xBFFFE-BFFFF = non-characters
+        //     / %xC0000-CFFFD
+        //     ; %xCFFFE-CFFFF = non-characters
+        //     / %xD0000-DFFFD
+        //     ; %xDFFFE-DFFFF = non-characters
+        //     / %xE0000-EFFFD
+        //     ; %xEFFFE-EFFFF = non-characters
+        //     / %xF0000-FFFFD
+        //     ; %xFFFFE-FFFFF = non-characters
+        //     / %x100000-10FFFD
+        //     ; %x10FFFE-10FFFF = non-characters
+        VALID_NON_ASCII = "regexp:[\u0080-\uD7FF\uE000-\uFFFD\U010000-\U01FFFD\U020000-\U02FFFD\U030000-\U03FFFD\U040000-\U04FFFD\U050000-\U05FFFD\U060000-\U06FFFD\U070000-\U07FFFD\U080000-\U08FFFD\U090000-\U09FFFD\U0A0000-\U0AFFFD\U0B0000-\U0BFFFD\U0C0000-\U0CFFFD\U0D0000-\U0DFFFD\U0E0000-\U0EFFFD\U0F0000-\U0FFFFD\U100000-\U10FFFD]"
+    ]
+}
+
+root ::= complete-expression
+
+complete-expression ::= whsp expression whsp
+
+expression ::=
+    // "\(x : a) -> b"
+      lambda whsp LEFT_PAREN whsp nonreserved-label whsp COLON whsp1 expression whsp RIGHT_PAREN whsp arrow whsp expression
+
+    // "if a then b else c"
+    | if whsp1 expression whsp then whsp1 expression whsp else whsp1 expression
+
+    // "let x : t = e1 in e2"
+    // "let x     = e1 in e2"
+    // We allow dropping the `in` between adjacent let-expressions; the following are equivalent:
+    // "let x = e1 let y = e2 in e3"
+    // "let x = e1 in let y = e2 in e3"
+    | let-binding+ in whsp1 expression
+
+    // "forall (x : a) -> b"
+    | forall whsp LEFT_PAREN whsp nonreserved-label whsp COLON whsp1 expression whsp RIGHT_PAREN whsp arrow whsp expression
+
+    // "a -> b"
+    // NOTE: Backtrack if parsing this alternative fails
+    | operator-expression whsp arrow whsp expression
+
+    // "merge e1 e2 : t"
+    // NOTE: Backtrack if parsing this alternative fails since we can't tell
+    // from the keyword whether there will be a type annotation or not
+    | merge whsp1 import-expression whsp1 import-expression whsp COLON whsp1 application-primary
+
+    // "[] : t"
+    // NOTE: Backtrack if parsing this alternative fails since we can't tell
+    // from the opening bracket whether or not this will be an empty list or
+    // a non-empty list
+    | empty-list-literal
+
+    // "toMap e : t"
+    // NOTE: Backtrack if parsing this alternative fails since we can't tell
+    // from the keyword whether there will be a type annotation or not
+    | toMap whsp1 import-expression whsp COLON whsp1 application-primary
+
+    // "assert : Natural/even 1 === False"
+    | assert whsp COLON whsp1 expression
+
+    // "x : t"
+    | annotated-expression
+
+
+simple-label ::= keyword simple-label-next-char+
+               | !keyword (simple-label-first-char simple-label-next-char*)
+simple-label-first-char ::= alpha | UNDERSCORE
+simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE
+
+
+label ::= GRAVE quoted-label GRAVE | simple-label
+
+
+//quoted-label-char =
+//      %x20-5F
+//        ; %x60 = '`'
+//    / %x61-7E
+quoted-label-char ::= pre_digit_printable
+              | between_digit_upper_alpha
+              | between_upper_lower_alpha_no_grave
+              | alphanum
+
+quoted-label ::= quoted-label-char+
+
+nonreserved-label ::= builtin simple-label-next-char+
+                    | !builtin label
+
+
+// Special Symbols
+combine ::= UNICODE_COMBINE | SLASH BACKSLASH
+combine-types ::= UNICODE_COMBINE_TYPES | SLASH SLASH BACKSLASH BACKSLASH
+equivalent ::= UNICODE_EQUIVALENT | EQUALS EQUALS EQUALS
+prefer ::= UNICODE_PREFER | SLASH SLASH !(BACKSLASH BACKSLASH)
+lambda ::= UNICODE_LAMBDA | BACKSLASH
+arrow ::= UNICODE_ARROW | MINUS GT
+complete ::= COLON COLON
+
+// Keywords
+keyword ::= if
+        | then
+        | else
+        | let
+        | in
+        | using
+        | missing
+        | as
+        | infinity
+        | nan
+        | merge
+        | some
+        | toMap
+        | assert
+        | forall
+
+if                    ::= i f
+then                  ::= t h e n
+else                  ::= e l s e
+let                   ::= l e t
+in                    ::= i n
+as                    ::= a s
+using                 ::= u s i n g
+merge                 ::= m e r g e
+missing               ::= m i s s i n g
+infinity              ::= UI n f i n i t y
+nan                   ::= UN a UN
+some                  ::= US o m e
+toMap                 ::= t o UM a p
+assert                ::= a s s e r t
+forall                ::= UNICODE_FORALL | f o r a l l;
+
+// Reserved identifiers
+optional ::= UO p t i o n a l
+textid ::= UT e x t
+list ::= UL i s t
+location ::= UL o c a t i o n
+
+// Reserved identifiers that are also builtins
+
+builtin ::=
+      natural-fold
+    | natural-build
+    | natural-iszero
+    | natural-even
+    | natural-odd
+    | natural-tointeger
+    | natural-show
+    | integer-todouble
+    | integer-show
+    | integer-negate
+    | integer-clamp
+    | natural-subtract
+    | double-show
+    | list-build
+    | list-fold
+    | list-length
+    | list-head
+    | list-last
+    | list-indexed
+    | list-reverse
+    | optional-fold
+    | optional-build
+    | text-show
+    | bool
+    | true
+    | false
+    | optional
+    | none
+    | natural
+    | integer
+    | double
+    | textid
+    | list
+    | type
+    | kind
+    | sort
+
+bool ::= UB o o l
+true ::= UT r u e
+false ::= UF a l s e
+none ::= UN o n e
+natural ::= UN a t u r a l
+integer ::= UI n t e g e r
+double ::= UD o u b l e
+type ::= UT y p e
+kind ::= UK i n d
+sort ::= US o r t
+natural-fold ::= UN a t u r a l MINUS f o l d
+natural-build ::= UN a t u r a l MINUS b u i l d
+natural-iszero ::= UN a t u r a l MINUS i s UZ e r o
+natural-even ::= UN a t u r a l MINUS e v e n
+natural-odd ::= UN a t u r a l MINUS o d d
+natural-tointeger ::= UN a t u r a l MINUS t o UI n t e g e r
+natural-show ::= UN a t u r a l MINUS s h o w
+natural-subtract ::= UN a t u r a l MINUS s u b t r a c t
+integer-todouble ::= UI n t e g e r MINUS t o UD o u b l e
+integer-show ::= UI n t e g e r MINUS s h o w
+integer-negate ::= UI n t e g e r MINUS n e g a t e
+integer-clamp ::= UI n t e g e r MINUS c l a m p
+double-show ::= UD o u b l e MINUS s h o w
+list-build ::= UL i s t MINUS b u i l d
+list-fold ::= UL i s t MINUS f o l d
+list-length ::= UL i s t MINUS l e n g t h
+list-head ::= UL i s t MINUS h e a d
+list-last ::= UL i s t MINUS l a s t
+list-indexed ::= UL i s t MINUS i n d e x e d
+list-reverse ::= UL i s t MINUS r e v e r s e
+optional-fold ::= UO p t i o n a l MINUS f o l d
+optional-build ::= UO p t i o n a l MINUS b u i l d
+text-show ::= UT e x t MINUS s h o w
+
+double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
+//double-quote-char =
+//      %x20-21
+//        ; %x22 = '"'
+//    / %x23-5B
+//        ; %x5C = "\"
+//    / %x5D-7F
+//    / valid-non-ascii
+double-quote-char ::= pre_digit_printable_no_double_quote
+                    | digit
+                    | between_digit_upper_alpha
+                    | upper_alpha
+                    | between_upper_lower_alpha_no_backslash
+                    | lower_alpha
+                    | post_lower_alpha_printable
+                    | VALID_NON_ASCII
+
+
+double-quote-chunk ::=
+      interpolation
+      // '\'    Beginning of escape sequence
+    | BACKSLASH double-quote-escaped
+    | double-quote-char
+
+double-quote-escaped ::= DOUBLE_QUOTE
+                       | DOLLAR
+                       | BACKSLASH
+                       | SLASH
+                       | b // 'b'    backspace       U+0008
+                       | f // 'f'    form feed       U+000C
+                       | n // 'n'    line feed       U+000A
+                       | r // 'r'    carriage return U+000D
+                       | t // 't'    tab             U+0009
+                       | u unicode-escape
+
+
+single-quote-continue ::= interpolation single-quote-continue
+                        | escaped-quote-pair single-quote-continue
+                        | escaped-interpolation single-quote-continue
+                        | single-quote-char single-quote-continue
+                        | SINGLE_QUOTE SINGLE_QUOTE
+
+escaped-quote-pair ::= SINGLE_QUOTE SINGLE_QUOTE SINGLE_QUOTE
+
+escaped-interpolation ::= SINGLE_QUOTE SINGLE_QUOTE DOLLAR LEFT_BRACE
+
+single-quote-char ::= all_ascii_printable
+                    | TAB
+                    | end-of-line
+                    | VALID_NON_ASCII
+
+single-quote-literal ::= SINGLE_QUOTE SINGLE_QUOTE end-of-line single-quote-continue
+
+interpolation ::= DOLLAR LEFT_BRACE complete-expression RIGHT_BRACE
+
+unicode-escape ::= unbraced-escape | LEFT_BRACE braced-escape RIGHT_BRACE
+
+braced-escape ::= ZERO* braced-codepoint
+
+unbraced-escape ::= (digit | UA | UB | UC) hexdig hexdig hexdig
+                  | UD (ZERO | ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN) hexdig hexdig
+                  // %xD800-DFFF Surrogate pairs
+                  | UE hexdig hexdig hexdig
+                  | UF hexdig hexdig (digit | UA | UB | UC | UD)
+                  // %xFFFE-FFFF Non-characters
+
+braced-codepoint ::= (ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE | UA | UB | UC | UD | UE | UF | ONE ZERO) unicode-suffix
+                    | unbraced-escape
+                    | (hexdig hexdig hexdig)+
+
+unicode-suffix ::= (digit | UA | UB | UC | UD | UE) hexdig hexdig hexdig
+                | UF hexdig hexdig (digit | UA | UB | UC | UD)
+
+exponent ::= e (PLUS | MINUS)? digit*
+
+numeric-double-literal ::= (PLUS | MINUS)? digit+ ( DOT digit+ exponent? | exponent)
+
+minus-infinity-literal ::= MINUS infinity
+plus-infinity-literal ::= infinity
+
+primitive-expression ::=
+    // "2.0"
+      double-literal
+
+    // "2"
+    | natural-literal
+
+    // "+2"
+    | integer-literal
+
+    // '"ABC"'
+    | text-literal
+
+    // "{ foo = 1      , bar = True }"
+    // "{ foo : Integer, bar : Bool }"
+    | LEFT_BRACE whsp (COMMA whsp)? record-type-or-literal whsp RIGHT_BRACE
+
+    // "< Foo : Integer | Bar : Bool >"
+    // "< Foo | Bar : Bool >"
+    | LT whsp [ PIPE whsp ] union-type whsp GT
+
+    // "[1, 2, 3]"
+    | non-empty-list-literal
+
+    // "x"
+    // "x@2"
+    | identifier
+
+    // "( e )"
+    | LEFT_PAREN complete-expression RIGHT_PAREN {extends=operator-expression}
+
+identifier ::= variable | builtin
+
+variable ::= nonreserved-label (whsp AT whsp natural-literal)?
+
+record-type-or-literal ::=
+      empty-record-literal
+    | non-empty-record-type-or-literal
+    | empty-record-type
+
+empty-record-literal ::= EQUALS
+empty-record-type ::=
+
+non-empty-record-type-or-literal ::= any-label-or-some whsp (non-empty-record-literal | non-empty-record-type)
+
+non-empty-record-type ::= COLON whsp1 expression (whsp COMMA whsp record-type-entry)*
+record-type-entry ::= any-label-or-some whsp COLON whsp1 expression
+
+non-empty-record-literal ::= EQUALS whsp expression (whsp COMMA whsp record-literal-entry)*
+record-literal-entry ::= any-label-or-some whsp EQUALS whsp expression
+
+union-type ::=
+      non-empty-union-type
+    | empty-union-type
+
+empty-union-type ::=
+
+non-empty-union-type ::=
+    union-type-entry (whsp PIPE whsp union-type-entry)*
+
+//; x : Natural
+//; x
+union-type-entry ::= any-label-or-some (whsp COLON whsp1 expression)?
+
+non-empty-list-literal ::=
+    LEFT_SQUARE_BRACKET whsp (COMMA whsp)? expression whsp (COMMA whsp expression whsp)* RIGHT_SQUARE_BRACKET
+
+// EXPRESSION tower of precedence
+
+//  Nonempty-whitespace to disambiguate `env:VARIABLE` from type annotations
+annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
+
+//  "let x = e1"
+let-binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp
+
+//  "[] : t"
+empty-list-literal ::=
+    LEFT_SQUARE_BRACKET whsp (COMMA whsp)? RIGHT_SQUARE_BRACKET whsp COLON whsp1 application-primary
+
+operator-expression ::= import-alt-expression
+                      | or-expression
+                      | plus-expression
+                      | text-append-expression
+                      | list-append-expression
+                      | and-expression
+                      | combine-expression
+                      | prefer-expression
+                      | combine-types-expression
+                      | times-expression
+                      | equal-expression
+                      | not-equal-expression
+                      | equivalent-expression
+                      | application-primary
+                      | import-expression
+                      | completion-primary
+                      | selector-primary
+                      | primitive-expression
+
+// Nonempty-whitespace to disambiguate `http://a/a?a`
+import-alt-expression    ::= operator-expression whsp QUESTION whsp1 operator-expression                {extends = operator-expression}
+or-expression            ::= operator-expression whsp PIPE PIPE whsp operator-expression                {extends = operator-expression}
+// Nonempty-whitespace to disambiguate `f +2`
+plus-expression          ::= operator-expression whsp PLUS whsp1 operator-expression                    {extends = operator-expression}
+text-append-expression   ::= operator-expression whsp PLUS PLUS whsp operator-expression                {extends = operator-expression}
+list-append-expression   ::= operator-expression whsp HASH_SIGN whsp operator-expression                {extends = operator-expression}
+and-expression           ::= operator-expression whsp AMPERSAND AMPERSAND whsp operator-expression      {extends = operator-expression}
+combine-expression       ::= operator-expression whsp combine whsp operator-expression                  {extends = operator-expression}
+prefer-expression        ::= operator-expression whsp prefer whsp operator-expression                   {extends = operator-expression}
+combine-types-expression ::= operator-expression whsp combine-types whsp operator-expression            {extends = operator-expression}
+times-expression         ::= operator-expression whsp ASTERISK whsp operator-expression                 {extends = operator-expression}
+equal-expression         ::= operator-expression whsp EQUALS EQUALS whsp operator-expression            {extends = operator-expression}
+not-equal-expression     ::= operator-expression whsp EXCLAMATION EQUALS whsp operator-expression       {extends = operator-expression}
+equivalent-expression    ::= operator-expression whsp equivalent whsp operator-expression               {extends = operator-expression}
+
+// Import expressions need to be separated by some whitespace, otherwise there
+// would be ambiguity: `./ab` could be interpreted as "import the file `./ab`",
+// or "apply the import `./a` to label `b`"
+application-primary ::=
+      first-application-expression application-expression* {extends = operator-expression}
+
+// Possibly necessary so that the parser doesn't overly eagerly
+// attempt
+left application-expression ::= whsp1 import-expression {extends = operator-expression}
+
+first-application-expression ::=
+    // "merge e1 e2"
+      merge whsp1 import-expression whsp1 import-expression
+
+    // "Some e"
+    | some whsp1 import-expression
+
+    // "toMap e"
+    | toMap whsp1 import-expression
+    | import-expression {extends = operator-expression}
+
+
+import-expression ::= import | completion-primary {extends = operator-expression}
+
+local ::=
+    parent-path
+    | here-path
+    | home-path
+    // NOTE: Backtrack if parsing this alternative fails
+    //
+    // This is because the first character of this alternative will be "/", but
+    // if the second character is "/" or "\" then this should have been parsed
+    // as an operator instead of a path
+    | absolute-path
+
+parent-path ::= DOT DOT path  // Relative path
+here-path ::= DOT  path  // Relative path
+home-path ::= TILDE  path  // Home-anchored path
+absolute-path ::= path  // Absolute path
+
+path-character ::= EXCLAMATION
+                | DOLLAR
+                | PERCENT
+                | AMPERSAND
+                | SINGLE_QUOTE
+                | ASTERISK
+                | PLUS
+                | MINUS
+                | DOT
+                | digit
+                | COLON
+                | SEMICOLON
+                | EQUALS
+                | AT
+                | upper_alpha
+                | CIRCUMFLEX
+                | UNDERSCORE
+                | GRAVE
+                | lower_alpha
+                | PIPE
+                | TILDE
+
+quoted-path-character ::= pre_digit_printable_no_double_quote_no_slash
+                        | digit
+                        | between_digit_upper_alpha
+                        | upper_alpha
+                        | between_upper_lower_alpha
+                        | lower_alpha
+                        | post_lower_alpha_printable
+                        | VALID_NON_ASCII
+
+unquoted-path-component ::= path-character+
+quoted-path-component ::= quoted-path-character+
+
+path-component ::= SLASH (unquoted-path-component | DOUBLE_QUOTE quoted-path-component DOUBLE_QUOTE)
+
+path ::= path-component+
+
+scheme ::= h t t p s?
+
+http-raw ::= scheme COLON SLASH SLASH authority url-path (QUESTION query)?
+
+url-path ::= (path-component | SLASH segment)*
+
+authority ::= (userinfo AT)? host (COLON port)?
+
+userinfo ::= (unreserved | pct-encoded | sub-delims | COLON)*
+
+host ::= ip-literal | ipv4address | domain
+
+port ::= digit*
+
+ip-literal ::= LEFT_SQUARE_BRACKET (ipv6address | ipvfuture) RIGHT_SQUARE_BRACKET
+
+ipvfuture ::= v hexdig+ DOT (unreserved | sub-delims | COLON)+
+
+
+//IPv6address =                            6( h16 ":" ) ls32
+//            /                       "::" 5( h16 ":" ) ls32
+//            / [ h16               ] "::" 4( h16 ":" ) ls32
+//            / [ h16 *1( ":" h16 ) ] "::" 3( h16 ":" ) ls32
+//            / [ h16 *2( ":" h16 ) ] "::" 2( h16 ":" ) ls32
+//            / [ h16 *3( ":" h16 ) ] "::"    h16 ":"   ls32
+//            / [ h16 *4( ":" h16 ) ] "::"              ls32
+//            / [ h16 *5( ":" h16 ) ] "::"              h16
+//            / [ h16 *6( ":" h16 ) ] "::"
+ipv6address ::= three-h16-colon three-h16-colon ls32
+            | double-colon three-h16-colon h16-colon h16-colon ls32
+            | (h16)? double-colon three-h16-colon h16-colon ls32
+            | (h16 colon-h16+)? double-colon three-h16-colon ls32
+            | (h16 colon-h16 colon-h16+)? double-colon h16-colon h16-colon ls32
+            | (h16 colon-h16-two colon-h16+)? double-colon h16-colon ls32
+            | (h16 colon-h16-two colon-h16 colon-h16+)? double-colon ls32
+            | (h16 colon-h16-two colon-h16-two colon-h16+)? double-colon h16
+            | (h16 colon-h16-two colon-h16-two colon-h16 colon-h16+)? double-colon
+
+// IPV6 Definition Helpers
+h16 ::= four-hex+
+
+private double-colon ::= COLON COLON
+private h16-colon ::= h16 COLON
+private three-h16-colon ::= h16-colon h16-colon h16-colon
+private colon-h16 ::= COLON h16
+private colon-h16-two ::= colon-h16 colon-h16
+
+ls32 ::= h16 COLON h16 | ipv4address
+
+
+ipv4address ::= dec-octet DOT dec-octet DOT dec-octet DOT dec-octet
+
+dec-octet ::= TWO FIVE (ZERO | ONE | TWO | THREE | FOUR | FIVE)
+            | TWO FOUR (ZERO | ONE | TWO | THREE | FOUR) digit
+            | ONE digit digit
+            | nonzero-digit digit
+            | digit
+
+domain ::= domainlabel (DOT domainlabel)* (DOT)?
+
+domainlabel ::= alphanum+ (MINUS+ alphanum+)*
+
+segment ::= pchar*
+
+pchar ::= unreserved
+        | pct-encoded
+        | sub-delims
+        | COLON
+        | AT
+
+query ::= (pchar | SLASH | QUESTION)*
+
+pct-encoded ::= PERCENT hexdig hexdig
+
+unreserved ::= alphanum | MINUS | DOT | UNDERSCORE | TILDE
+
+// this is the RFC3986 sub-delims rule, without "(", ")" or ","
+// see comments above the `http-raw` rule above
+sub-delims ::= EXCLAMATION
+            | DOLLAR
+            | AMPERSAND
+            | SINGLE_QUOTE
+            | ASTERISK
+            | PLUS
+            | SEMICOLON
+            | EQUALS
+
+http ::= http-raw (whsp using whsp1 import-expression)?
+
+env ::= e n v COLON (bash-environment-variable | DOUBLE_QUOTE posix-environment-variable DOUBLE_QUOTE)
+
+bash-environment-variable ::= (alpha | UNDERSCORE) (alphanum | UNDERSCORE)*
+
+posix-environment-variable ::= posix-environment-variable-character+
+
+posix-environment-variable-character ::= BACKSLASH (DOUBLE_QUOTE | BACKSLASH | a | b | f | n | r | t | v)
+                                       | pre_digit_printable_no_double_quote
+                                       | digit
+                                       | between_digit_upper_alpha_no_equals
+                                       | upper_alpha
+                                       | between_upper_lower_alpha_no_backslash
+                                       | lower_alpha
+
+import ::= import-hashed (whsp as whsp1 (textid | location))?
+
+import-hashed ::= import-type (whsp1 hash)?
+
+hash ::= s h a TWO FIVE SIX COLON sixty-four-hex // "sha256:XXX...XXX"
+
+import-type ::= missing | local | http | env
+
+completion-primary ::=
+    selector-primary completion-expression? {extends = operator-expression}
+
+left completion-expression ::= whsp complete whsp selector-primary {extends = operator-expression}
+
+selector-primary ::= primitive-expression selector-expression* {extends = operator-expression}
+
+left selector-expression::= whsp DOT whsp selector {extends = operator-expression}
+
+selector ::= any-label
+            | labels
+            | type-selector
+
+type-selector ::= LEFT_PAREN whsp expression whsp RIGHT_PAREN
+
+labels ::= LEFT_BRACE whsp (any-label-or-some whsp (COMMA whsp any-label-or-some whsp)*)? RIGHT_BRACE
+
+any-label ::= label
+
+any-label-or-some ::= label | some
+
+double-literal ::= numeric-double-literal // "2.0"
+                   // "-Infinity"
+                 | minus-infinity-literal
+                 // "Infinity"
+                 | plus-infinity-literal
+                 | nan
+
+natural-literal ::=
+    // Hexadecimal with "0x" prefix
+      ZERO x hexdig+
+    | digit+
+
+integer-literal ::= (PLUS | MINUS) natural-literal
+
+text-literal ::= double-quote-literal
+              | single-quote-literal
+
+end-of-line ::= NEW_LINE
+             | CARRIAGE_RETURN NEW_LINE
+
+block-comment ::= LEFT_BRACE MINUS block-comment-continue
+
+block-comment-char ::= all_ascii_printable
+                    | VALID_NON_ASCII
+                    | TAB
+                    | end-of-line
+
+block-comment-continue ::= MINUS RIGHT_BRACE
+                        | block-comment block-comment-continue
+                        | block-comment-char block-comment-continue
+
+not-end-of-line ::= all_ascii_printable
+                  | VALID_NON_ASCII
+                  | TAB
+
+line-comment ::= MINUS MINUS not-end-of-line* end-of-line
+
+whitespace-chunk ::= SPACE
+                   | TAB
+                   | end-of-line
+                   | line-comment
+                   | block-comment
+
+whsp ::= whitespace-chunk*
+
+whsp1 ::= whitespace-chunk+
+
+
+// compact definition of sixty-four hex digits
+sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex
+private sixteen-hex ::= four-hex four-hex four-hex four-hex
+private four-hex ::= hexdig hexdig hexdig hexdig
+
+hexdig ::= digit | UA | UB | UC | UD | UE | UF
+
+// MAJOR CHARACTER CLASSES
+
+// x41-x5a, x61-x71
+alpha ::= upper_alpha | lower_alpha
+
+// x41 - x5A
+private upper_alpha ::= UA | UB | UC | UD | UE | UF | UI | UK
+                    | UL | UM | UN | UO | US | UT
+                    | UZ | UALPHA
+// x61 - x7a
+private lower_alpha ::= a | b | c | d | e | f | g | h | i | k | l | m | n
+                     | o | p | r | s | t | u | v | w | x | y | LALPHA
+
+// x30-x39, x41-x5a, x61-x7a
+alphanum ::= alpha | digit
+
+// x30 - x39
+digit ::= ZERO | nonzero-digit
+private nonzero-digit ::= ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE
+// x20 - x2f
+private pre_digit_printable ::= pre_digit_printable_no_double_quote | DOUBLE_QUOTE
+private pre_digit_printable_no_double_quote ::= pre_digit_printable_no_double_quote_no_slash | SLASH
+private pre_digit_printable_no_double_quote_no_slash ::= SPACE
+                                                      | EXCLAMATION
+                                                      | HASH_SIGN
+                                                      | DOLLAR
+                                                      | PERCENT
+                                                      | AMPERSAND
+                                                      | SINGLE_QUOTE
+                                                      | LEFT_PAREN
+                                                      | RIGHT_PAREN
+                                                      | ASTERISK
+                                                      | PLUS
+                                                      | COMMA
+                                                      | MINUS
+                                                      | DOT
+
+// x3a - x40
+private between_digit_upper_alpha ::= between_digit_upper_alpha_no_equals | EQUALS
+private between_digit_upper_alpha_no_equals ::= COLON | SEMICOLON | LT | GT | QUESTION | AT
+
+// x5b - x60
+private between_upper_lower_alpha ::= between_upper_lower_alpha_no_grave | GRAVE
+private between_upper_lower_alpha_no_grave ::= LEFT_SQUARE_BRACKET | BACKSLASH | RIGHT_SQUARE_BRACKET | CIRCUMFLEX | UNDERSCORE
+private between_upper_lower_alpha_no_backslash ::= LEFT_SQUARE_BRACKET | RIGHT_SQUARE_BRACKET | CIRCUMFLEX | UNDERSCORE | GRAVE
+
+private post_lower_alpha_printable ::= LEFT_BRACE | PIPE | RIGHT_BRACE | TILDE | DELETE
+
+private all_ascii_printable ::= pre_digit_printable
+                            | digit
+                            | between_digit_upper_alpha
+                            | upper_alpha
+                            | between_upper_lower_alpha
+                            | lower_alpha
+                            | post_lower_alpha_printable

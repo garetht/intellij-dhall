@@ -1,0 +1,29 @@
+# The input parts
+{
+    # Shows a list of options
+    "Type" = [
+        "feature",
+        "fix",
+        "documentation",
+        "style",
+        "refactor",
+        "test",
+        "package"
+    ]
+    "Summary" = @ # Single line input
+    "Body" = !@ # Multi-line input
+}
+
+# predefined messages
+# this section is optional
+{
+    vb = "package: version bump"
+    readme = "docs: updated readme"
+}
+
+# The output format
+# Takes the values provided from the input stage
+# and interpolates them in
+[${Type}] ${Summary}
+
+${Body}

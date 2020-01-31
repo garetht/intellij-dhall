@@ -1,0 +1,34 @@
+<idea-plugin>
+    <id>org.intellij.plugins.dhall</id>
+    <name>Dhall</name>
+    <version>0.1</version>
+    <vendor email="garethwtan@gmail.com" url="https://github.com/garetht">Gareth T</vendor>
+
+    <description>Provides Dhall language support. https://dhall-lang.org/</description>
+
+    <change-notes>
+        This plugin continues to be under developmenting.
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="182.3341.11"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <fileType name="Dhall File" implementationClass="org.intellij.plugins.dhall.DhallFileType"
+                  language="Dhall" extensions="dhall"/>
+        <lang.parserDefinition language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallParserDefinition"/>
+<!--        <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallAnnotator" />-->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>
