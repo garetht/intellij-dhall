@@ -24,7 +24,7 @@
         <fileType name="Dhall File" implementationClass="org.intellij.plugins.dhall.DhallFileType"
                   language="Dhall" extensions="dhall"/>
         <lang.parserDefinition language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallParserDefinition"/>
-<!--        <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallAnnotator" />-->
+        <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallAnnotator" />
     </extensions>
 
     <actions>

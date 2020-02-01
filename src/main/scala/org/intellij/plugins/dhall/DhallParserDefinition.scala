@@ -23,7 +23,4 @@ class DhallParserDefinition extends ParserDefinition {
     DhallTypes.Factory.createElement(astNode)
   override def createFile(fileViewProvider: FileViewProvider) =
     new DhallFile(fileViewProvider)
-  override def spaceExistenceTypeBetweenTokens(left: ASTNode,
-                                               right: ASTNode): Null =
-    null
 }

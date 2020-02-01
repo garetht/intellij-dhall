@@ -2,7 +2,7 @@ package org.intellij.plugins.dhall
 
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
-import javax.swing._
+import javax.swing.Icon
 
 class DhallFile(val viewProvider: FileViewProvider)
     extends PsiFileBase(viewProvider, DhallLanguage) {

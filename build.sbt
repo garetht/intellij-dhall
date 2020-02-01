@@ -13,7 +13,9 @@ lazy val dhall = project
     resourceDirectory in Compile := baseDirectory.value / "resources",
     patchPluginXml := pluginXmlOptions { xml =>
       xml.version = version.value
-    }
+    },
+    intellijExternalPlugins += IntellijPlugin
+      .Id("PsiViewer", Some("193-SNAPSHOT"), None)
   )
 
 lazy val runner = createRunnerProject(dhall, "dhall-runner")
