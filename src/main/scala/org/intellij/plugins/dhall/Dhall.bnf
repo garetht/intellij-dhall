@@ -219,10 +219,12 @@ expression ::=
     | annotated-expression
 
 
+fake character ::= all_ascii_printable | VALID_NON_ASCII
+
 simple-label ::= keyword simple-label-next-char+
                | !keyword (simple-label-first-char simple-label-next-char*)
-simple-label-first-char ::= alpha | UNDERSCORE
-simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE
+simple-label-first-char ::= alpha | UNDERSCORE { extends = character elementType = character }
+simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE { extends = character elementType = character }
 
 
 label ::= GRAVE quoted-label GRAVE | simple-label
@@ -235,13 +237,12 @@ label ::= GRAVE quoted-label GRAVE | simple-label
 quoted-label-char ::= pre_digit_printable
               | between_digit_upper_alpha
               | between_upper_lower_alpha_no_grave
-              | alphanum
+              | alphanum { extends = character elementType = character }
 
 quoted-label ::= quoted-label-char+
 
-nonreserved-label ::= builtin simple-label-next-char+
-                    | !builtin label
-
+private nonreserved-label ::= builtin simple-label-next-char+
+                            | !builtin label
 
 // Special Symbols
 combine ::= UNICODE_COMBINE | SLASH BACKSLASH
@@ -365,7 +366,7 @@ optional-fold ::= UO p t i o n a l MINUS f o l d
 optional-build ::= UO p t i o n a l MINUS b u i l d
 text-show ::= UT e x t MINUS s h o w
 
-double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
+private double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
 //double-quote-char =
 //      %x20-21
 //        ; %x22 = '"'
@@ -380,7 +381,7 @@ double-quote-char ::= pre_digit_printable_no_double_quote
                     | between_upper_lower_alpha_no_backslash
                     | lower_alpha
                     | post_lower_alpha_printable
-                    | VALID_NON_ASCII
+                    | VALID_NON_ASCII {extends = character elementType = character}
 
 
 double-quote-chunk ::=
@@ -398,14 +399,14 @@ double-quote-escaped ::= DOUBLE_QUOTE
                        | n // 'n'    line feed       U+000A
                        | r // 'r'    carriage return U+000D
                        | t // 't'    tab             U+0009
-                       | u unicode-escape
+                       | u unicode-escape {extends = character elementType = character}
 
 
-single-quote-continue ::= interpolation single-quote-continue
-                        | escaped-quote-pair single-quote-continue
-                        | escaped-interpolation single-quote-continue
-                        | single-quote-char single-quote-continue
-                        | SINGLE_QUOTE SINGLE_QUOTE
+private single-quote-continue ::= interpolation single-quote-continue
+                                | escaped-quote-pair single-quote-continue
+                                | escaped-interpolation single-quote-continue
+                                | single-quote-char single-quote-continue
+                                | SINGLE_QUOTE SINGLE_QUOTE
 
 escaped-quote-pair ::= SINGLE_QUOTE SINGLE_QUOTE SINGLE_QUOTE
 
@@ -414,7 +415,7 @@ escaped-interpolation ::= SINGLE_QUOTE SINGLE_QUOTE DOLLAR LEFT_BRACE
 single-quote-char ::= all_ascii_printable
                     | TAB
                     | end-of-line
-                    | VALID_NON_ASCII
+                    | VALID_NON_ASCII {extends = character elementType = character}
 
 single-quote-literal ::= SINGLE_QUOTE SINGLE_QUOTE end-of-line single-quote-continue
 
@@ -619,7 +620,7 @@ path-character ::= EXCLAMATION
                 | GRAVE
                 | lower_alpha
                 | PIPE
-                | TILDE
+                | TILDE {extends = character elementType = character}
 
 quoted-path-character ::= pre_digit_printable_no_double_quote_no_slash
                         | digit
@@ -628,7 +629,7 @@ quoted-path-character ::= pre_digit_printable_no_double_quote_no_slash
                         | between_upper_lower_alpha
                         | lower_alpha
                         | post_lower_alpha_printable
-                        | VALID_NON_ASCII
+                        | VALID_NON_ASCII {extends = character elementType = character}
 
 unquoted-path-component ::= path-character+
 quoted-path-component ::= quoted-path-character+
@@ -738,7 +739,7 @@ posix-environment-variable-character ::= BACKSLASH (DOUBLE_QUOTE | BACKSLASH | a
                                        | between_digit_upper_alpha_no_equals
                                        | upper_alpha
                                        | between_upper_lower_alpha_no_backslash
-                                       | lower_alpha
+                                       | lower_alpha {extends = character elementType = character}
 
 import ::= import-hashed (whsp as whsp1 (textid | location))?
 
@@ -765,9 +766,9 @@ type-selector ::= LEFT_PAREN whsp expression whsp RIGHT_PAREN
 
 labels ::= LEFT_BRACE whsp (any-label-or-some whsp (COMMA whsp any-label-or-some whsp)*)? RIGHT_BRACE
 
-any-label ::= label
+private any-label ::= label
 
-any-label-or-some ::= label | some
+private any-label-or-some ::= label | some
 
 double-literal ::= numeric-double-literal // "2.0"
                    // "-Infinity"
@@ -784,7 +785,7 @@ natural-literal ::=
 integer-literal ::= (PLUS | MINUS) natural-literal
 
 text-literal ::= double-quote-literal
-              | single-quote-literal
+               | single-quote-literal
 
 end-of-line ::= NEW_LINE
              | CARRIAGE_RETURN NEW_LINE
@@ -794,9 +795,9 @@ block-comment ::= LEFT_BRACE MINUS block-comment-continue
 block-comment-char ::= all_ascii_printable
                     | VALID_NON_ASCII
                     | TAB
-                    | end-of-line
+                    | end-of-line {extends = character elementType = character}
 
-block-comment-continue ::= MINUS RIGHT_BRACE
+private block-comment-continue ::= MINUS RIGHT_BRACE
                         | block-comment block-comment-continue
                         | block-comment-char block-comment-continue
 
@@ -806,15 +807,15 @@ not-end-of-line ::= all_ascii_printable
 
 line-comment ::= MINUS MINUS not-end-of-line* end-of-line
 
-whitespace-chunk ::= SPACE
+private whitespace-chunk ::= SPACE
                    | TAB
                    | end-of-line
                    | line-comment
                    | block-comment
 
-whsp ::= whitespace-chunk*
+private whsp ::= whitespace-chunk*
 
-whsp1 ::= whitespace-chunk+
+private whsp1 ::= whitespace-chunk+
 
 
 // compact definition of sixty-four hex digits
@@ -827,7 +828,7 @@ hexdig ::= digit | UA | UB | UC | UD | UE | UF
 // MAJOR CHARACTER CLASSES
 
 // x41-x5a, x61-x71
-alpha ::= upper_alpha | lower_alpha
+private alpha ::= upper_alpha | lower_alpha
 
 // x41 - x5A
 private upper_alpha ::= UA | UB | UC | UD | UE | UF | UI | UK
@@ -838,7 +839,7 @@ private lower_alpha ::= a | b | c | d | e | f | g | h | i | k | l | m | n
                      | o | p | r | s | t | u | v | w | x | y | LALPHA
 
 // x30-x39, x41-x5a, x61-x7a
-alphanum ::= alpha | digit
+private alphanum ::= alpha | digit
 
 // x30 - x39
 digit ::= ZERO | nonzero-digit
