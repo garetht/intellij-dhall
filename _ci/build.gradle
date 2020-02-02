@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id "org.jetbrains.intellij" version "0.4.16"
+    id "org.jetbrains.grammarkit" version "2019.3"
+}
+
+apply plugin: 'org.jetbrains.grammarkit'
+
+import org.jetbrains.grammarkit.tasks.*
+
+intellij {
+    version 'IC-2019.3'
+}
+
+grammarKit {
+    // version of IntelliJ patched JFlex (see bintray link below), Default is 1.7.0-1
+    jflexRelease = '1.7.0-1'
+
+    // tag or short commit hash of Grammar-Kit to use (see link below). Default is 2017.1.6
+    grammarKitRelease = '2019.3'
+}
+
+task generateDhallLexer(type: GenerateLexer) {
+    source = "src/main/scala/org/intellij/plugins/dhall/_DhallLexer.flex"
+
+    targetDir = "$projectDir/gen/org/intellij/plugins/dhall"
+    targetClass = "_DhallLexer"
+
+    purgeOldFiles = true
+}
+
+task generateDhallParser(type: GenerateParser) {
+    source = "src/main/scala/org/intellij/plugins/dhall/Dhall.bnf"
+
+    targetRoot = "$projectDir/gen"
+
+    pathToParser = '/org/intellij/plugins/dhall/parser/DhallParser.java'
+    pathToPsiRoot = '/org/intellij/plugins/dhall/psi'
+
+    purgeOldFiles = true
+}
+
+
+compileJava.dependsOn(generateDhallLexer, generateDhallParser)
