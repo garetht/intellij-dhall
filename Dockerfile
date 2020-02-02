@@ -4,7 +4,7 @@ COPY src/main/scala/org/intellij/plugins/dhall/_DhallLexer.flex src/main/scala/o
 COPY src/main/scala/org/intellij/plugins/dhall/Dhall.bnf src/main/scala/org/intellij/plugins/dhall/Dhall.bnf
 COPY _ci/build.gradle build.gradle
 
-RUN ["gradle", "build"]
+RUN ["gradle"]
 
 FROM hseeberger/scala-sbt:8u242_1.3.7_2.13.1
 
