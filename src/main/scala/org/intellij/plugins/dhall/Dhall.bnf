@@ -342,31 +342,31 @@ double ::= UD o u b l e
 type ::= UT y p e
 kind ::= UK i n d
 sort ::= US o r t
-natural-fold ::= UN a t u r a l MINUS f o l d
-natural-build ::= UN a t u r a l MINUS b u i l d
-natural-iszero ::= UN a t u r a l MINUS i s UZ e r o
-natural-even ::= UN a t u r a l MINUS e v e n
-natural-odd ::= UN a t u r a l MINUS o d d
-natural-tointeger ::= UN a t u r a l MINUS t o UI n t e g e r
-natural-show ::= UN a t u r a l MINUS s h o w
-natural-subtract ::= UN a t u r a l MINUS s u b t r a c t
-integer-todouble ::= UI n t e g e r MINUS t o UD o u b l e
-integer-show ::= UI n t e g e r MINUS s h o w
-integer-negate ::= UI n t e g e r MINUS n e g a t e
-integer-clamp ::= UI n t e g e r MINUS c l a m p
-double-show ::= UD o u b l e MINUS s h o w
-list-build ::= UL i s t MINUS b u i l d
-list-fold ::= UL i s t MINUS f o l d
-list-length ::= UL i s t MINUS l e n g t h
-list-head ::= UL i s t MINUS h e a d
-list-last ::= UL i s t MINUS l a s t
-list-indexed ::= UL i s t MINUS i n d e x e d
-list-reverse ::= UL i s t MINUS r e v e r s e
-optional-fold ::= UO p t i o n a l MINUS f o l d
-optional-build ::= UO p t i o n a l MINUS b u i l d
-text-show ::= UT e x t MINUS s h o w
+natural-fold ::= UN a t u r a l SLASH f o l d
+natural-build ::= UN a t u r a l SLASH b u i l d
+natural-iszero ::= UN a t u r a l SLASH i s UZ e r o
+natural-even ::= UN a t u r a l SLASH e v e n
+natural-odd ::= UN a t u r a l SLASH o d d
+natural-tointeger ::= UN a t u r a l SLASH t o UI n t e g e r
+natural-show ::= UN a t u r a l SLASH s h o w
+natural-subtract ::= UN a t u r a l SLASH s u b t r a c t
+integer-todouble ::= UI n t e g e r SLASH t o UD o u b l e
+integer-show ::= UI n t e g e r SLASH s h o w
+integer-negate ::= UI n t e g e r SLASH n e g a t e
+integer-clamp ::= UI n t e g e r SLASH c l a m p
+double-show ::= UD o u b l e SLASH s h o w
+list-build ::= UL i s t SLASH b u i l d
+list-fold ::= UL i s t SLASH f o l d
+list-length ::= UL i s t SLASH l e n g t h
+list-head ::= UL i s t SLASH h e a d
+list-last ::= UL i s t SLASH l a s t
+list-indexed ::= UL i s t SLASH i n d e x e d
+list-reverse ::= UL i s t SLASH r e v e r s e
+optional-fold ::= UO p t i o n a l SLASH f o l d
+optional-build ::= UO p t i o n a l SLASH b u i l d
+text-show ::= UT e x t SLASH s h o w
 
-private double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
+double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
 //double-quote-char =
 //      %x20-21
 //        ; %x22 = '"'
@@ -786,8 +786,8 @@ natural-literal ::=
 
 integer-literal ::= (PLUS | MINUS) natural-literal
 
-text-literal ::= double-quote-literal
-               | single-quote-literal
+private text-literal ::= double-quote-literal
+                       | single-quote-literal
 
 end-of-line ::= NEW_LINE
              | CARRIAGE_RETURN NEW_LINE
