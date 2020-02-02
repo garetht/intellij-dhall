@@ -1,11 +1,8 @@
 variables:
   GIT_DEPTH: 1
 
-stages:
-  - build
-  - test
-
 build:
+  stage: build
   image: gradle:6.1-jdk
   script:
     - gradle --build-file=_ci/build.gradle
@@ -14,6 +11,7 @@ build:
       - gen/
 
 test:
+  stage: test
   image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
   script:
     - sbt test
