@@ -23,7 +23,7 @@ grammarKit {
 task generateDhallLexer(type: GenerateLexer) {
     source = "src/main/scala/org/intellij/plugins/dhall/_DhallLexer.flex"
 
-    targetDir = "$projectDir/gen/org/intellij/plugins/dhall"
+    targetDir = "gen/org/intellij/plugins/dhall"
     targetClass = "_DhallLexer"
 
     purgeOldFiles = true
@@ -32,7 +32,7 @@ task generateDhallLexer(type: GenerateLexer) {
 task generateDhallParser(type: GenerateParser) {
     source = "src/main/scala/org/intellij/plugins/dhall/Dhall.bnf"
 
-    targetRoot = "$projectDir/gen"
+    targetRoot = "gen"
 
     pathToParser = '/org/intellij/plugins/dhall/parser/DhallParser.java'
     pathToPsiRoot = '/org/intellij/plugins/dhall/psi'
