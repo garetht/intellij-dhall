@@ -1,7 +1,19 @@
 variables:
   GIT_DEPTH: 1
-default:
-  image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
+
+stages:
+  - build
+  - test
+
+build:
+  image: gradle:6.1-jdk
+  script:
+    - gradle --build-file=_ci/build.gradle
+  artifacts:
+    paths:
+      - gen/
+
 test:
+  image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
   script:
     - sbt test
