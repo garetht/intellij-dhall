@@ -1,0 +1,7 @@
+variables:
+  GIT_DEPTH: 1
+default:
+  image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
+test:
+  script:
+    - sbt test
