@@ -5,7 +5,8 @@ build:
   stage: build
   image: gradle:6.1-jdk
   script:
-    - gradle --build-file=_ci/build.gradle
+    - cp _ci/build.gradle .
+    - gradle build
   artifacts:
     paths:
       - gen/
