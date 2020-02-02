@@ -8,6 +8,7 @@ lazy val dhall = project
     scalaVersion := "2.13.1",
     version := "2019.3.0",
     scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala",
+    scalaSource in Test := baseDirectory.value / "src" / "test" / "scala",
     ideBasePackages := Seq("org.intellij.plugins.dhall"),
     unmanagedSourceDirectories in Compile += baseDirectory.value / "gen",
     resourceDirectory in Compile := baseDirectory.value / "resources",
@@ -15,7 +16,10 @@ lazy val dhall = project
       xml.version = version.value
     },
     intellijExternalPlugins += IntellijPlugin
-      .Id("PsiViewer", Some("193-SNAPSHOT"), None)
+      .Id("PsiViewer", Some("193-SNAPSHOT"), None),
+    libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test
+    )
   )
 
 lazy val runner = createRunnerProject(dhall, "dhall-runner")

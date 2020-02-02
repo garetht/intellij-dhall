@@ -27,8 +27,14 @@ Basic Development Commands
 ===
 In order to run the test version of the development IDE, run the `sbt` shell and then the command `runIDE`.
 
+Basic Testing Commands
+===
 
-Resetting Downloaded IDEA
+Run `test` in the SBT shell to run tests. Parser tests consist of a `.dhall` file describing a Dhall program and a `.txt` file containing the expected PSI structure. If the corresponding PSI file is missing, running `test` will fail but also automatically generate the PSI structure from the `.dhall` file for the next run.
+
+Resetting State
 ===
 
 The default location where `sbt` stores the downloaded development `IDEA` is `~/.intellij-dhall...`. This folder can be deleted for `sbt` to download the plugin again on its next run.
+
+To reset `sbt` caches, run `reload` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
