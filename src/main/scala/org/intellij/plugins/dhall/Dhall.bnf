@@ -425,19 +425,21 @@ unicode-escape ::= unbraced-escape | LEFT_BRACE braced-escape RIGHT_BRACE
 
 braced-escape ::= ZERO* braced-codepoint
 
-unbraced-escape ::= (digit | UA | UB | UC) hexdig hexdig hexdig
-                  | UD (ZERO | ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN) hexdig hexdig
+unbraced-escape ::= (digit | UA | a | UB | b | UC | c) hexdig hexdig hexdig
+                  | (UD | d) (ZERO | ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN) hexdig hexdig
                   // %xD800-DFFF Surrogate pairs
-                  | UE hexdig hexdig hexdig
-                  | UF hexdig hexdig (digit | UA | UB | UC | UD)
+                  | (UE | e) hexdig hexdig hexdig
+                  | (UF | f) hexdig hexdig (digit | UA | a | UB | b | UC | c | UD | d)
                   // %xFFFE-FFFF Non-characters
 
-braced-codepoint ::= (ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE | UA | UB | UC | UD | UE | UF | ONE ZERO) unicode-suffix
+braced-codepoint ::= (ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE
+                    | UA | a | UB | b | UC | c | UD | d | UE | e | UF | f
+                    | ONE ZERO) unicode-suffix
                     | unbraced-escape
                     | (hexdig hexdig hexdig)+
 
-unicode-suffix ::= (digit | UA | UB | UC | UD | UE) hexdig hexdig hexdig
-                | UF hexdig hexdig (digit | UA | UB | UC | UD)
+unicode-suffix ::= (digit | UA | a | UB | b | UC | c | UD | d | UE | e) hexdig hexdig hexdig
+                | (UF | f) hexdig hexdig (digit | UA | a | UB | b | UC | c | UD | d)
 
 exponent ::= e (PLUS | MINUS)? digit*
 
@@ -596,8 +598,8 @@ local ::=
     | absolute-path
 
 parent-path ::= DOT DOT path  // Relative path
-here-path ::= DOT  path  // Relative path
-home-path ::= TILDE  path  // Home-anchored path
+here-path ::= DOT path  // Relative path
+home-path ::= TILDE path  // Home-anchored path
 absolute-path ::= path  // Absolute path
 
 path-character ::= EXCLAMATION
@@ -823,7 +825,7 @@ sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex
 private sixteen-hex ::= four-hex four-hex four-hex four-hex
 private four-hex ::= hexdig hexdig hexdig hexdig
 
-hexdig ::= digit | UA | UB | UC | UD | UE | UF
+hexdig ::= digit | UA | a | UB | b | UC | c | UD | d | UE | e | UF | f
 
 // MAJOR CHARACTER CLASSES
 
