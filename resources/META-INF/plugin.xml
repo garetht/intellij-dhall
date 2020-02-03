@@ -7,7 +7,7 @@
     <description>Provides Dhall language support. https://dhall-lang.org/</description>
 
     <change-notes>
-        This plugin continues to be under developmenting.
+        This plugin continues to be under development.
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -25,6 +25,7 @@
                   language="Dhall" extensions="dhall"/>
         <lang.parserDefinition language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallParserDefinition"/>
         <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallAnnotator" />
+        <colorSettingsPage implementation="org.intellij.plugins.dhall.DhallColorSettingsPage"/>
     </extensions>
 
     <actions>

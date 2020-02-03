@@ -216,8 +216,7 @@ expression ::=
     | assert whsp COLON whsp1 expression
 
     // "x : t"
-    | annotated-expression
-
+    | annotated-expression {methods=[parameter="/nonreserved-label"]}
 
 fake character ::= all_ascii_printable | VALID_NON_ASCII
 
@@ -241,14 +240,13 @@ quoted-label-char ::= pre_digit_printable
 
 quoted-label ::= quoted-label-char+
 
-private nonreserved-label ::= builtin simple-label-next-char+
-                            | !builtin label
+nonreserved-label ::= builtin simple-label-next-char+
+                    | !builtin label
 
 fake operator ::= combine
            | combine-types
            | equivalent
            | prefer
-           | lambda
            | arrow
            | complete
            | question
@@ -299,27 +297,27 @@ keyword ::= if
         | assert
         | forall
 
-if                    ::= i f
-then                  ::= t h e n
-else                  ::= e l s e
-let                   ::= l e t
-in                    ::= i n
-as                    ::= a s
-using                 ::= u s i n g
-merge                 ::= m e r g e
-missing               ::= m i s s i n g
-infinity              ::= UI n f i n i t y
-nan                   ::= UN a UN
-some                  ::= US o m e
-toMap                 ::= t o UM a p
-assert                ::= a s s e r t
-forall                ::= UNICODE_FORALL | f o r a l l;
+if                    ::= i f { extends = keyword }
+then                  ::= t h e n { extends = keyword }
+else                  ::= e l s e { extends = keyword }
+let                   ::= l e t { extends = keyword }
+in                    ::= i n { extends = keyword }
+as                    ::= a s { extends = keyword }
+using                 ::= u s i n g { extends = keyword }
+merge                 ::= m e r g e { extends = keyword }
+missing               ::= m i s s i n g { extends = keyword }
+infinity              ::= UI n f i n i t y { extends = keyword }
+nan                   ::= UN a UN { extends = keyword }
+some                  ::= US o m e { extends = keyword }
+toMap                 ::= t o UM a p { extends = keyword }
+assert                ::= a s s e r t { extends = keyword }
+forall                ::= UNICODE_FORALL | f o r a l l { extends = keyword }
 
 // Reserved identifiers
-optional ::= UO p t i o n a l
-textid ::= UT e x t
-list ::= UL i s t
-location ::= UL o c a t i o n
+optional ::= UO p t i o n a l {extends = builtin}
+textid ::= UT e x t {extends = builtin}
+list ::= UL i s t {extends = builtin}
+location ::= UL o c a t i o n {extends = builtin}
 
 // Reserved identifiers that are also builtins
 
@@ -359,41 +357,41 @@ builtin ::=
     | list
     | type
     | kind
-    | sort
+    | sort { extends = identifier }
 
-bool ::= UB o o l
-true ::= UT r u e
-false ::= UF a l s e
-none ::= UN o n e
-natural ::= UN a t u r a l
-integer ::= UI n t e g e r
-double ::= UD o u b l e
-type ::= UT y p e
-kind ::= UK i n d
-sort ::= US o r t
-natural-fold ::= UN a t u r a l SLASH f o l d
-natural-build ::= UN a t u r a l SLASH b u i l d
-natural-iszero ::= UN a t u r a l SLASH i s UZ e r o
-natural-even ::= UN a t u r a l SLASH e v e n
-natural-odd ::= UN a t u r a l SLASH o d d
-natural-tointeger ::= UN a t u r a l SLASH t o UI n t e g e r
-natural-show ::= UN a t u r a l SLASH s h o w
-natural-subtract ::= UN a t u r a l SLASH s u b t r a c t
-integer-todouble ::= UI n t e g e r SLASH t o UD o u b l e
-integer-show ::= UI n t e g e r SLASH s h o w
-integer-negate ::= UI n t e g e r SLASH n e g a t e
-integer-clamp ::= UI n t e g e r SLASH c l a m p
-double-show ::= UD o u b l e SLASH s h o w
-list-build ::= UL i s t SLASH b u i l d
-list-fold ::= UL i s t SLASH f o l d
-list-length ::= UL i s t SLASH l e n g t h
-list-head ::= UL i s t SLASH h e a d
-list-last ::= UL i s t SLASH l a s t
-list-indexed ::= UL i s t SLASH i n d e x e d
-list-reverse ::= UL i s t SLASH r e v e r s e
-optional-fold ::= UO p t i o n a l SLASH f o l d
-optional-build ::= UO p t i o n a l SLASH b u i l d
-text-show ::= UT e x t SLASH s h o w
+bool ::= UB o o l { extends = builtin }
+true ::= UT r u e { extends = builtin }
+false ::= UF a l s e { extends = builtin }
+none ::= UN o n e { extends = builtin }
+natural ::= UN a t u r a l { extends = builtin }
+integer ::= UI n t e g e r { extends = builtin }
+double ::= UD o u b l e { extends = builtin }
+type ::= UT y p e { extends = builtin }
+kind ::= UK i n d { extends = builtin }
+sort ::= US o r t { extends = builtin }
+natural-fold ::= UN a t u r a l SLASH f o l d { extends = builtin }
+natural-build ::= UN a t u r a l SLASH b u i l d { extends = builtin }
+natural-iszero ::= UN a t u r a l SLASH i s UZ e r o { extends = builtin }
+natural-even ::= UN a t u r a l SLASH e v e n { extends = builtin }
+natural-odd ::= UN a t u r a l SLASH o d d { extends = builtin }
+natural-tointeger ::= UN a t u r a l SLASH t o UI n t e g e r { extends = builtin }
+natural-show ::= UN a t u r a l SLASH s h o w { extends = builtin }
+natural-subtract ::= UN a t u r a l SLASH s u b t r a c t { extends = builtin }
+integer-todouble ::= UI n t e g e r SLASH t o UD o u b l e { extends = builtin }
+integer-show ::= UI n t e g e r SLASH s h o w { extends = builtin }
+integer-negate ::= UI n t e g e r SLASH n e g a t e { extends = builtin }
+integer-clamp ::= UI n t e g e r SLASH c l a m p { extends = builtin }
+double-show ::= UD o u b l e SLASH s h o w { extends = builtin }
+list-build ::= UL i s t SLASH b u i l d { extends = builtin }
+list-fold ::= UL i s t SLASH f o l d { extends = builtin }
+list-length ::= UL i s t SLASH l e n g t h { extends = builtin }
+list-head ::= UL i s t SLASH h e a d { extends = builtin }
+list-last ::= UL i s t SLASH l a s t { extends = builtin }
+list-indexed ::= UL i s t SLASH i n d e x e d { extends = builtin }
+list-reverse ::= UL i s t SLASH r e v e r s e { extends = builtin }
+optional-fold ::= UO p t i o n a l SLASH f o l d { extends = builtin }
+optional-build ::= UO p t i o n a l SLASH b u i l d { extends = builtin }
+text-show ::= UT e x t SLASH s h o w { extends = builtin }
 
 double-quote-literal ::= DOUBLE_QUOTE double-quote-chunk* DOUBLE_QUOTE
 //double-quote-char =
@@ -510,7 +508,7 @@ primitive-expression ::=
 
 identifier ::= variable | builtin
 
-variable ::= nonreserved-label (whsp AT whsp natural-literal)?
+variable ::= nonreserved-label (whsp AT whsp natural-literal)? { extends = identifier }
 
 record-type-or-literal ::=
       empty-record-literal

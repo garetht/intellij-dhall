@@ -32,9 +32,54 @@ Basic Testing Commands
 
 Run `test` in the SBT shell to run tests. Parser tests consist of a `.dhall` file describing a Dhall program and a `.txt` file containing the expected PSI structure. If the corresponding PSI file is missing, running `test` will fail but also automatically generate the PSI structure from the `.dhall` file for the next run.
 
+Thoughts on Grammar Structure
+===
+
+When is it desirable for all alternatives of a rule to extend a rule?
+
+Consider the following:
+```
+keyword ::= if | else
+
+if ::= i f
+else ::= e l s e
+```
+
+This generates the structure
+
+```
+class Keyword extends PsiElement {
+    getIf() {}
+    getElse() {}
+}
+
+class If extends PsiElement {}
+class Else extends PsiElement {}
+```
+
+But if we extend both classes from `keyword` like so
+```
+keyword ::= if | else
+
+if ::= i f { extend = keyword }
+else ::= e l s e { extend = keyword }
+```
+
+we get the following structure instead
+```
+class Keyword extends PsiElement {}
+
+class If extends Keyword {}
+class Else extends Keyword {}
+```
+
+which seems more immediately accessible to pattern-matching, and flattens the layer of structure granted by `keyword` away.
+
+A `fake` rule has the advantage of allowing the custom grammar to specify a particular structure that is not present in the original grammar.
+
 Resetting State
 ===
 
 The default location where `sbt` stores the downloaded development `IDEA` is `~/.intellij-dhall...`. This folder can be deleted for `sbt` to download the plugin again on its next run.
 
-To reset `sbt` caches, run `reload` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
+To reset `sbt` caches, run `reload` or `clean` or `clearCaches` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
