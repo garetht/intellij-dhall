@@ -11,14 +11,17 @@ import org.intellij.plugins.dhall.psi.{
   DhallDoubleLiteral,
   DhallDoubleQuoteLiteral,
   DhallExpression,
-  DhallIdentifier,
   DhallIntegerLiteral,
   DhallInterpolation,
   DhallKeyword,
   DhallLetBinding,
   DhallLineComment,
   DhallNaturalLiteral,
+  DhallNonEmptyRecordTypeOrLiteral,
   DhallOperator,
+  DhallRecordLiteralEntry,
+  DhallRecordTypeEntry,
+  DhallSelector,
   DhallSingleQuoteLiteral,
   DhallVariable
 }
@@ -46,6 +49,8 @@ class DhallAnnotator extends Annotator {
         Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
       case _: DhallVariable =>
         Some(DefaultLanguageHighlighterColors.IDENTIFIER)
+      case _: DhallSelector =>
+        Some(DefaultLanguageHighlighterColors.IDENTIFIER)
       case _: DhallDoubleLiteral =>
         Some(DefaultLanguageHighlighterColors.NUMBER)
       case _: DhallNaturalLiteral =>
@@ -58,6 +63,28 @@ class DhallAnnotator extends Annotator {
         Some(DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR)
       case _: DhallSingleQuoteLiteral =>
         Some(DefaultLanguageHighlighterColors.STRING)
+      case ne: DhallNonEmptyRecordTypeOrLiteral =>
+        // TODO: if the suceeding entry is a non-empty record literal,
+        // then this should be colored as a instance value field, otherwise
+        // it should be colored as an instance type field
+        val label = ne.getLabel
+        highlightannotation =
+          annotationHolder.createInfoAnnotation(this.textRange(label), null)
+        Some(
+          if (ne.getNonEmptyRecordLiteral == null)
+            DhallSyntaxHighlighter.RECORD_TYPE_KEY
+          else DhallSyntaxHighlighter.RECORD_VALUE_KEY
+        )
+      case rle: DhallRecordLiteralEntry =>
+        val label = rle.getLabel
+        highlightannotation =
+          annotationHolder.createInfoAnnotation(this.textRange(label), null)
+        Some(DhallSyntaxHighlighter.RECORD_VALUE_KEY)
+      case rle: DhallRecordTypeEntry =>
+        val label = rle.getLabel
+        highlightannotation =
+          annotationHolder.createInfoAnnotation(this.textRange(label), null)
+        Some(DhallSyntaxHighlighter.RECORD_TYPE_KEY)
       case lb: DhallLetBinding =>
         val binding = lb.getNonreservedLabel
         highlightannotation =
@@ -79,3 +106,5 @@ class DhallAnnotator extends Annotator {
     }
   }
 }
+// DOT, FUNCTION_DECLARATION (lambda), INSTANCE FIELD (record property)
+// what about property accesses?

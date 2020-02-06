@@ -18,7 +18,27 @@ import scala.jdk.CollectionConverters.MapHasAsJava
 object DhallColorSettingsPage {
   private val DESCRIPTORS = Array[AttributesDescriptor](
     new AttributesDescriptor("Path", DhallSyntaxHighlighter.PATH),
-    new AttributesDescriptor("Record Key", DhallSyntaxHighlighter.RECORD_KEY),
+    new AttributesDescriptor(
+      "Record Value Key",
+      DhallSyntaxHighlighter.RECORD_VALUE_KEY
+    ),
+    new AttributesDescriptor(
+      "Record Type Key",
+      DhallSyntaxHighlighter.RECORD_TYPE_KEY
+    ),
+    new AttributesDescriptor(
+      "Block Comment",
+      DefaultLanguageHighlighterColors.BLOCK_COMMENT
+    ),
+    new AttributesDescriptor(
+      "Line Comment",
+      DefaultLanguageHighlighterColors.LINE_COMMENT
+    ),
+    new AttributesDescriptor("Number", DefaultLanguageHighlighterColors.NUMBER),
+    new AttributesDescriptor(
+      "Interpolation",
+      DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
+    ),
   )
 }
 
@@ -36,6 +56,7 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       |
       | let Example = { Type = { foo : Natural, bar : Bool }, default = { bar = False } }
       | in  Example::{ foo = 1 }
+      | let { key = True, value = "four" } : {key : Bool, value : Text} in 2
       |""".stripMargin
   override def getAdditionalHighlightingTagToDescriptorMap
     : util.Map[String, TextAttributesKey] =
