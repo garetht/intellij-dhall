@@ -819,7 +819,7 @@ private text-literal ::= double-quote-literal
 end-of-line ::= NEW_LINE
              | CARRIAGE_RETURN NEW_LINE
 
-block-comment ::= LEFT_BRACE MINUS block-comment-continue
+block-comment ::= LEFT_BRACE MINUS block-comment-continue {pin = 2}
 
 block-comment-char ::= all_ascii_printable
                     | VALID_NON_ASCII
@@ -828,7 +828,7 @@ block-comment-char ::= all_ascii_printable
 
 private block-comment-continue ::= MINUS RIGHT_BRACE
                         | block-comment block-comment-continue
-                        | block-comment-char block-comment-continue
+                        | block-comment-char block-comment-continue {pin(".*")=block-comment}
 
 not-end-of-line ::= all_ascii_printable
                   | VALID_NON_ASCII
