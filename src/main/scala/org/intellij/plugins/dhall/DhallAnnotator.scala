@@ -6,10 +6,12 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.intellij.plugins.dhall.psi.{
+  DhallBashEnvironmentVariable,
   DhallBlockComment,
   DhallBuiltin,
   DhallDoubleLiteral,
   DhallDoubleQuoteLiteral,
+  DhallEnv,
   DhallExpression,
   DhallHttp,
   DhallIntegerLiteral,
@@ -22,6 +24,7 @@ import org.intellij.plugins.dhall.psi.{
   DhallNonEmptyRecordTypeOrLiteral,
   DhallOperator,
   DhallPath,
+  DhallPosixEnvironmentVariable,
   DhallRecordLiteralEntry,
   DhallRecordTypeEntry,
   DhallSelector,
@@ -45,31 +48,31 @@ class DhallAnnotator extends Annotator {
         Some(DefaultLanguageHighlighterColors.BLOCK_COMMENT)
       case _: DhallLineComment =>
         Some(DefaultLanguageHighlighterColors.LINE_COMMENT)
-      case _: DhallLocal =>
+
+      // Path highlighting
+      case _: DhallLocal | _: DhallHttp =>
         Some(DhallSyntaxHighlighter.PATH)
-      case _: DhallHttp =>
-        Some(DhallSyntaxHighlighter.PATH)
+
+      // Env Highlighting
+      case _: DhallEnv =>
+        Some(DhallSyntaxHighlighter.ENVIRONMENT_IMPORT)
+      case _: DhallBashEnvironmentVariable | _: DhallPosixEnvironmentVariable =>
+        Some(DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME)
+
       case _: DhallOperator =>
         Some(DefaultLanguageHighlighterColors.OPERATION_SIGN)
       case _: DhallKeyword => Some(DefaultLanguageHighlighterColors.KEYWORD)
       case _: DhallBuiltin =>
         Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
-      case _: DhallVariable =>
+      case _: DhallVariable | _: DhallSelector =>
         Some(DefaultLanguageHighlighterColors.IDENTIFIER)
-      case _: DhallSelector =>
-        Some(DefaultLanguageHighlighterColors.IDENTIFIER)
-      case _: DhallDoubleLiteral =>
+      case _: DhallDoubleLiteral | _: DhallNaturalLiteral |
+          _: DhallIntegerLiteral =>
         Some(DefaultLanguageHighlighterColors.NUMBER)
-      case _: DhallNaturalLiteral =>
-        Some(DefaultLanguageHighlighterColors.NUMBER)
-      case _: DhallIntegerLiteral =>
-        Some(DefaultLanguageHighlighterColors.NUMBER)
-      case _: DhallDoubleQuoteLiteral =>
+      case _: DhallDoubleQuoteLiteral | _: DhallSingleQuoteLiteral =>
         Some(DefaultLanguageHighlighterColors.STRING)
       case _: DhallInterpolation =>
         Some(DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR)
-      case _: DhallSingleQuoteLiteral =>
-        Some(DefaultLanguageHighlighterColors.STRING)
       case ne: DhallNonEmptyRecordTypeOrLiteral =>
         // TODO: if the suceeding entry is a non-empty record literal,
         // then this should be colored as a instance value field, otherwise

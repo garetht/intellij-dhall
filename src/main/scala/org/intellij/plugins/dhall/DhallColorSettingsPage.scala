@@ -19,6 +19,14 @@ object DhallColorSettingsPage {
   private val DESCRIPTORS = Array[AttributesDescriptor](
     new AttributesDescriptor("Path", DhallSyntaxHighlighter.PATH),
     new AttributesDescriptor(
+      "Environment Import",
+      DhallSyntaxHighlighter.ENVIRONMENT_IMPORT
+    ),
+    new AttributesDescriptor(
+      "Environment Variable Import Name",
+      DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME
+    ),
+    new AttributesDescriptor(
       "Record Value Key",
       DhallSyntaxHighlighter.RECORD_VALUE_KEY
     ),
@@ -55,6 +63,8 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       |
       |<keyword>let</keyword> <identifier>f</identifier> = <path>./src/data/directory/file.dhall</path>
       |
+      |<keyword>let</keyword> <identifier>hname</identifier> = <env-import>env:<env-import-name>HOME_DIRECTORY</env-import-name></env-import>
+      |
       |<keyword>let</keyword> <identifier>f</identifier> = <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<operator>λ</operator>(<parameter>textParam</parameter> : <builtin>Text</builtin>) <operator>→</operator> <identifier>t</identifier> <operator>++</operator> <string>"!"</string>) <string>"Hello <interpolation>$${</interpolation><string>"world"</string><interpolation>}</interpolation>"</string>
       |
       |<keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>⩓</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
@@ -81,7 +91,9 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "record-type-key" -> DhallSyntaxHighlighter.RECORD_TYPE_KEY,
       "record-value-key" -> DhallSyntaxHighlighter.RECORD_VALUE_KEY,
       "interpolation" -> DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR,
-      "path" -> DhallSyntaxHighlighter.PATH
+      "path" -> DhallSyntaxHighlighter.PATH,
+      "env-import" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT,
+      "env-import-name" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME,
     ).asJava
   override def getAttributeDescriptors: Array[AttributesDescriptor] =
     DhallColorSettingsPage.DESCRIPTORS
