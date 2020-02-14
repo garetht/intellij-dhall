@@ -11,14 +11,17 @@ import org.intellij.plugins.dhall.psi.{
   DhallDoubleLiteral,
   DhallDoubleQuoteLiteral,
   DhallExpression,
+  DhallHttp,
   DhallIntegerLiteral,
   DhallInterpolation,
   DhallKeyword,
   DhallLetBinding,
   DhallLineComment,
+  DhallLocal,
   DhallNaturalLiteral,
   DhallNonEmptyRecordTypeOrLiteral,
   DhallOperator,
+  DhallPath,
   DhallRecordLiteralEntry,
   DhallRecordTypeEntry,
   DhallSelector,
@@ -42,6 +45,10 @@ class DhallAnnotator extends Annotator {
         Some(DefaultLanguageHighlighterColors.BLOCK_COMMENT)
       case _: DhallLineComment =>
         Some(DefaultLanguageHighlighterColors.LINE_COMMENT)
+      case _: DhallLocal =>
+        Some(DhallSyntaxHighlighter.PATH)
+      case _: DhallHttp =>
+        Some(DhallSyntaxHighlighter.PATH)
       case _: DhallOperator =>
         Some(DefaultLanguageHighlighterColors.OPERATION_SIGN)
       case _: DhallKeyword => Some(DefaultLanguageHighlighterColors.KEYWORD)
