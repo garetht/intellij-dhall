@@ -35,6 +35,11 @@ object DhallColorSettingsPage {
       DefaultLanguageHighlighterColors.LINE_COMMENT
     ),
     new AttributesDescriptor("Number", DefaultLanguageHighlighterColors.NUMBER),
+    new AttributesDescriptor("String", DefaultLanguageHighlighterColors.STRING),
+    new AttributesDescriptor(
+      "Operator",
+      DefaultLanguageHighlighterColors.OPERATION_SIGN
+    ),
     new AttributesDescriptor(
       "Interpolation",
       DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
@@ -45,19 +50,22 @@ object DhallColorSettingsPage {
 class DhallColorSettingsPage extends ColorSettingsPage {
   override def getIcon: Icon = DhallIcons.FILE
   override def getDemoText: String =
-    """
-      | <block-comment>{- A block comment -}</block-comment>
+    s"""
+      |<block-comment>{- A block comment -}</block-comment>
       |
-      | <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<operator>λ</operator>(<parameter>t</parameter> : <builtin>Text</builtin>) → <identifier>t</identifier> ++ <string>"!"</string>) <string>"Hello"</string>
+      |<keyword>let</keyword> <identifier>f</identifier> = <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<operator>λ</operator>(<parameter>textParam</parameter> : <builtin>Text</builtin>) <operator>→</operator> <identifier>t</identifier> <operator>++</operator> <string>"!"</string>) <string>"Hello <interpolation>$${</interpolation><string>"world"</string><interpolation>}</interpolation>"</string>
       |
-      | <line-comment>-- A line comment</line-comment>
+      |<keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>⩓</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
       |
-      | <keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>//\\</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
+      |<keyword>let</keyword> <identifier>Example</identifier> =
+      |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <builtin>Bool</builtin> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
       |
-      | let Example = { Type = { foo : Natural, bar : Bool }, default = { bar = False } }
-      | in  Example::{ foo = 1 }
-      | let { key = True, value = "four" } : {key : Bool, value : Text} in 2
+      |<keyword>let</keyword> <identifier>w = { <record-value-key>key</record-value-key> = <keyword>True</keyword>, <record-value-key>value</record-value-key> = <string>"four"</string> } : { <record-type-key>key</record-type-key> : <builtin>Bool</builtin>, <record-type-key>value</record-type-key> : <builtin>Text</builtin> }
+      |
+      |<keyword>in</keyword>  <identifier>Example</identifier>::{ <record-value-key>value</record-value-key> = <number>1</number> }
+      |
       |""".stripMargin
+
   override def getAdditionalHighlightingTagToDescriptorMap
     : util.Map[String, TextAttributesKey] =
     Map(
@@ -69,7 +77,10 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "operator" -> DefaultLanguageHighlighterColors.OPERATION_SIGN,
       "number" -> DefaultLanguageHighlighterColors.NUMBER,
       "string" -> DefaultLanguageHighlighterColors.STRING,
-      "parameter" -> DefaultLanguageHighlighterColors.PARAMETER
+      "parameter" -> DefaultLanguageHighlighterColors.PARAMETER,
+      "record-type-key" -> DhallSyntaxHighlighter.RECORD_TYPE_KEY,
+      "record-value-key" -> DhallSyntaxHighlighter.RECORD_VALUE_KEY,
+      "interpolation" -> DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
     ).asJava
   override def getAttributeDescriptors: Array[AttributesDescriptor] =
     DhallColorSettingsPage.DESCRIPTORS
