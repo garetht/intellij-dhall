@@ -8,7 +8,7 @@ class LocalSuccessDhallParsingTest
     doTest(true, true)
   }
 
-  def testSimpleBlockComment(): Unit = {
+  def testsimpleBlockComment(): Unit = {
     doTest(true, true)
   }
 

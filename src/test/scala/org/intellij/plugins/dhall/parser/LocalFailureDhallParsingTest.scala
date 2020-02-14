@@ -4,7 +4,7 @@ package parser
 class LocalFailureDhallParsingTest
     extends BaseDhallParsingTest("local/failure") {
 
-  def testIncompleteBlockComment(): Unit = {
+  def testincompleteBlockComment(): Unit = {
     doTest(true, false)
   }
 }
