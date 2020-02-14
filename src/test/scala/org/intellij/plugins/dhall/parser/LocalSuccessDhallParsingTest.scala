@@ -11,4 +11,8 @@ class LocalSuccessDhallParsingTest
   def testSimpleBlockComment(): Unit = {
     doTest(true, true)
   }
+
+  def testwordedBlockComment(): Unit = {
+    doTest(true, true)
+  }
 }
