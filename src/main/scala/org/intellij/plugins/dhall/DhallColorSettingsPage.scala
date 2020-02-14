@@ -53,14 +53,14 @@ class DhallColorSettingsPage extends ColorSettingsPage {
     s"""
       |<block-comment>{- A block comment -}</block-comment>
       |
+      |<keyword>let</keyword> <identifier>f</identifier> = <path>./src/data/directory/file.dhall</path>
+      |
       |<keyword>let</keyword> <identifier>f</identifier> = <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<operator>λ</operator>(<parameter>textParam</parameter> : <builtin>Text</builtin>) <operator>→</operator> <identifier>t</identifier> <operator>++</operator> <string>"!"</string>) <string>"Hello <interpolation>$${</interpolation><string>"world"</string><interpolation>}</interpolation>"</string>
       |
       |<keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>⩓</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
       |
       |<keyword>let</keyword> <identifier>Example</identifier> =
       |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <builtin>Bool</builtin> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
-      |
-      |<keyword>let</keyword> <identifier>w = { <record-value-key>key</record-value-key> = <keyword>True</keyword>, <record-value-key>value</record-value-key> = <string>"four"</string> } : { <record-type-key>key</record-type-key> : <builtin>Bool</builtin>, <record-type-key>value</record-type-key> : <builtin>Text</builtin> }
       |
       |<keyword>in</keyword>  <identifier>Example</identifier>::{ <record-value-key>value</record-value-key> = <number>1</number> }
       |
@@ -80,7 +80,8 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "parameter" -> DefaultLanguageHighlighterColors.PARAMETER,
       "record-type-key" -> DhallSyntaxHighlighter.RECORD_TYPE_KEY,
       "record-value-key" -> DhallSyntaxHighlighter.RECORD_VALUE_KEY,
-      "interpolation" -> DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
+      "interpolation" -> DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR,
+      "path" -> DhallSyntaxHighlighter.PATH
     ).asJava
   override def getAttributeDescriptors: Array[AttributesDescriptor] =
     DhallColorSettingsPage.DESCRIPTORS
