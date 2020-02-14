@@ -62,7 +62,7 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       |<keyword>let</keyword> <identifier>Example</identifier> =
       |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <builtin>Bool</builtin> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
       |
-      |<keyword>in</keyword>  <identifier>Example</identifier>::{ <record-value-key>value</record-value-key> = <number>1</number> }
+      |<keyword>in</keyword>  <identifier>Example</identifier><operator>::</operator>{ <record-value-key>value</record-value-key> = <number>1</number> }
       |
       |""".stripMargin
 
