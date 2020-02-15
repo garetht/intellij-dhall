@@ -17,7 +17,7 @@ import org.junit.Assert._
   *
   * The utilities here are meant to provide a more explicit and reasonable way of going about these assertions.
   */
-class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
+abstract class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
   override protected def getTestDataPath =
     "src/test/scala/syntaxHighlightTestData"
 
@@ -27,7 +27,7 @@ class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
   }
 
   def assertHighlight(actual: List[HighlightInfo],
-                      expected: List[AnnotatorHighlightAssertion]) = {
+                      expected: List[AnnotatorHighlightAssertion]): Unit = {
     actual.zip(expected).foreach {
       case (highlightInfo, highlightAssertion) => {
         val selectedInfo =

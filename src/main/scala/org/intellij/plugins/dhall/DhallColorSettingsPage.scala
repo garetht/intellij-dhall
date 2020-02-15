@@ -69,6 +69,8 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       |
       |<keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>⩓</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
       |
+      |<keyword>let</keyword> <identifier>union</identifier> = <<union-type>Red</union-type>|<union-type>Green</union-type>>
+      |
       |<keyword>let</keyword> <identifier>Example</identifier> =
       |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <builtin>Bool</builtin> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
       |
@@ -94,6 +96,7 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "path" -> DhallSyntaxHighlighter.PATH,
       "env-import" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT,
       "env-import-name" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME,
+      "union-type" -> DhallSyntaxHighlighter.UNION_TYPE_ENTRY,
     ).asJava
   override def getAttributeDescriptors: Array[AttributesDescriptor] =
     DhallColorSettingsPage.DESCRIPTORS

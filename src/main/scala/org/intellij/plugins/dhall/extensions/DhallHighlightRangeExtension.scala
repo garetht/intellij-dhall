@@ -1,8 +1,8 @@
-package org.intellij.plugins.dhall.extensions
+package org.intellij.plugins.dhall
+package extensions
 
 import com.intellij.codeInsight.daemon.impl.HighlightRangeExtension
 import com.intellij.psi.PsiFile
-import org.intellij.plugins.dhall.DhallFileType
 
 class DhallHighlightRangeExtension extends HighlightRangeExtension {
   override def isForceHighlightParents(psiFile: PsiFile): Boolean = {

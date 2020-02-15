@@ -32,6 +32,7 @@ import org.intellij.plugins.dhall.psi.{
   DhallRecordTypeEntry,
   DhallSelector,
   DhallSingleQuoteLiteral,
+  DhallUnionTypeEntry,
   DhallVariable
 }
 
@@ -48,7 +49,7 @@ object SyntaxInfoAnnotator {
   // highlighted in Dhall files.
   def annotate(
     psiElement: PsiElement,
-  ): Tuple2[TextRange, Option[TextAttributesKey]] = {
+  ): (TextRange, Option[TextAttributesKey]) = {
     val defaultTextRange = this.textRange(psiElement)
 
     psiElement match {
@@ -77,7 +78,7 @@ object SyntaxInfoAnnotator {
         // the backslash is the only branch of the DoubleQuoteChunk
         // that is the escape
         Option(dqc.getBackslash)
-          .map(backslash => {
+          .map(_ => {
             (
               this.textRange(dqc),
               Some(DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
@@ -117,6 +118,8 @@ object SyntaxInfoAnnotator {
             else DhallSyntaxHighlighter.RECORD_VALUE_KEY
           )
         )
+      case _: DhallUnionTypeEntry =>
+        (defaultTextRange, Some(DhallSyntaxHighlighter.UNION_TYPE_ENTRY))
       case rle: DhallRecordLiteralEntry =>
         (
           this.textRange(rle.getLabel),
