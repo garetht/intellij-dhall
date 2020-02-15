@@ -20,13 +20,17 @@ object DhallSyntaxHighlighter {
       "ENVIRONMENT_IMPORT_NAME",
       DefaultLanguageHighlighterColors.IDENTIFIER
     )
+  val UNION_TYPE_ENTRY: TextAttributesKey = createTextAttributesKey(
+    "UNION_TYPE_ENTRY",
+    DefaultLanguageHighlighterColors.CLASS_NAME
+  )
   val RECORD_VALUE_KEY: TextAttributesKey = createTextAttributesKey(
     "RECORD_VALUE_KEY",
     DefaultLanguageHighlighterColors.INSTANCE_FIELD
   )
   val RECORD_TYPE_KEY: TextAttributesKey = createTextAttributesKey(
     "RECORD_TYPE_KEY",
-    DefaultLanguageHighlighterColors.INSTANCE_FIELD
+    DefaultLanguageHighlighterColors.CLASS_NAME
   )
 }
 
