@@ -415,8 +415,9 @@ double-quote-chunk ::=
       interpolation
       // '\'    Beginning of escape sequence
     | BACKSLASH double-quote-escaped
-    | double-quote-char
+    | double-quote-char {pin(".*")=BACKSLASH}
 
+// N.B. this cannot inherit from Character because of the unicode-escape
 double-quote-escaped ::= DOUBLE_QUOTE
                        | DOLLAR
                        | BACKSLASH
@@ -426,7 +427,7 @@ double-quote-escaped ::= DOUBLE_QUOTE
                        | n // 'n'    line feed       U+000A
                        | r // 'r'    carriage return U+000D
                        | t // 't'    tab             U+0009
-                       | u unicode-escape {extends = character elementType = character}
+                       | u unicode-escape
 
 
 private single-quote-continue ::= interpolation single-quote-continue

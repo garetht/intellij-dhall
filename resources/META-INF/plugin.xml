@@ -18,14 +18,14 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
-
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <fileType name="Dhall File" implementationClass="org.intellij.plugins.dhall.DhallFileType"
                   language="Dhall" extensions="dhall"/>
         <lang.parserDefinition language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallParserDefinition"/>
-        <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.DhallAnnotator" />
+        <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.annotator.DhallAnnotator" />
         <colorSettingsPage implementation="org.intellij.plugins.dhall.DhallColorSettingsPage"/>
+        <highlightRangeExtension implementation="org.intellij.plugins.dhall.extensions.DhallHighlightRangeExtension"/>
     </extensions>
 
     <actions>

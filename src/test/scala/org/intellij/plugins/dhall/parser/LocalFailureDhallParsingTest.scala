@@ -7,4 +7,8 @@ class LocalFailureDhallParsingTest
   def testincompleteBlockComment(): Unit = {
     doTest(true, false)
   }
+
+  def testincompleteDoubleQuoteSlash(): Unit = {
+    doTest(true, false)
+  }
 }
