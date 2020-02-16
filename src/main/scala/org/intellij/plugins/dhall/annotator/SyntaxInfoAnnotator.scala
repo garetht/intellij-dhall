@@ -136,10 +136,11 @@ object SyntaxInfoAnnotator {
           Some(DefaultLanguageHighlighterColors.IDENTIFIER)
         )
       case ex: DhallExpression =>
-        Option(ex.getParameter)
-          .map(param => {
+        // lambda parameters and forall parameters
+        Option(ex.getNonreservedLabel)
+          .map(label => {
             (
-              this.textRange(param),
+              this.textRange(label),
               Some(DefaultLanguageHighlighterColors.PARAMETER)
             )
           })
