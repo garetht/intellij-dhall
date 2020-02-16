@@ -286,7 +286,7 @@ double-plus ::= PLUS PLUS {extends = operator elementType = operator}
 hash-sign ::= HASH_SIGN {extends = operator elementType = operator}
 double-ampersand ::= AMPERSAND AMPERSAND {extends = operator elementType = operator}
 asterisk ::= ASTERISK {extends = operator elementType = operator}
-double-equals ::= EQUALS {extends = operator elementType = operator}
+double-equals ::= EQUALS EQUALS {extends = operator elementType = operator}
 not-equals ::= EXCLAMATION EQUALS {extends = operator elementType = operator}
 dot ::= DOT {extends = operator elementType = operator}
 
@@ -587,18 +587,18 @@ operator-expression ::= import-alt-expression
 
 // Nonempty-whitespace to disambiguate `http://a/a?a`
 import-alt-expression    ::= operator-expression whsp question whsp1 operator-expression                {extends = operator-expression}
-or-expression            ::= operator-expression whsp double-pipe whsp operator-expression                {extends = operator-expression}
+or-expression            ::= operator-expression whsp double-pipe whsp operator-expression              {extends = operator-expression}
 // Nonempty-whitespace to disambiguate `f +2`
 plus-expression          ::= operator-expression whsp plus whsp1 operator-expression                    {extends = operator-expression}
-text-append-expression   ::= operator-expression whsp double-plus whsp operator-expression                {extends = operator-expression}
+text-append-expression   ::= operator-expression whsp double-plus whsp operator-expression              {extends = operator-expression}
 list-append-expression   ::= operator-expression whsp hash-sign whsp operator-expression                {extends = operator-expression}
-and-expression           ::= operator-expression whsp double-ampersand whsp operator-expression      {extends = operator-expression}
+and-expression           ::= operator-expression whsp double-ampersand whsp operator-expression         {extends = operator-expression}
 combine-expression       ::= operator-expression whsp combine whsp operator-expression                  {extends = operator-expression}
 prefer-expression        ::= operator-expression whsp prefer whsp operator-expression                   {extends = operator-expression}
 combine-types-expression ::= operator-expression whsp combine-types whsp operator-expression            {extends = operator-expression}
 times-expression         ::= operator-expression whsp asterisk whsp operator-expression                 {extends = operator-expression}
-equal-expression         ::= operator-expression whsp double-equals whsp operator-expression            {extends = operator-expression}
-not-equal-expression     ::= operator-expression whsp not-equals whsp operator-expression       {extends = operator-expression}
+equal-expression         ::= operator-expression whsp double-equals !EQUALS whsp operator-expression    {extends = operator-expression}
+not-equal-expression     ::= operator-expression whsp not-equals whsp operator-expression               {extends = operator-expression}
 equivalent-expression    ::= operator-expression whsp equivalent whsp operator-expression               {extends = operator-expression}
 
 // Import expressions need to be separated by some whitespace, otherwise there
