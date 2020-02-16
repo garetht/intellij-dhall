@@ -220,7 +220,7 @@ expression ::=
 
     // The four pins here are the rules that do not need backtracking. Once those
     // keywords are matched, the rule is matched.
-    { pin(".*")="forall|lambda|if|assert" methods=[parameter="/nonreserved-label"]}
+    { pin(".*")="forall|lambda|if|assert"}
 
 // These two rules are pinned at the colon, since according to the comments we must backtrack
 // because we do not know when parsing from the left if there will be a type annotation. But
