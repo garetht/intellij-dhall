@@ -220,7 +220,8 @@ expression ::=
 
 fake character ::= all_ascii_printable | VALID_NON_ASCII
 
-simple-label ::= keyword simple-label-next-char+
+simple-label ::= !assert as simple-label-next-char+
+               | keyword-without-as simple-label-next-char+
                | !keyword (simple-label-first-char simple-label-next-char*)
 simple-label-first-char ::= alpha | UNDERSCORE { extends = character elementType = character }
 simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE { extends = character elementType = character }
@@ -281,21 +282,21 @@ dot ::= DOT {extends = operator elementType = operator}
 
 
 // Keywords
-keyword ::= if
-        | then
-        | else
-        | let
-        | in
-        | using
-        | missing
-        | as
-        | infinity
-        | nan
-        | merge
-        | some
-        | toMap
-        | assert
-        | forall
+keyword ::= keyword-without-as | as
+private keyword-without-as ::= if
+                            | then
+                            | else
+                            | let
+                            | in
+                            | using
+                            | missing
+                            | infinity
+                            | nan
+                            | merge
+                            | some
+                            | toMap
+                            | assert
+                            | forall
 
 if                    ::= i f { extends = keyword }
 then                  ::= t h e n { extends = keyword }
