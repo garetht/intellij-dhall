@@ -187,7 +187,7 @@ expression ::=
     // We allow dropping the `in` between adjacent let-expressions; the following are equivalent:
     // "let x = e1 let y = e2 in e3"
     // "let x = e1 in let y = e2 in e3"
-    | let-binding+ in whsp1 expression
+    | let_binding+ in whsp1 expression
 
     // "forall (x : a) -> b"
     | forall whsp LEFT_PAREN whsp nonreserved-label whsp COLON whsp1 expression whsp RIGHT_PAREN whsp arrow whsp expression
@@ -560,7 +560,7 @@ non-empty-list-literal ::=
 annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
 
 //  "let x = e1"
-let-binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile="#auto"}
+let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile="#auto"}
 
 //  "[] : t"
 empty-list-literal ::=
