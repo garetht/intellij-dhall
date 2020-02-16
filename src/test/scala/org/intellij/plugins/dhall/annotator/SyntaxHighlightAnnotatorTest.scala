@@ -11,11 +11,11 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     this.assertHighlight(
       highlight,
       List(
-        AnnotatorHighlightAssertion(text = "let", key = C.KEYWORD),
-        AnnotatorHighlightAssertion(text = "x", key = C.IDENTIFIER),
-        AnnotatorHighlightAssertion(text = "2", key = C.NUMBER),
-        AnnotatorHighlightAssertion(text = "in", key = C.KEYWORD),
-        AnnotatorHighlightAssertion(text = "x", key = C.IDENTIFIER)
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "x", key = C.IDENTIFIER),
+        HighlightAssert(text = "2", key = C.NUMBER),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "x", key = C.IDENTIFIER)
       )
     )
   }
@@ -25,20 +25,17 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     this.assertHighlight(
       highlight,
       List(
-        AnnotatorHighlightAssertion(text = "let", key = C.KEYWORD),
-        AnnotatorHighlightAssertion(text = "e", key = C.IDENTIFIER),
-        AnnotatorHighlightAssertion(text = """"h\ w"""", key = C.STRING),
-        AnnotatorHighlightAssertion(
-          text = """\""",
-          key = C.VALID_STRING_ESCAPE
-        ),
-        AnnotatorHighlightAssertion(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "e", key = C.IDENTIFIER),
+        HighlightAssert(text = """"h\ w"""", key = C.STRING),
+        HighlightAssert(text = """\""", key = C.VALID_STRING_ESCAPE),
+        HighlightAssert(
           text = " ",
           key = null,
           severity = HighlightSeverity.ERROR
         ),
-        AnnotatorHighlightAssertion(text = "in", key = C.KEYWORD),
-        AnnotatorHighlightAssertion(text = "e", key = C.IDENTIFIER)
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "e", key = C.IDENTIFIER)
       )
     )
   }
@@ -48,9 +45,28 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     this.assertHighlight(
       highlight,
       List(
-        AnnotatorHighlightAssertion(text = "Hello", key = D.UNION_TYPE_ENTRY),
-        AnnotatorHighlightAssertion(text = "World", key = D.UNION_TYPE_ENTRY),
-        AnnotatorHighlightAssertion(text = "There", key = D.UNION_TYPE_ENTRY),
+        HighlightAssert(text = "Hello", key = D.UNION_TYPE_ENTRY),
+        HighlightAssert(text = "World", key = D.UNION_TYPE_ENTRY),
+        HighlightAssert(text = "There", key = D.UNION_TYPE_ENTRY),
+      )
+    )
+  }
+
+  def testLambdaParameter(): Unit = {
+    val highlight = this.highlightFile("lambdaParameter.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert(text = """\""", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "nat", key = C.PARAMETER),
+        HighlightAssert(text = "Natural", key = C.PREDEFINED_SYMBOL),
+        HighlightAssert(text = "->", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "assert", key = C.KEYWORD),
+        HighlightAssert(text = "n", key = C.IDENTIFIER),
+        HighlightAssert(text = "===", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "n", key = C.IDENTIFIER),
+        HighlightAssert(text = "+", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "0", key = C.NUMBER),
       )
     )
   }

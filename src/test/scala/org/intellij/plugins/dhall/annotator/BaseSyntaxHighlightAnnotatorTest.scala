@@ -27,13 +27,13 @@ abstract class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
   }
 
   def assertHighlight(actual: List[HighlightInfo],
-                      expected: List[AnnotatorHighlightAssertion]): Unit = {
+                      expected: List[HighlightAssert]): Unit = {
     actual.zip(expected).foreach {
       case (highlightInfo, highlightAssertion) => {
         val selectedInfo =
-          AnnotatorHighlightAssertion.fromHighlightInfo(highlightInfo)
+          HighlightAssert.fromHighlightInfo(highlightInfo)
         val message =
-          s"highlight info ${selectedInfo} (actual: ${highlightInfo}) did not match assertion ${highlightAssertion}"
+          s"highlight info ${selectedInfo} (actual: ${highlightInfo})\n did not match assertion ${highlightAssertion}"
         // There is the small chance that, because we do not compare the position of the text, our assertion
         // leaves open the possibility of mismatch. This is thought to be an unlikely possibility relative
         // to the amount of noise introducing position information would introduce.
@@ -44,8 +44,10 @@ abstract class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
     }
 
     assertEquals(
-      s"expected number of highlights to be the same but ${actual.length} highlights were generated and ${expected.length} highlights were asserted. actual highlights: ${actual
-        .map(AnnotatorHighlightAssertion.fromHighlightInfo)}",
+      s"expected number of highlights to be the same but ${actual.length} highlights were generated and ${expected.length} highlights were asserted.\n\nactual highlights:\n${actual
+        .map(HighlightAssert.fromHighlightInfo)
+        .map(_.toString)
+        .mkString("\n")}",
       actual.length,
       expected.length
     )
