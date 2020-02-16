@@ -199,7 +199,7 @@ expression ::=
     // "merge e1 e2 : t"
     // NOTE: Backtrack if parsing this alternative fails since we can't tell
     // from the keyword whether there will be a type annotation or not
-    | merge whsp1 import-expression whsp1 import-expression whsp COLON whsp1 application-primary
+    | merge-expression
 
     // "[] : t"
     // NOTE: Backtrack if parsing this alternative fails since we can't tell
@@ -210,13 +210,23 @@ expression ::=
     // "toMap e : t"
     // NOTE: Backtrack if parsing this alternative fails since we can't tell
     // from the keyword whether there will be a type annotation or not
-    | toMap whsp1 import-expression whsp COLON whsp1 application-primary
+    | tomap-expression
 
     // "assert : Natural/even 1 === False"
     | assert whsp COLON whsp1 expression
 
     // "x : t"
-    | annotated-expression {methods=[parameter="/nonreserved-label"]}
+    | annotated-expression
+
+    // The four pins here are the rules that do not need backtracking. Once those
+    // keywords are matched, the rule is matched.
+    { pin(".*")="forall|lambda|if|assert" methods=[parameter="/nonreserved-label"]}
+
+// These two rules are pinned at the colon, since according to the comments we must backtrack
+// because we do not know when parsing from the left if there will be a type annotation. But
+// once we get to the colon, we know there ought to be a type annotation.
+private merge-expression ::= merge whsp1 import-expression whsp1 import-expression whsp COLON whsp1 application-primary {pin=COLON}
+private tomap-expression ::= toMap whsp1 import-expression whsp COLON whsp1 application-primary {pin=COLON}
 
 fake character ::= all_ascii_printable | VALID_NON_ASCII
 
@@ -554,7 +564,7 @@ let-binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? 
 
 //  "[] : t"
 empty-list-literal ::=
-    LEFT_SQUARE_BRACKET whsp (COMMA whsp)? RIGHT_SQUARE_BRACKET whsp COLON whsp1 application-primary
+    LEFT_SQUARE_BRACKET whsp (COMMA whsp)? RIGHT_SQUARE_BRACKET whsp COLON whsp1 application-primary {pin=COLON}
 
 operator-expression ::= import-alt-expression
                       | or-expression
