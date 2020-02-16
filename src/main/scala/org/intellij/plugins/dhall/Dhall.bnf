@@ -550,7 +550,7 @@ non-empty-list-literal ::=
 annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
 
 //  "let x = e1"
-let-binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp
+let-binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile="#auto"}
 
 //  "[] : t"
 empty-list-literal ::=
