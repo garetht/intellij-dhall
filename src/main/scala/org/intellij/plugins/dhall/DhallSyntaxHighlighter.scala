@@ -10,6 +10,8 @@ import com.intellij.psi.tree.IElementType
 object DhallSyntaxHighlighter {
   val PATH: TextAttributesKey =
     createTextAttributesKey("PATH", DefaultLanguageHighlighterColors.IDENTIFIER)
+  val IP_LITERAL: TextAttributesKey =
+    createTextAttributesKey("IP_LITERAL", PATH)
   val ENVIRONMENT_IMPORT: TextAttributesKey =
     createTextAttributesKey(
       "ENVIRONMENT_IMPORT",
