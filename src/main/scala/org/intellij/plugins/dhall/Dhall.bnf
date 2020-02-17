@@ -230,8 +230,7 @@ private tomap-expression ::= toMap whsp1 import-expression whsp COLON whsp1 appl
 
 fake character ::= all_ascii_printable | VALID_NON_ASCII
 
-simple-label ::= !assert as simple-label-next-char+
-               | keyword-without-as simple-label-next-char+
+simple-label ::= keyword simple-label-next-char+
                | !keyword (simple-label-first-char simple-label-next-char*)
 simple-label-first-char ::= alpha | UNDERSCORE { extends = character elementType = character }
 simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE { extends = character elementType = character }
@@ -292,21 +291,21 @@ dot-op ::= DOT {extends = operator}
 
 
 // Keywords
-keyword ::= keyword-without-as | as
-private keyword-without-as ::= if
-                            | then
-                            | else
-                            | let
-                            | in
-                            | using
-                            | missing
-                            | infinity
-                            | nan
-                            | merge
-                            | some
-                            | toMap
-                            | assert
-                            | forall
+keyword ::= if
+          | then
+          | else
+          | let
+          | in
+          | using
+          | missing
+          | assert
+          | as
+          | infinity
+          | nan
+          | merge
+          | some
+          | toMap
+          | forall
 
 if                    ::= i f { extends = keyword }
 then                  ::= t h e n { extends = keyword }
