@@ -15,6 +15,10 @@ import org.intellij.plugins.dhall.icons.DhallIcons
 
 import scala.jdk.CollectionConverters.MapHasAsJava
 
+// TODO: Write color settings tests:
+// 1. that demoText is valid XML
+// 2. that all values in the highlighting tags map are
+//    editable
 object DhallColorSettingsPage {
   private val DESCRIPTORS = Array[AttributesDescriptor](
     new AttributesDescriptor("Path", DhallSyntaxHighlighter.PATH),
