@@ -23,4 +23,8 @@ class LocalFailureDhallParsingTest
   def testimportShaRecovery(): Unit = {
     doTest(true, false)
   }
+
+  def testKeywordPrefixRecovery(): Unit = {
+    doTest(true, false)
+  }
 }
