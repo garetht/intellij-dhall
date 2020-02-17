@@ -559,8 +559,10 @@ non-empty-list-literal ::=
 //  Nonempty-whitespace to disambiguate `env:VARIABLE` from type annotations
 annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
 
+// the FOLLOW set of let_binding
+private let_binding_recover ::= !(let | in)
 //  "let x = e1"
-let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile="#auto"}
+let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile=let_binding_recover}
 
 //  "[] : t"
 empty-list-literal ::=
