@@ -78,4 +78,23 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
       )
     )
   }
+
+  def testSelectorDot(): Unit = {
+    val highlight = this.highlightFile("selectorDot.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "n", key = C.IDENTIFIER),
+        HighlightAssert(text = "2.0", key = C.NUMBER),
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "a", key = C.IDENTIFIER),
+        HighlightAssert(text = ".", key = C.DOT),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
 }

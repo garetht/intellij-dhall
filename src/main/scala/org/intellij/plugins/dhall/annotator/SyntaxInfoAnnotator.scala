@@ -10,6 +10,7 @@ import org.intellij.plugins.dhall.psi.{
   DhallBashEnvironmentVariable,
   DhallBlockComment,
   DhallBuiltin,
+  DhallDotOp,
   DhallDoubleLiteral,
   DhallDoubleQuoteChunk,
   DhallDoubleQuoteLiteral,
@@ -91,6 +92,8 @@ object SyntaxInfoAnnotator {
           defaultTextRange,
           Some(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
         )
+      case _: DhallDotOp =>
+        (defaultTextRange, Some(DefaultLanguageHighlighterColors.DOT))
       case _: DhallOperator =>
         (
           defaultTextRange,
