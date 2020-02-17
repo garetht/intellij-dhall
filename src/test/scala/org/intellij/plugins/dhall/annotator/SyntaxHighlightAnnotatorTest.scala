@@ -29,11 +29,7 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
         HighlightAssert(text = "e", key = C.IDENTIFIER),
         HighlightAssert(text = """"h\ w"""", key = C.STRING),
         HighlightAssert(text = """\""", key = C.VALID_STRING_ESCAPE),
-        HighlightAssert(
-          text = " ",
-          key = null,
-          severity = HighlightSeverity.ERROR
-        ),
+        HighlightAssert.AssertError,
         HighlightAssert(text = "in", key = C.KEYWORD),
         HighlightAssert(text = "e", key = C.IDENTIFIER)
       )
@@ -67,6 +63,18 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
         HighlightAssert(text = "n", key = C.IDENTIFIER),
         HighlightAssert(text = "+", key = C.OPERATION_SIGN),
         HighlightAssert(text = "0", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testIncompleteRecordError(): Unit = {
+    val highlight = this.highlightFile("incompleteRecordError.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert("place", D.RECORD_VALUE_KEY),
+        HighlightAssert("2", C.NUMBER),
+        HighlightAssert.AssertError
       )
     )
   }
