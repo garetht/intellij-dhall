@@ -87,6 +87,8 @@ object SyntaxInfoAnnotator {
             )
           })
           .getOrElse((defaultTextRange, Option.empty[TextAttributesKey]))
+      // N.B. These must come before Operator since they are
+      // subclasses of Operator
       case _: DhallLambda =>
         (
           defaultTextRange,
