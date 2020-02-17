@@ -557,7 +557,10 @@ non-empty-list-literal ::=
 //  Nonempty-whitespace to disambiguate `env:VARIABLE` from type annotations
 annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
 
-// the FOLLOW set of let_binding
+// the FOLLOW set of let_binding. Note that that pinning changes the FOLLOW set to
+// be more permissive, so we must manually write a rule to recover the FOLLOW set
+// before pinning - "#auto" will not just work.
+// N.B. Quick Documentation can be used to see the FIRST and FOLLOW sets.
 private let_binding_recover ::= !(let | in)
 //  "let x = e1"
 let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile=let_binding_recover}
