@@ -21,6 +21,7 @@ import org.intellij.plugins.dhall.psi.{
   DhallIntegerLiteral,
   DhallInterpolation,
   DhallKeyword,
+  DhallLambda,
   DhallLetBinding,
   DhallLineComment,
   DhallLocal,
@@ -85,6 +86,11 @@ object SyntaxInfoAnnotator {
             )
           })
           .getOrElse((defaultTextRange, Option.empty[TextAttributesKey]))
+      case _: DhallLambda =>
+        (
+          defaultTextRange,
+          Some(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+        )
       case _: DhallOperator =>
         (
           defaultTextRange,

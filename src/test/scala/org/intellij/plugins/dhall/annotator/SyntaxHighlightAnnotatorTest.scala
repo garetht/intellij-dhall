@@ -53,7 +53,7 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     this.assertHighlight(
       highlight,
       List(
-        HighlightAssert(text = """\""", key = C.OPERATION_SIGN),
+        HighlightAssert(text = """\""", key = C.FUNCTION_DECLARATION),
         HighlightAssert(text = "nat", key = C.PARAMETER),
         HighlightAssert(text = "Natural", key = C.PREDEFINED_SYMBOL),
         HighlightAssert(text = "->", key = C.OPERATION_SIGN),
