@@ -276,7 +276,7 @@ combine ::= UNICODE_COMBINE | SLASH BACKSLASH {extends = operator elementType = 
 combine-types ::= UNICODE_COMBINE_TYPES | SLASH SLASH BACKSLASH BACKSLASH {extends = operator elementType = operator}
 equivalent ::= UNICODE_EQUIVALENT | EQUALS EQUALS EQUALS {extends = operator elementType = operator}
 prefer ::= UNICODE_PREFER | SLASH SLASH !(BACKSLASH BACKSLASH) {extends = operator elementType = operator}
-lambda ::= UNICODE_LAMBDA | BACKSLASH {extends = operator elementType = operator}
+lambda ::= UNICODE_LAMBDA | BACKSLASH {extends = operator}
 arrow ::= UNICODE_ARROW | MINUS GT {extends = operator elementType = operator}
 complete ::= COLON COLON {extends = operator elementType = operator}
 question ::= QUESTION {extends = operator elementType = operator}
