@@ -440,12 +440,11 @@ double-quote-escaped ::= DOUBLE_QUOTE
                        | t // 't'    tab             U+0009
                        | u unicode-escape
 
-
 private single-quote-continue ::= interpolation single-quote-continue
                                 | escaped-quote-pair single-quote-continue
                                 | escaped-interpolation single-quote-continue
-                                | single-quote-char single-quote-continue
                                 | SINGLE_QUOTE SINGLE_QUOTE
+                                | single-quote-char single-quote-continue
 
 escaped-quote-pair ::= SINGLE_QUOTE SINGLE_QUOTE SINGLE_QUOTE
 
