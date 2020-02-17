@@ -11,4 +11,12 @@ class LocalFailureDhallParsingTest
   def testincompleteDoubleQuoteSlash(): Unit = {
     doTest(true, false)
   }
+
+  def testletBindingRecovery(): Unit = {
+    doTest(true, false)
+  }
+
+  def testfirstApplicationExpressionRecovery(): Unit = {
+    doTest(true, false)
+  }
 }

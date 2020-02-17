@@ -187,7 +187,7 @@ expression ::=
     // We allow dropping the `in` between adjacent let-expressions; the following are equivalent:
     // "let x = e1 let y = e2 in e3"
     // "let x = e1 in let y = e2 in e3"
-    | let_binding+ in whsp1 expression
+    | let_binding let_binding* in whsp1 expression
 
     // "forall (x : a) -> b"
     | forall whsp LEFT_PAREN whsp nonreserved-label whsp COLON whsp1 expression whsp RIGHT_PAREN whsp arrow whsp expression
@@ -218,9 +218,9 @@ expression ::=
     // "x : t"
     | annotated-expression
 
-    // The four pins here are the rules that do not need backtracking. Once those
+    // The first four pins here are the rules that do not need backtracking. Once those
     // keywords are matched, the rule is matched.
-    { pin(".*")="forall|lambda|if|assert"}
+    { pin(".*")="forall|lambda|if|assert|let_binding"}
 
 // These two rules are pinned at the colon, since according to the comments we must backtrack
 // because we do not know when parsing from the left if there will be a type annotation. But
@@ -516,7 +516,7 @@ primitive-expression ::=
     | identifier
 
     // "( e )"
-    | LEFT_PAREN complete-expression RIGHT_PAREN {extends=operator-expression}
+    | LEFT_PAREN complete-expression RIGHT_PAREN {pin(".*")="LEFT_BRACE|LEFT_PAREN" extends=operator-expression}
 
 identifier ::= variable | builtin
 
@@ -620,7 +620,7 @@ first-application-expression ::=
 
     // "toMap e"
     | toMap whsp1 import-expression
-    | import-expression {extends = operator-expression}
+    | import-expression {pin(".*")="merge|some|toMap" extends = operator-expression}
 
 
 import-expression ::= import | completion-primary {extends = operator-expression}
@@ -838,6 +838,15 @@ block-comment-char ::= all_ascii_printable
                     | TAB
                     | end-of-line {extends = character elementType = character}
 
+// Once we have matched a block comment, we must pick the block comment rule. This is because
+// the ABNF does not specify that backtracking is to be done in the case that the block-comment
+// rule fails.
+// Consider, for example, {- {- -}. If we allow failure in the second branch, then this gets parsed
+// using the block-comment-char rule, which will successfully parse this as the string " {- " within
+// a block comment, instead of an unclosed block comment containing the nested block comment, which is
+// the correct parse.
+// The reason we need to explicitly state the pin is because some prefix for the second rule can also
+// be matched by the third rule.
 private block-comment-continue ::= MINUS RIGHT_BRACE
                         | block-comment block-comment-continue
                         | block-comment-char block-comment-continue {pin(".*")=block-comment}
@@ -860,7 +869,7 @@ private whsp1 ::= whitespace-chunk+
 
 
 // compact definition of sixty-four hex digits
-sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex
+private sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex
 private sixteen-hex ::= four-hex four-hex four-hex four-hex
 private four-hex ::= hexdig hexdig hexdig hexdig
 

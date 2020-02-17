@@ -11,6 +11,9 @@ case class HighlightAssert(text: String,
                              HighlightSeverity.INFORMATION)
 
 object HighlightAssert {
+  val AssertError: HighlightAssert =
+    HighlightAssert(text = "", key = null, severity = HighlightSeverity.ERROR)
+
   def fromHighlightInfo(info: HighlightInfo): HighlightAssert = {
     HighlightAssert(
       text = info.getText,
