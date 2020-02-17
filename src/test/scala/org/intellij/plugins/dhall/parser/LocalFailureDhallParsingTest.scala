@@ -24,7 +24,7 @@ class LocalFailureDhallParsingTest
     doTest(true, false)
   }
 
-  def testKeywordPrefixRecovery(): Unit = {
+  def testkeywordPrefixRecovery(): Unit = {
     doTest(true, false)
   }
 }
