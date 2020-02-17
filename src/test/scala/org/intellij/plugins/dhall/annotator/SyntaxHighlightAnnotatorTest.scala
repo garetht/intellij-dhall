@@ -29,7 +29,7 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
         HighlightAssert(text = "e", key = C.IDENTIFIER),
         HighlightAssert(text = """"h\ w"""", key = C.STRING),
         HighlightAssert(text = """\""", key = C.VALID_STRING_ESCAPE),
-        HighlightAssert.AssertError,
+        HighlightAssert.assertError(" "),
         HighlightAssert(text = "in", key = C.KEYWORD),
         HighlightAssert(text = "e", key = C.IDENTIFIER)
       )
@@ -74,7 +74,7 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
       List(
         HighlightAssert("place", D.RECORD_VALUE_KEY),
         HighlightAssert("2", C.NUMBER),
-        HighlightAssert.AssertError
+        HighlightAssert.assertError("")
       )
     )
   }

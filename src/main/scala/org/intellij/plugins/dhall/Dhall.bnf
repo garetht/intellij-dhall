@@ -784,11 +784,14 @@ posix-environment-variable-character ::= BACKSLASH (DOUBLE_QUOTE | BACKSLASH | a
                                        | between_upper_lower_alpha_no_backslash
                                        | lower_alpha {extends = character elementType = character}
 
-import ::= import-hashed (whsp as whsp1 (textid | location))?
+// "http://example.com"
+// "./foo/bar"
+// "env:FOO"
+import ::= import-hashed (whsp as whsp1 (textid | location))? {pin = 1}
 
-import-hashed ::= import-type (whsp1 hash)?
+import-hashed ::= import-type (whsp1 hash)? {pin = 1}
 
-hash ::= s h a TWO FIVE SIX COLON sixty-four-hex // "sha256:XXX...XXX"
+hash ::= s h a TWO FIVE SIX COLON sixty-four-hex {pin=COLON} // "sha256:XX...XXX"
 
 import-type ::= missing | local | http | env
 
@@ -871,9 +874,9 @@ private whsp1 ::= whitespace-chunk+
 
 
 // compact definition of sixty-four hex digits
-private sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex
-private sixteen-hex ::= four-hex four-hex four-hex four-hex
-private four-hex ::= hexdig hexdig hexdig hexdig
+private sixty-four-hex ::= sixteen-hex sixteen-hex sixteen-hex sixteen-hex {pin = 1}
+private sixteen-hex ::= four-hex four-hex four-hex four-hex {pin = 1}
+private four-hex ::= hexdig hexdig hexdig hexdig {pin = 1}
 
 hexdig ::= digit | UA | a | UB | b | UC | c | UD | d | UE | e | UF | f
 
