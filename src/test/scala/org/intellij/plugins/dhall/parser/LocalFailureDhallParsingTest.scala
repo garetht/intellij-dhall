@@ -19,4 +19,8 @@ class LocalFailureDhallParsingTest
   def testfirstApplicationExpressionRecovery(): Unit = {
     doTest(true, false)
   }
+
+  def testimportShaRecovery(): Unit = {
+    doTest(true, false)
+  }
 }
