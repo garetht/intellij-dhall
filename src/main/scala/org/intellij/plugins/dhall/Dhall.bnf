@@ -269,7 +269,7 @@ fake operator ::= combine
            | asterisk
            | double-equals
            | not-equals
-           | dot
+           | dot-op
 
 // Special Symbols
 combine ::= UNICODE_COMBINE | SLASH BACKSLASH {extends = operator elementType = operator}
@@ -288,7 +288,7 @@ double-ampersand ::= AMPERSAND AMPERSAND {extends = operator elementType = opera
 asterisk ::= ASTERISK {extends = operator elementType = operator}
 double-equals ::= EQUALS EQUALS {extends = operator elementType = operator}
 not-equals ::= EXCLAMATION EQUALS {extends = operator elementType = operator}
-dot ::= DOT {extends = operator elementType = operator}
+dot-op ::= DOT {extends = operator}
 
 
 // Keywords
@@ -802,7 +802,7 @@ left completion-expression ::= whsp complete whsp selector-primary {extends = op
 
 selector-primary ::= primitive-expression selector-expression* {extends = operator-expression}
 
-left selector-expression::= whsp dot whsp selector {extends = operator-expression}
+left selector-expression::= whsp dot-op whsp selector {extends = operator-expression}
 
 selector ::= any-label
             | labels

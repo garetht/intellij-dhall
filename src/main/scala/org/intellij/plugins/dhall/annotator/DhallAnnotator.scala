@@ -18,5 +18,4 @@ class DhallAnnotator extends Annotator {
     }
   }
 }
-// DOT, FUNCTION_DECLARATION (lambda), INSTANCE FIELD (record property)
 // what about property accesses?
