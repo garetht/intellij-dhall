@@ -21,6 +21,8 @@ import org.intellij.plugins.dhall.psi.{
   DhallHttp,
   DhallIntegerLiteral,
   DhallInterpolation,
+  DhallIpLiteral,
+  DhallIpv4Address,
   DhallKeyword,
   DhallLambda,
   DhallLetBinding,
@@ -63,7 +65,8 @@ object SyntaxInfoAnnotator {
       // Path highlighting
       case _: DhallLocal | _: DhallHttp =>
         (defaultTextRange, Some(DhallSyntaxHighlighter.PATH))
-
+      case _: DhallIpLiteral | _: DhallIpv4Address =>
+        (defaultTextRange, Some(DhallSyntaxHighlighter.IP_LITERAL))
       // Env Highlighting
       case _: DhallEnv =>
         (defaultTextRange, Some(DhallSyntaxHighlighter.ENVIRONMENT_IMPORT))

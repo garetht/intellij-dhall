@@ -18,6 +18,7 @@ import scala.jdk.CollectionConverters.MapHasAsJava
 object DhallColorSettingsPage {
   private val DESCRIPTORS = Array[AttributesDescriptor](
     new AttributesDescriptor("Path", DhallSyntaxHighlighter.PATH),
+    new AttributesDescriptor("IP Literal", DhallSyntaxHighlighter.IP_LITERAL),
     new AttributesDescriptor(
       "Environment Import",
       DhallSyntaxHighlighter.ENVIRONMENT_IMPORT
@@ -49,6 +50,10 @@ object DhallColorSettingsPage {
       DefaultLanguageHighlighterColors.OPERATION_SIGN
     ),
     new AttributesDescriptor(
+      "Lambda",
+      DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+    ),
+    new AttributesDescriptor(
       "Interpolation",
       DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
     ),
@@ -63,16 +68,18 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       |
       |<keyword>let</keyword> <identifier>f</identifier> = <path>./src/data/directory/file.dhall</path>
       |
+      |<keyword>let</keyword> <identifier>protocl</identifier> = <path>http://<ip-literal>192.168.0.1</ip-literal>/places</path>
+      |
       |<keyword>let</keyword> <identifier>hname</identifier> = <env-import>env:<env-import-name>HOME_DIRECTORY</env-import-name></env-import>
       |
-      |<keyword>let</keyword> <identifier>f</identifier> = <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<operator>λ</operator>(<parameter>textParam</parameter> : <builtin>Text</builtin>) <operator>→</operator> <identifier>t</identifier> <operator>++</operator> <string>"!"</string>) <string>"Hello <interpolation>$${</interpolation><string>"world"</string><interpolation>}</interpolation>"</string>
+      |<keyword>let</keyword> <identifier>f</identifier> = <builtin>Natural/fold</builtin> <number>10</number> <builtin>Text</builtin> (<lambda>λ</lambda>(<parameter>textParam</parameter> : <builtin>Text</builtin>) <operator>→</operator> <identifier>t</identifier> <operator>++</operator> <string>"!"</string>) <string>"Hello <interpolation>$${</interpolation><string>"world"</string><interpolation>}</interpolation>"</string>
       |
       |<keyword>let</keyword> <identifier>x</identifier> = <number>1</number> <operator>+</operator> <number>1.0</number> <operator>⩓</operator> <number>Infinity</number> <operator>||</operator> <number>NaN</number>
       |
       |<keyword>let</keyword> <identifier>union</identifier> = <<union-type>Red</union-type>|<union-type>Green</union-type>>
       |
       |<keyword>let</keyword> <identifier>Example</identifier> =
-      |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <builtin>Bool</builtin> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
+      |      { <record-value-key>Type</record-value-key> = { <record-type-key>foo</record-type-key> : <builtin>Natural</builtin>, <record-type-key>bar</record-type-key> : <identifier>a</identifier><dot>.</dot><identifier>b</identifier><dot>.</dot><identifier>c</identifier> }, <record-value-key>default</record-value-key> = { <record-value-key>bar</record-value-key> = <builtin>False</builtin> } }
       |
       |<keyword>in</keyword>  <identifier>Example</identifier><operator>::</operator>{ <record-value-key>value</record-value-key> = <number>1</number> }
       |
@@ -97,6 +104,9 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "env-import" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT,
       "env-import-name" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME,
       "union-type" -> DhallSyntaxHighlighter.UNION_TYPE_ENTRY,
+      "ip-literal" -> DhallSyntaxHighlighter.IP_LITERAL,
+      "dot" -> DefaultLanguageHighlighterColors.DOT,
+      "lambda" -> DefaultLanguageHighlighterColors.FUNCTION_DECLARATION,
     ).asJava
   override def getAttributeDescriptors: Array[AttributesDescriptor] =
     DhallColorSettingsPage.DESCRIPTORS

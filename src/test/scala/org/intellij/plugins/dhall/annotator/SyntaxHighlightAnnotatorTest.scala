@@ -97,4 +97,29 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
       )
     )
   }
+
+  def testIpLiteralHighlight(): Unit = {
+    val highlight = this.highlightFile("ipLiteral.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "a", key = C.IDENTIFIER),
+        HighlightAssert(
+          text = "http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]",
+          key = D.PATH
+        ),
+        HighlightAssert(
+          text = "[2001:0db8:85a3:0000:0000:8a2e:0370:7334]",
+          key = D.IP_LITERAL
+        ),
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "http://192.168.0.0", key = D.PATH),
+        HighlightAssert(text = "192.168.0.0", key = D.IP_LITERAL),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
 }
