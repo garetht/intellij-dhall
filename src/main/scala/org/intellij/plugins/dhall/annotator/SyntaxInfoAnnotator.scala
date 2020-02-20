@@ -6,39 +6,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import org.intellij.plugins.dhall.psi.{
-  DhallBashEnvironmentVariable,
-  DhallBlockComment,
-  DhallBuiltin,
-  DhallDotOp,
-  DhallDoubleLiteral,
-  DhallDoubleQuoteChunk,
-  DhallDoubleQuoteLiteral,
-  DhallEnv,
-  DhallEscapedInterpolation,
-  DhallEscapedQuotePair,
-  DhallExpression,
-  DhallHttp,
-  DhallIntegerLiteral,
-  DhallInterpolation,
-  DhallIpLiteral,
-  DhallIpv4Address,
-  DhallKeyword,
-  DhallLambda,
-  DhallLetBinding,
-  DhallLineComment,
-  DhallLocal,
-  DhallNaturalLiteral,
-  DhallNonEmptyRecordTypeOrLiteral,
-  DhallOperator,
-  DhallPosixEnvironmentVariable,
-  DhallRecordLiteralEntry,
-  DhallRecordTypeEntry,
-  DhallSelector,
-  DhallSingleQuoteLiteral,
-  DhallUnionTypeEntry,
-  DhallVariable
-}
+import org.intellij.plugins.dhall.psi.{DhallBashEnvironmentVariable, DhallBlockComment, DhallBuiltin, DhallDotOp, DhallDoubleLiteral, DhallDoubleQuoteChunk, DhallDoubleQuoteLiteral, DhallEnv, DhallEscapedInterpolation, DhallEscapedQuotePair, DhallExpression, DhallHttp, DhallIntegerLiteral, DhallInterpolation, DhallIpLiteral, DhallIpv4Address, DhallKeyword, DhallLambda, DhallLetBinding, DhallLineComment, DhallLocal, DhallNaturalLiteral, DhallNonEmptyRecordTypeOrLiteral, DhallNonreservedLabel, DhallOperator, DhallPosixEnvironmentVariable, DhallRecordLiteralEntry, DhallRecordTypeEntry, DhallSelector, DhallSimpleLabel, DhallSingleQuoteLiteral, DhallUnionTypeEntry, DhallVariable}
 
 object SyntaxInfoAnnotator {
   private def textRange(element: PsiElement): TextRange = {
@@ -104,13 +72,19 @@ object SyntaxInfoAnnotator {
           defaultTextRange,
           Some(DefaultLanguageHighlighterColors.OPERATION_SIGN)
         )
-      case _: DhallKeyword =>
-        (defaultTextRange, Some(DefaultLanguageHighlighterColors.KEYWORD))
-      case _: DhallBuiltin =>
+      case kw: DhallKeyword =>
+        // a label can have a keyword as a prefix
+        (defaultTextRange, if (kw.getParent match {
+          case _: DhallSimpleLabel => true
+          case _ => false
+        }) None else Some(DefaultLanguageHighlighterColors.KEYWORD))
+      case bi: DhallBuiltin =>
         (
           defaultTextRange,
-          Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
-        )
+          if (bi.getParent match {
+            case _: DhallNonreservedLabel => true
+            case _ => false
+          }) None else Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL))
       case _: DhallVariable | _: DhallSelector =>
         (defaultTextRange, Some(DefaultLanguageHighlighterColors.IDENTIFIER))
       case _: DhallDoubleLiteral | _: DhallNaturalLiteral |

@@ -473,7 +473,7 @@ braced-codepoint ::= (ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NI
                     | UA | a | UB | b | UC | c | UD | d | UE | e | UF | f
                     | ONE ZERO) unicode-suffix
                     | unbraced-escape
-                    | (hexdig hexdig hexdig)+
+                    | (hexdig | hexdig hexdig | hexdig hexdig hexdig)
 
 unicode-suffix ::= (digit | UA | a | UB | b | UC | c | UD | d | UE | e) hexdig hexdig hexdig
                 | (UF | f) hexdig hexdig (digit | UA | a | UB | b | UC | c | UD | d)
@@ -684,7 +684,7 @@ path ::= path-component+
 
 scheme ::= h t t p s?
 
-http-raw ::= scheme COLON SLASH SLASH authority url-path (QUESTION query)?
+http-raw ::= scheme COLON SLASH SLASH authority url-path (QUESTION query)? {pin = 4}
 
 url-path ::= (path-component | SLASH segment)*
 
@@ -713,21 +713,26 @@ ipvfuture ::= v hexdig+ DOT (unreserved | sub-delims | COLON)+
 ipv6address ::= three-h16-colon three-h16-colon ls32
             | double-colon three-h16-colon h16-colon h16-colon ls32
             | (h16)? double-colon three-h16-colon h16-colon ls32
-            | (h16 colon-h16+)? double-colon three-h16-colon ls32
-            | (h16 colon-h16 colon-h16+)? double-colon h16-colon h16-colon ls32
-            | (h16 colon-h16-two colon-h16+)? double-colon h16-colon ls32
-            | (h16 colon-h16-two colon-h16 colon-h16+)? double-colon ls32
-            | (h16 colon-h16-two colon-h16-two colon-h16+)? double-colon h16
-            | (h16 colon-h16-two colon-h16-two colon-h16 colon-h16+)? double-colon
+            | (h16 colon-h16?)? double-colon three-h16-colon ls32
+            | (h16 two-colon-h16?)? double-colon h16-colon h16-colon ls32
+            | (h16 three-colon-h16?)? double-colon h16-colon ls32
+            | (h16 four-colon-h16?)? double-colon ls32
+            | (h16 five-colon-h16?)? double-colon h16
+            | (h16 six-colon-h16?)? double-colon
 
 // IPV6 Definition Helpers
-h16 ::= four-hex+
+h16 ::= hexdig hexdig hexdig hexdig | hexdig hexdig hexdig | hexdig hexdig | hexdig
+
+private two-colon-h16 ::= colon-h16 colon-h16 | colon-h16
+private three-colon-h16 ::= colon-h16 colon-h16 colon-h16 | two-colon-h16
+private four-colon-h16 ::= colon-h16 colon-h16 colon-h16 colon-h16 | three-colon-h16
+private five-colon-h16 ::= colon-h16 colon-h16 colon-h16 colon-h16 colon-h16 | four-colon-h16
+private six-colon-h16 ::= colon-h16 colon-h16 colon-h16 colon-h16 colon-h16 colon-h16 | five-colon-h16
 
 private double-colon ::= COLON COLON
 private h16-colon ::= h16 COLON
 private three-h16-colon ::= h16-colon h16-colon h16-colon
 private colon-h16 ::= COLON h16
-private colon-h16-two ::= colon-h16 colon-h16
 
 ls32 ::= h16 COLON h16 | ipv4address
 

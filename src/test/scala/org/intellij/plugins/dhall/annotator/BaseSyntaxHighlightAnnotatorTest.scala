@@ -22,8 +22,8 @@ abstract class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
     "src/test/scala/syntaxHighlightTestData"
 
   def highlightFile(fileName: String): List[HighlightInfo] = {
-    myFixture.configureByFile(fileName)
-    myFixture.doHighlighting().asScala.toList
+    this.myFixture.configureByFile(fileName)
+    this.myFixture.doHighlighting().asScala.toList
   }
 
   def assertHighlight(actual: List[HighlightInfo],

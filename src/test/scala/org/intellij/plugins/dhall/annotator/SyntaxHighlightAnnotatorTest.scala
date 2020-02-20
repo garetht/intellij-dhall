@@ -1,7 +1,6 @@
 package org.intellij.plugins.dhall
 package annotator
 
-import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.{DefaultLanguageHighlighterColors => C}
 import org.intellij.plugins.dhall.{DhallSyntaxHighlighter => D}
 
@@ -114,11 +113,46 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
           key = D.IP_LITERAL
         ),
         HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "c", key = C.IDENTIFIER),
+        HighlightAssert(
+          text = "https://[2001:db8::8a2e:370:7334]/hello",
+          key = D.PATH
+        ),
+        HighlightAssert(text = "[2001:db8::8a2e:370:7334]", key = D.IP_LITERAL),
+        HighlightAssert(text = "let", key = C.KEYWORD),
         HighlightAssert(text = "b", key = C.IDENTIFIER),
         HighlightAssert(text = "http://192.168.0.0", key = D.PATH),
         HighlightAssert(text = "192.168.0.0", key = D.IP_LITERAL),
         HighlightAssert(text = "in", key = C.KEYWORD),
         HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testKeywordPrefix(): Unit = {
+    val highlight = this.highlightFile("keywordPrefix.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "assertive", key = C.IDENTIFIER),
+        HighlightAssert(text = "14", C.NUMBER),
+        HighlightAssert(text = "in", C.KEYWORD),
+        HighlightAssert(text = "1", C.NUMBER)
+      )
+    )
+  }
+
+  def testBuiltinPrefix(): Unit = {
+    val highlight = this.highlightFile("builtinPrefix.dhall")
+    this.assertHighlight(
+      highlight,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "Natural/showoff", key = C.IDENTIFIER),
+        HighlightAssert(text = "14", C.NUMBER),
+        HighlightAssert(text = "in", C.KEYWORD),
+        HighlightAssert(text = "1", C.NUMBER)
       )
     )
   }
