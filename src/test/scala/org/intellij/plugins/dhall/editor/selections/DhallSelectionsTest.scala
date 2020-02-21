@@ -123,4 +123,11 @@ class DhallSelectionsTest
       """let e = <selection><caret>"h\ w"</selection> in e"""
     )
   }
+
+  def testInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"text <caret>${variable}"""",
+      """"text <selection><caret>${variable}</selection>""""
+    )
+  }
 }

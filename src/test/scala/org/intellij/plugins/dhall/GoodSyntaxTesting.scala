@@ -13,4 +13,9 @@ trait GoodSyntaxTesting {
   def testSelectorDot(): Unit
   def testIpV6Literal(): Unit
   def testIpV4Literal(): Unit
+  def testInterpolation(): Unit
+
+  // testImport
+  // testAssertApplicationExpression
+  // testMergeApplicationExpression
 }

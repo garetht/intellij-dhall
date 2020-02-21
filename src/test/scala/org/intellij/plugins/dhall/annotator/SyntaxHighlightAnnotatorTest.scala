@@ -1,8 +1,9 @@
 package org.intellij.plugins.dhall
 package annotator
 
-import com.intellij.openapi.editor.{DefaultLanguageHighlighterColors => C}
-import org.intellij.plugins.dhall.{DhallSyntaxHighlighter => D}
+import com.intellij.openapi.editor.{DefaultLanguageHighlighterColors ⇒ C}
+import javax.swing.text.Highlighter.Highlight
+import org.intellij.plugins.dhall.{DhallSyntaxHighlighter ⇒ D}
 
 class SyntaxHighlightAnnotatorTest
     extends BaseSyntaxHighlightAnnotatorTest
@@ -232,6 +233,20 @@ class SyntaxHighlightAnnotatorTest
         HighlightAssert.assertError(text = "i"),
         HighlightAssert(text = "in", key = C.KEYWORD),
         HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testInterpolation(): Unit = {
+    this.assertHighlight(
+      """"${variable}"""",
+      List(
+        HighlightAssert(text = """"${variable}"""", key = C.STRING),
+        HighlightAssert(
+          text = """${variable}""",
+          key = C.TEMPLATE_LANGUAGE_COLOR
+        ),
+        HighlightAssert(text = "variable", key = C.IDENTIFIER),
       )
     )
   }

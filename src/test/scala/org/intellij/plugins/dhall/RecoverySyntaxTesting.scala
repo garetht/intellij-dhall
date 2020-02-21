@@ -4,4 +4,7 @@ trait RecoverySyntaxTesting {
   def testIncompleteRecordLiteral(): Unit
   def testIncompleteLetInChain(): Unit
   def testDoubleQuoteEscapeError(): Unit
+
+  // test forall | if | assert  -> pinning
+
 }
