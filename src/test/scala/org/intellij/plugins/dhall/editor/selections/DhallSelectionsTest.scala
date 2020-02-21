@@ -1,6 +1,8 @@
 package org.intellij.plugins.dhall
 package editor.selections
 
+import org.intellij.plugins.dhall.annotator.HighlightAssert
+
 class DhallSelectionsTest
     extends BaseDhallSelectionsTest
     with GoodSyntaxTesting
@@ -100,5 +102,18 @@ class DhallSelectionsTest
         "<selection>name<caret></selection>.position",
         "<selection>name<caret>.position</selection>"
       )
+  }
+
+  def testIncompleteLetInChain(): Unit = {
+    this
+      .assertSelectionInText("""
+       |let n = 12
+       |<selection>l<caret>et</selection> b = {
+       |in 1
+       |""".stripMargin, """
+       |let n = 12
+       |<selection>l<caret>et b = {
+       |</selection>in 1
+       |""".stripMargin)
   }
 }

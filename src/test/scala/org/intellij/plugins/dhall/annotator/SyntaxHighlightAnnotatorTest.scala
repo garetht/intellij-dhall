@@ -215,4 +215,24 @@ class SyntaxHighlightAnnotatorTest
       )
     )
   }
+
+  def testIncompleteLetInChain(): Unit = {
+    this.assertHighlight(
+      """
+        |let n = 12
+        |let b = {
+        |in 1
+        |""".stripMargin,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "n", key = C.IDENTIFIER),
+        HighlightAssert(text = "12", key = C.NUMBER),
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert.assertError(text = "i"),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
 }
