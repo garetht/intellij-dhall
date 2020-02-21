@@ -4,11 +4,13 @@ package annotator
 import com.intellij.openapi.editor.{DefaultLanguageHighlighterColors => C}
 import org.intellij.plugins.dhall.{DhallSyntaxHighlighter => D}
 
-class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
-  def testSimpleHighlighting(): Unit = {
-    val highlight = this.highlightFile("simpleLet.dhall")
+class SyntaxHighlightAnnotatorTest
+    extends BaseSyntaxHighlightAnnotatorTest
+    with GoodSyntaxTesting
+    with RecoverySyntaxTesting {
+  def testLetExpression(): Unit = {
     this.assertHighlight(
-      highlight,
+      "let x = 2 in x",
       List(
         HighlightAssert(text = "let", key = C.KEYWORD),
         HighlightAssert(text = "x", key = C.IDENTIFIER),
@@ -20,9 +22,8 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
   }
 
   def testDoubleQuoteErrorHighlighting(): Unit = {
-    val highlight = this.highlightFile("doubleQuoteError.dhall")
     this.assertHighlight(
-      highlight,
+      """let e = "h\ w" in e""",
       List(
         HighlightAssert(text = "let", key = C.KEYWORD),
         HighlightAssert(text = "e", key = C.IDENTIFIER),
@@ -35,10 +36,9 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     )
   }
 
-  def testUnionTypeHighlighter(): Unit = {
-    val highlight = this.highlightFile("unionType.dhall")
+  def testUnionType(): Unit = {
     this.assertHighlight(
-      highlight,
+      "<Hello|World|There>",
       List(
         HighlightAssert(text = "Hello", key = D.UNION_TYPE_ENTRY),
         HighlightAssert(text = "World", key = D.UNION_TYPE_ENTRY),
@@ -47,10 +47,9 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     )
   }
 
-  def testLambdaParameter(): Unit = {
-    val highlight = this.highlightFile("lambdaParameter.dhall")
+  def testLambdaExpression(): Unit = {
     this.assertHighlight(
-      highlight,
+      """\(nat : Natural) -> assert : n === (n + 0)""",
       List(
         HighlightAssert(text = """\""", key = C.FUNCTION_DECLARATION),
         HighlightAssert(text = "nat", key = C.PARAMETER),
@@ -66,10 +65,9 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     )
   }
 
-  def testIncompleteRecordError(): Unit = {
-    val highlight = this.highlightFile("incompleteRecordError.dhall")
+  def testIncompleteRecordLiteral(): Unit = {
     this.assertHighlight(
-      highlight,
+      "({ place = 2",
       List(
         HighlightAssert("place", D.RECORD_VALUE_KEY),
         HighlightAssert("2", C.NUMBER),
@@ -79,9 +77,12 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
   }
 
   def testSelectorDot(): Unit = {
-    val highlight = this.highlightFile("selectorDot.dhall")
     this.assertHighlight(
-      highlight,
+      """
+        |let n = 2.0
+        |let b = a.b
+        |in 1
+        |""".stripMargin,
       List(
         HighlightAssert(text = "let", key = C.KEYWORD),
         HighlightAssert(text = "n", key = C.IDENTIFIER),
@@ -97,10 +98,52 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
     )
   }
 
-  def testIpLiteralHighlight(): Unit = {
-    val highlight = this.highlightFile("ipLiteral.dhall")
+  def testKeywordPrefix(): Unit = {
     this.assertHighlight(
-      highlight,
+      "let assertive = 14 in 1",
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "assertive", key = C.IDENTIFIER),
+        HighlightAssert(text = "14", C.NUMBER),
+        HighlightAssert(text = "in", C.KEYWORD),
+        HighlightAssert(text = "1", C.NUMBER)
+      )
+    )
+  }
+
+  def testBuiltinPrefix(): Unit = {
+    this.assertHighlight(
+      "let Natural/showoff = 14 in 1",
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "Natural/showoff", key = C.IDENTIFIER),
+        HighlightAssert(text = "14", C.NUMBER),
+        HighlightAssert(text = "in", C.KEYWORD),
+        HighlightAssert(text = "1", C.NUMBER)
+      )
+    )
+  }
+
+  def testIpV4Literal(): Unit = {
+    this.assertHighlight(
+      """let b = http://192.168.0.0
+        |in 1""".stripMargin,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "http://192.168.0.0", key = D.PATH),
+        HighlightAssert(text = "192.168.0.0", key = D.IP_LITERAL),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testIpV6Literal(): Unit = {
+    this.assertHighlight(
+      """let a = http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]
+        |let c = https://[2001:db8::8a2e:370:7334]/hello
+        |in 1""".stripMargin,
       List(
         HighlightAssert(text = "let", key = C.KEYWORD),
         HighlightAssert(text = "a", key = C.IDENTIFIER),
@@ -119,40 +162,56 @@ class SyntaxHighlightAnnotatorTest extends BaseSyntaxHighlightAnnotatorTest {
           key = D.PATH
         ),
         HighlightAssert(text = "[2001:db8::8a2e:370:7334]", key = D.IP_LITERAL),
-        HighlightAssert(text = "let", key = C.KEYWORD),
-        HighlightAssert(text = "b", key = C.IDENTIFIER),
-        HighlightAssert(text = "http://192.168.0.0", key = D.PATH),
-        HighlightAssert(text = "192.168.0.0", key = D.IP_LITERAL),
         HighlightAssert(text = "in", key = C.KEYWORD),
         HighlightAssert(text = "1", key = C.NUMBER),
       )
     )
   }
 
-  def testKeywordPrefix(): Unit = {
-    val highlight = this.highlightFile("keywordPrefix.dhall")
+  def testForallExpression(): Unit = {
     this.assertHighlight(
-      highlight,
+      "forall(x: Y) -> 14",
       List(
-        HighlightAssert(text = "let", key = C.KEYWORD),
-        HighlightAssert(text = "assertive", key = C.IDENTIFIER),
-        HighlightAssert(text = "14", C.NUMBER),
-        HighlightAssert(text = "in", C.KEYWORD),
-        HighlightAssert(text = "1", C.NUMBER)
+        HighlightAssert(text = "forall", key = C.KEYWORD),
+        HighlightAssert(text = "x", key = C.PARAMETER),
+        HighlightAssert(text = "Y", key = C.IDENTIFIER),
+        HighlightAssert(text = "->", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "14", key = C.NUMBER)
       )
     )
   }
 
-  def testBuiltinPrefix(): Unit = {
-    val highlight = this.highlightFile("builtinPrefix.dhall")
+  def testAssertExpression(): Unit = {
     this.assertHighlight(
-      highlight,
+      "assert: 2 === 2",
       List(
-        HighlightAssert(text = "let", key = C.KEYWORD),
-        HighlightAssert(text = "Natural/showoff", key = C.IDENTIFIER),
-        HighlightAssert(text = "14", C.NUMBER),
-        HighlightAssert(text = "in", C.KEYWORD),
-        HighlightAssert(text = "1", C.NUMBER)
+        HighlightAssert(text = "assert", key = C.KEYWORD),
+        HighlightAssert(text = "2", key = C.NUMBER),
+        HighlightAssert(text = "===", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "2", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testRecordValueKey(): Unit = {
+    this.assertHighlight(
+      "{ record = 14 }",
+      List(
+        HighlightAssert(text = "record", key = D.RECORD_VALUE_KEY),
+        HighlightAssert(text = "14", key = C.NUMBER),
+      )
+    )
+  }
+
+  def testOperatorPrecedence(): Unit = {
+    this.assertHighlight(
+      """1 + 2 //\\ 3""",
+      List(
+        HighlightAssert(text = "1", key = C.NUMBER),
+        HighlightAssert(text = "+", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "2", key = C.NUMBER),
+        HighlightAssert(text = """//\\""", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "3", key = C.NUMBER),
       )
     )
   }

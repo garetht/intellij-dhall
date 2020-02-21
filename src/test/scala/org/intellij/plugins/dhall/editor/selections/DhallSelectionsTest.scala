@@ -1,7 +1,36 @@
 package org.intellij.plugins.dhall
 package editor.selections
 
-class DhallSelectionsTest extends BaseDhallSelectionsTest {
+class DhallSelectionsTest
+    extends BaseDhallSelectionsTest
+    with GoodSyntaxTesting
+    with RecoverySyntaxTesting {
+  def testLetExpression(): Unit = {
+    this.assertSelectionInText(
+      "let attempts = 1 in <selection><caret>1</selection>",
+      "<selection>let attempts = 1 in <caret>1</selection>"
+    )
+  }
+
+  def testAssertExpression(): Unit = {
+    this.assertSelectionInText(
+      """assert: <selection>2 =<caret>== 2</selection>""",
+      "<selection>assert: 2 =<caret>== 2</selection>"
+    )
+  }
+
+  def testForallExpression(): Unit = {
+    this.assertSelectionInText(
+      """for<caret>all(x: a) -> b""",
+      """<selection>for<caret>all</selection>(x: a) -> b"""
+    )
+
+    this.assertSelectionInText(
+      """<selection>for<caret>all</selection>(x: a) -> b""",
+      """<selection>for<caret>all(x: a) -> b</selection>"""
+    )
+  }
+
   def testBuiltinPrefix(): Unit = {
     this.assertSelectionInText(
       "let Na<caret>tural/evensong = 2 in 1",
@@ -30,24 +59,38 @@ class DhallSelectionsTest extends BaseDhallSelectionsTest {
     )
   }
 
-  def testOperatorPrecedenceSelection(): Unit = {
+  def testOperatorPrecedence(): Unit = {
     this.assertSelectionInText(
       "1 === 2 + 3 <selection>!=<caret></selection> 4 && 5",
       "1 === 2 + <selection>3 !=<caret> 4</selection> && 5"
     )
   }
 
-  def testIpV6LiteralSelection(): Unit = {
+  def testIpV6Literal(): Unit = {
     this.assertSelectionInText(
       "http://[2001<caret>:0db8:85a3:0000:0000:8a2e:0370:7334]",
       "http://[<selection>2001<caret></selection>:0db8:85a3:0000:0000:8a2e:0370:7334]"
     )
   }
 
-  def testIpV4LiteralSelection(): Unit = {
+  def testIpV4Literal(): Unit = {
     this.assertSelectionInText(
       "http://192.168.0<caret>.1",
       "http://192.168.<selection>0<caret></selection>.1"
+    )
+  }
+
+  def testLambdaExpression(): Unit = {
+    this.assertSelectionInText(
+      """\(x: Natural) -> <selection>14 : <caret>forall(y: Y) -> a</selection>""",
+      """<selection>\(x: Natural) -> 14 : <caret>forall(y: Y) -> a</selection>"""
+    )
+  }
+
+  def testIncompleteRecordLiteral(): Unit = {
+    this.assertSelectionInText(
+      "({<caret>place = 2",
+      "({<selection><caret>place</selection> = 2"
     )
   }
 }

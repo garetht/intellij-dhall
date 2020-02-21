@@ -26,6 +26,12 @@ abstract class BaseSyntaxHighlightAnnotatorTest extends BasePlatformTestCase {
     this.myFixture.doHighlighting().asScala.toList
   }
 
+  def assertHighlight(actual: String, expected: List[HighlightAssert]): Unit = {
+    this.myFixture.configureByText("highlight.dhall", actual)
+    this
+      .assertHighlight(this.myFixture.doHighlighting().asScala.toList, expected)
+  }
+
   def assertHighlight(actual: List[HighlightInfo],
                       expected: List[HighlightAssert]): Unit = {
     actual.zip(expected).foreach {
