@@ -4,7 +4,7 @@ package editor.selections
 import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-class BaseDhallSelectionsTest extends BasePlatformTestCase {
+abstract class BaseDhallSelectionsTest extends BasePlatformTestCase {
   override protected def getTestDataPath =
     "src/test/scala/editorSelectionTestData"
 
