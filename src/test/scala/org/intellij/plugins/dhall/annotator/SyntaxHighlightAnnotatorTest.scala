@@ -21,7 +21,7 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  def testDoubleQuoteErrorHighlighting(): Unit = {
+  def testDoubleQuoteEscapeError(): Unit = {
     this.assertHighlight(
       """let e = "h\ w" in e""",
       List(

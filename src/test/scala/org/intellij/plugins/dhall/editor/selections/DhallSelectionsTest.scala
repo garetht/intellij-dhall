@@ -116,4 +116,11 @@ class DhallSelectionsTest
        |</selection>in 1
        |""".stripMargin)
   }
+
+  def testDoubleQuoteEscapeError(): Unit = {
+    this.assertSelectionInText(
+      """let e = <caret>"h\ w" in e""",
+      """let e = <selection><caret>"h\ w"</selection> in e"""
+    )
+  }
 }
