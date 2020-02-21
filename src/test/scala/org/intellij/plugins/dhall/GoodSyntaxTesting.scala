@@ -10,6 +10,7 @@ trait GoodSyntaxTesting {
   def testUnionType(): Unit
   def testRecordValueKey(): Unit
   def testOperatorPrecedence(): Unit
+  def testSelectorDot(): Unit
   def testIpV6Literal(): Unit
   def testIpV4Literal(): Unit
 }

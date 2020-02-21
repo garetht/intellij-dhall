@@ -93,4 +93,12 @@ class DhallSelectionsTest
       "({<selection><caret>place</selection> = 2"
     )
   }
+
+  def testSelectorDot(): Unit = {
+    this
+      .assertSelectionInText(
+        "<selection>name<caret></selection>.position",
+        "<selection>name<caret>.position</selection>"
+      )
+  }
 }

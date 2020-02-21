@@ -36,6 +36,28 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
+  def testSelectorDot(): Unit = {
+    this.assertHighlight(
+      """
+        |let n = 2.0
+        |let b = a.b
+        |in 1
+        |""".stripMargin,
+      List(
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "n", key = C.IDENTIFIER),
+        HighlightAssert(text = "2.0", key = C.NUMBER),
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "a", key = C.IDENTIFIER),
+        HighlightAssert(text = ".", key = C.DOT),
+        HighlightAssert(text = "b", key = C.IDENTIFIER),
+        HighlightAssert(text = "in", key = C.KEYWORD),
+        HighlightAssert(text = "1", key = C.NUMBER),
+      )
+    )
+  }
+
   def testUnionType(): Unit = {
     this.assertHighlight(
       "<Hello|World|There>",
@@ -72,28 +94,6 @@ class SyntaxHighlightAnnotatorTest
         HighlightAssert("place", D.RECORD_VALUE_KEY),
         HighlightAssert("2", C.NUMBER),
         HighlightAssert.assertError("")
-      )
-    )
-  }
-
-  def testSelectorDot(): Unit = {
-    this.assertHighlight(
-      """
-        |let n = 2.0
-        |let b = a.b
-        |in 1
-        |""".stripMargin,
-      List(
-        HighlightAssert(text = "let", key = C.KEYWORD),
-        HighlightAssert(text = "n", key = C.IDENTIFIER),
-        HighlightAssert(text = "2.0", key = C.NUMBER),
-        HighlightAssert(text = "let", key = C.KEYWORD),
-        HighlightAssert(text = "b", key = C.IDENTIFIER),
-        HighlightAssert(text = "a", key = C.IDENTIFIER),
-        HighlightAssert(text = ".", key = C.DOT),
-        HighlightAssert(text = "b", key = C.IDENTIFIER),
-        HighlightAssert(text = "in", key = C.KEYWORD),
-        HighlightAssert(text = "1", key = C.NUMBER),
       )
     )
   }
