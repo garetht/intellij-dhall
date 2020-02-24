@@ -7,7 +7,7 @@ import org.intellij.plugins.dhall.{DhallSyntaxHighlighter ⇒ D}
 
 class SyntaxHighlightAnnotatorTest
     extends BaseSyntaxHighlightAnnotatorTest
-    with GoodSyntaxTesting
+    with CorrectSyntaxTesting
     with RecoverySyntaxTesting {
   def testLetExpression(): Unit = {
     this.assertHighlight(
@@ -22,7 +22,7 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  def testDoubleQuoteEscapeError(): Unit = {
+  def testDoubleQuoteEscapeRecovery(): Unit = {
     this.assertHighlight(
       """let e = "h\ w" in e""",
       List(
@@ -36,6 +36,8 @@ class SyntaxHighlightAnnotatorTest
       )
     )
   }
+
+  override def testForallRecovery(): Unit = {}
 
   def testSelectorDot(): Unit = {
     this.assertHighlight(
@@ -88,7 +90,7 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  def testIncompleteRecordLiteral(): Unit = {
+  def testRecordLiteralRecovery(): Unit = {
     this.assertHighlight(
       "({ place = 2",
       List(
@@ -217,7 +219,7 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  def testIncompleteLetInChain(): Unit = {
+  def testLetChainRecovery(): Unit = {
     this.assertHighlight(
       """
         |let n = 12

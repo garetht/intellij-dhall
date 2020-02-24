@@ -1,6 +1,6 @@
-package org.intellij.plugins.dhall.psi
+package org.intellij.plugins.dhall
+package psi
 
-import org.intellij.plugins.dhall.DhallLanguage
 import com.intellij.psi.tree.IElementType
 
 class DhallElementType(val debugName: String)

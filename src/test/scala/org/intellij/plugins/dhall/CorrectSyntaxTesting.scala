@@ -1,6 +1,6 @@
 package org.intellij.plugins.dhall
 
-trait GoodSyntaxTesting {
+trait CorrectSyntaxTesting {
   def testLetExpression(): Unit
   def testLambdaExpression(): Unit
   def testForallExpression(): Unit

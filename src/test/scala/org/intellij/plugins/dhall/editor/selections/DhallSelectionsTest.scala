@@ -5,7 +5,7 @@ import org.intellij.plugins.dhall.annotator.HighlightAssert
 
 class DhallSelectionsTest
     extends BaseDhallSelectionsTest
-    with GoodSyntaxTesting
+    with CorrectSyntaxTesting
     with RecoverySyntaxTesting {
   def testLetExpression(): Unit = {
     this.assertSelectionInText(
@@ -89,7 +89,7 @@ class DhallSelectionsTest
     )
   }
 
-  def testIncompleteRecordLiteral(): Unit = {
+  def testRecordLiteralRecovery(): Unit = {
     this.assertSelectionInText(
       "({<caret>place = 2",
       "({<selection><caret>place</selection> = 2"
@@ -104,7 +104,7 @@ class DhallSelectionsTest
       )
   }
 
-  def testIncompleteLetInChain(): Unit = {
+  def testLetChainRecovery(): Unit = {
     this
       .assertSelectionInText("""
        |let n = 12
@@ -117,10 +117,17 @@ class DhallSelectionsTest
        |""".stripMargin)
   }
 
-  def testDoubleQuoteEscapeError(): Unit = {
+  def testDoubleQuoteEscapeRecovery(): Unit = {
     this.assertSelectionInText(
       """let e = <caret>"h\ w" in e""",
       """let e = <selection><caret>"h\ w"</selection> in e"""
+    )
+  }
+
+  override def testForallRecovery(): Unit = {
+    this.assertSelectionInText(
+      """\(x: T) -> f : <selection>forall<caret></selection>(x: X) let x = 2""",
+      """\(x: T) -> f : <selection>forall<caret>(x: X) let x = 2</selection>"""
     )
   }
 
