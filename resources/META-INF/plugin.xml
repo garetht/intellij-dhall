@@ -26,6 +26,9 @@
         <annotator language="Dhall" implementationClass="org.intellij.plugins.dhall.annotator.DhallAnnotator" />
         <colorSettingsPage implementation="org.intellij.plugins.dhall.DhallColorSettingsPage"/>
         <highlightRangeExtension implementation="org.intellij.plugins.dhall.extensions.DhallHighlightRangeExtension"/>
+
+        <basicWordSelectionFilter implementation="org.intellij.plugins.dhall.editor.selections.DhallWordSelectionFilter"/>
+        <extendWordSelectionHandler implementation="org.intellij.plugins.dhall.editor.selections.DhallSelectioner" />
     </extensions>
 
     <actions>
