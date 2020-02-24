@@ -124,7 +124,7 @@ class DhallSelectionsTest
     )
   }
 
-  override def testForallRecovery(): Unit = {
+  def testForallRecovery(): Unit = {
     this.assertSelectionInText(
       """\(x: T) -> f : <selection>forall<caret></selection>(x: X) let x = 2""",
       """\(x: T) -> f : <selection>forall<caret>(x: X) let x = 2</selection>"""

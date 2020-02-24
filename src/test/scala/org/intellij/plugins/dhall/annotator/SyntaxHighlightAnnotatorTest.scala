@@ -37,7 +37,20 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  override def testForallRecovery(): Unit = {}
+  def testForallRecovery(): Unit = {
+    this.assertHighlight(
+      """forall(x: Y) -> let x""",
+      List(
+        HighlightAssert(text = "forall", key = C.KEYWORD),
+        HighlightAssert(text = "x", key = C.PARAMETER),
+        HighlightAssert(text = "Y", key = C.IDENTIFIER),
+        HighlightAssert(text = "->", key = C.OPERATION_SIGN),
+        HighlightAssert(text = "let", key = C.KEYWORD),
+        HighlightAssert(text = "x", key = C.IDENTIFIER),
+        HighlightAssert.assertError(text = ""),
+      )
+    )
+  }
 
   def testSelectorDot(): Unit = {
     this.assertHighlight(
