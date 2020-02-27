@@ -137,4 +137,42 @@ class DhallSelectionsTest
       """"text <selection><caret>${variable}</selection>""""
     )
   }
+
+  def testWithinInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"text ${<caret>variable}"""",
+      """"text ${<selection><caret>variable</selection>}""""
+    )
+  }
+
+  def testWordSelectionAdjacentToInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"riverr<caret>un${variable}"""",
+      """"<selection>riverr<caret>un</selection>${variable}""""
+    )
+  }
+
+  def testWordSelectionExactlyBetweenInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"riverrun<caret>${variable}"""",
+      """"riverrun<selection>${variable}</selection>""""
+    )
+  }
+
+  // test word selection adjacent to escape
+  // test word selection adjacent to block comment
+
+  def testDoubleQuoteWordSelectionAtStart(): Unit = {
+    this.assertSelectionInText(
+      """"pe<caret>t the dog"""",
+      """"<selection>pe<caret>t</selection> the dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionInMiddle(): Unit = {
+    this.assertSelectionInText(
+      """"pet <caret>the dog"""",
+      """"pet <selection><caret>the</selection> dog""""
+    )
+  }
 }

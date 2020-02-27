@@ -14,6 +14,7 @@ trait CorrectSyntaxTesting {
   def testIpV6Literal(): Unit
   def testIpV4Literal(): Unit
   def testInterpolation(): Unit
+  def testWithinInterpolation(): Unit
 
   // testImport
   // testAssertApplicationExpression

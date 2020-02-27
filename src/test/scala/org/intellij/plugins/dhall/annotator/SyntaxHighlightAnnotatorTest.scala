@@ -265,4 +265,18 @@ class SyntaxHighlightAnnotatorTest
       )
     )
   }
+
+  def testWithinInterpolation(): Unit = {
+    this.assertHighlight(
+      """"${"quote"}"""",
+      List(
+        HighlightAssert(text = """"${"quote"}"""", key = C.STRING),
+        HighlightAssert(
+          text = """${"quote"}""",
+          key = C.TEMPLATE_LANGUAGE_COLOR
+        ),
+        HighlightAssert(text = """"quote"""", key = C.STRING),
+      )
+    )
+  }
 }
