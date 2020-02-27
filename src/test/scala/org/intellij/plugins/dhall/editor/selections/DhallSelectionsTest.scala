@@ -6,7 +6,8 @@ import org.intellij.plugins.dhall.annotator.HighlightAssert
 class DhallSelectionsTest
     extends BaseDhallSelectionsTest
     with CorrectSyntaxTesting
-    with RecoverySyntaxTesting {
+    with RecoverySyntaxTesting
+    with WordSelectionTesting {
   def testLetExpression(): Unit = {
     this.assertSelectionInText(
       "let attempts = 1 in <selection><caret>1</selection>",
@@ -145,14 +146,14 @@ class DhallSelectionsTest
     )
   }
 
-  def testWordSelectionAdjacentToInterpolation(): Unit = {
+  def testDoubleQuoteWordSelectionAdjacentToInterpolation(): Unit = {
     this.assertSelectionInText(
       """"riverr<caret>un${variable}"""",
       """"<selection>riverr<caret>un</selection>${variable}""""
     )
   }
 
-  def testWordSelectionExactlyBetweenInterpolation(): Unit = {
+  def testDoubleQuoteWordSelectionExactlyBetweenInterpolation(): Unit = {
     this.assertSelectionInText(
       """"riverrun<caret>${variable}"""",
       """"riverrun<selection>${variable}</selection>""""
@@ -162,17 +163,48 @@ class DhallSelectionsTest
   // test word selection adjacent to escape
   // test word selection adjacent to block comment
 
-  def testDoubleQuoteWordSelectionAtStart(): Unit = {
-    this.assertSelectionInText(
-      """"pe<caret>t the dog"""",
-      """"<selection>pe<caret>t</selection> the dog""""
-    )
-  }
-
-  def testDoubleQuoteWordSelectionInMiddle(): Unit = {
+  def testDoubleQuoteWordSelectionAtWordStart(): Unit = {
     this.assertSelectionInText(
       """"pet <caret>the dog"""",
       """"pet <selection><caret>the</selection> dog""""
     )
+  }
+
+  def testDoubleQuoteWordSelectionInWordMiddle(): Unit = {
+    this.assertSelectionInText(
+      """"pet th<caret>e dog"""",
+      """"pet <selection>th<caret>e</selection> dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtWordEnd(): Unit = {
+    this.assertSelectionInText(
+      """"pet the<caret> dog"""",
+      """"pet <selection>the<caret></selection> dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtStringStart(): Unit = {
+    this.assertSelectionInText(
+      """"<caret>pet the dog"""",
+      """"<caret><selection>pet</selection> the dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtStringEnd(): Unit = {
+    this.assertSelectionInText(
+      """"pet the dog<caret>"""",
+      """"pet the <selection>dog<caret></selection>""""
+    )
+  }
+
+  def testSingleQuoteWordSelectionInWordMiddle(): Unit = {
+    this.assertSelectionInText("""''
+        | word-sel<caret> in
+        | string''
+        |""".stripMargin, """''
+        | <selection>word-<caret>sel</selection> in
+        | string''
+        |""".stripMargin)
   }
 }
