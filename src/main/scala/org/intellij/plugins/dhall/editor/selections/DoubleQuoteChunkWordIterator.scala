@@ -27,15 +27,16 @@ class DoubleQuoteChunkWordIterator(element: PsiElement)
     }
   }
 
-  def entireLiteral(element: PsiElement): TextRange = {
-    element.getParent.getTextRange
-  }
 }
 
 object DoubleQuoteChunkWordIterator {
   def apply(element: PsiElement): DoubleQuoteChunkWordIterator =
     new DoubleQuoteChunkWordIterator(element)
 
+  // The element provided here is any PSI element, and it is the task
+  // of the iterator to decide if it should apply, by checking for example
+  // to see if the element's grandparent is a double-quote chunk, or a
+  // single quote chunk, and so on.
   def generateRange(element: PsiElement): Option[TextRange] = {
     Option(element.getParent)
       .flatMap(par => Option(par.getParent))

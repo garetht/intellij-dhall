@@ -29,10 +29,6 @@ class SingleQuoteChunkWordIterator(element: PsiElement)
       case _                                                       => false
     }
   }
-
-  def entireLiteral(element: PsiElement): TextRange = {
-    element.getParent.getTextRange
-  }
 }
 
 object SingleQuoteChunkWordIterator {
@@ -43,7 +39,7 @@ object SingleQuoteChunkWordIterator {
     Option(element.getParent).flatMap(par => {
       Option(par.getParent).flatMap {
         case _: DhallSingleQuoteLiteral =>
-          SingleQuoteChunkWordIterator.generateRange(par)
+          SingleQuoteChunkWordIterator(par).wordBoundary()
         case _ => None
       }
     })

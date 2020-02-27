@@ -17,8 +17,9 @@ trait WordBoundaryExtender {
   // If it is not a word character, return false. This
   // stops iteration.
   def isWordCharToDrop(element: PsiElement): Boolean
-  def entireLiteral(element: PsiElement): TextRange
-
+  def entireLiteral(element: PsiElement): TextRange = {
+    element.getParent.getTextRange
+  }
   def iterateDropWordChars(element: PsiElement,
                            direction: (PsiElement) => PsiElement,
                            offsetEdge: (TextRange) => Int): Option[Int] = {

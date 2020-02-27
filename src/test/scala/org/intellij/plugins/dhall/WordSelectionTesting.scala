@@ -17,7 +17,7 @@ trait WordSelectionTesting {
 //  def testSingleQuoteWordSelectionAtStringStart(): Unit
 //  def testSingleQuoteWordSelectionAtStringEnd(): Unit
 //
-//  def testSingleQuoteWordSelectionAtWordStart(): Unit
+  def testSingleQuoteWordSelectionAtWordStart(): Unit
   def testSingleQuoteWordSelectionInWordMiddle(): Unit
-//  def testSingleQuoteWordSelectionAtWordEnd(): Unit
+  def testSingleQuoteWordSelectionAtWordEnd(): Unit
 }

@@ -22,10 +22,10 @@ class DhallWordSelectioner extends BaseDhallSelectioner {
 
     val range = DoubleQuoteChunkWordIterator
       .generateRange(psiElement)
-//      .orElse(
-//        SingleQuoteChunkWordIterator
-//          .generateRange(psiElement)
-//      )
+      .orElse(
+        SingleQuoteChunkWordIterator
+          .generateRange(psiElement)
+      )
 
     (if (range.isDefined && range.get.getLength > 0)
        List(range.get)

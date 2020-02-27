@@ -198,9 +198,29 @@ class DhallSelectionsTest
     )
   }
 
+  def testSingleQuoteWordSelectionAtWordStart(): Unit = {
+    this.assertSelectionInText("""''
+     | word-sel <caret>inco ntent
+     | string''
+     |""".stripMargin, """''
+     | word-sel <selection><caret>inco</selection> ntent
+     | string''
+     |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAtWordEnd(): Unit = {
+    this.assertSelectionInText("""''
+     | word-sel inco ntent<caret>
+     | string''
+     |""".stripMargin, """''
+     | word-sel inco <selection>ntent<caret></selection>
+     | string''
+     |""".stripMargin)
+  }
+
   def testSingleQuoteWordSelectionInWordMiddle(): Unit = {
     this.assertSelectionInText("""''
-        | word-sel<caret> in
+        | word-<caret>sel in
         | string''
         |""".stripMargin, """''
         | <selection>word-<caret>sel</selection> in
