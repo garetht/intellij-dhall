@@ -273,4 +273,20 @@ class DhallSelectionsTest
         |""".stripMargin
     )
   }
+
+  def testSingleQuoteWordSelectionInterpolationEscape(): Unit = {
+    this.assertSelectionInText("""''
+        | con ''${var<caret>iable}es''
+        |""".stripMargin, """''
+        | con <selection>''${var<caret>iable}es</selection>''
+        |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionQuoteEscape(): Unit = {
+    this.assertSelectionInText("""''
+       | pers<caret>on'''s''
+       |""".stripMargin, """''
+       | <selection>pers<caret>on'''s</selection>''
+       |""".stripMargin)
+  }
 }

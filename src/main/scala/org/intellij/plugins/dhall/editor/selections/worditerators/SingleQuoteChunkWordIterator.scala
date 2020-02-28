@@ -1,11 +1,10 @@
 package org.intellij.plugins.dhall
-package editor.selections
+package editor.selections.worditerators
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.intellij.plugins.dhall.psi.{
   DhallCharacter,
-  DhallDoubleQuoteChunk,
   DhallEscapedInterpolation,
   DhallEscapedQuotePair,
   DhallInterpolation,
@@ -13,7 +12,7 @@ import org.intellij.plugins.dhall.psi.{
 }
 
 class SingleQuoteChunkWordIterator(rootElement: PsiElement)
-    extends WordBoundaryExtender(rootElement) {
+    extends WordIterator(rootElement) {
   // wrapper method that feeds constructor parameters into
   // pre-implemented word boundary methods
   def wordBoundary(): Option[TextRange] = {

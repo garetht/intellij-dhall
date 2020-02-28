@@ -6,6 +6,10 @@ import java.util
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import org.intellij.plugins.dhall.editor.selections.worditerators.{
+  DoubleQuoteChunkWordIterator,
+  SingleQuoteChunkWordIterator
+}
 import org.intellij.plugins.dhall.psi.DhallSingleQuoteLiteral
 
 import scala.jdk.CollectionConverters.SeqHasAsJava
