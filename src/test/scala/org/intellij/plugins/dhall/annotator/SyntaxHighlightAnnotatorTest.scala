@@ -52,6 +52,18 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
+  def testDoubleQuoteInterpolationRecovery(): Unit = {
+    this.assertHighlight(
+      """"${hello!}"""",
+      List(
+        HighlightAssert(text = """"${hello!}"""", C.STRING),
+        HighlightAssert(text = "${hello", C.TEMPLATE_LANGUAGE_COLOR),
+        HighlightAssert(text = "hello", C.IDENTIFIER),
+        HighlightAssert.assertError(text = "!"),
+      )
+    )
+  }
+
   def testSelectorDot(): Unit = {
     this.assertHighlight(
       """

@@ -132,6 +132,14 @@ class DhallSelectionsTest
     )
   }
 
+  def testDoubleQuoteInterpolationRecovery(): Unit = {
+    this
+      .assertSelectionInText(
+        """<caret>"${hello!}"""",
+        """<selection><caret>"${hello!}"</selection>"""
+      )
+  }
+
   def testInterpolation(): Unit = {
     this.assertSelectionInText(
       """"text <caret>${variable}"""",
