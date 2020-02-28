@@ -6,7 +6,8 @@ import org.intellij.plugins.dhall.annotator.HighlightAssert
 class DhallSelectionsTest
     extends BaseDhallSelectionsTest
     with CorrectSyntaxTesting
-    with RecoverySyntaxTesting {
+    with RecoverySyntaxTesting
+    with WordSelectionTesting {
   def testLetExpression(): Unit = {
     this.assertSelectionInText(
       "let attempts = 1 in <selection><caret>1</selection>",
@@ -131,10 +132,181 @@ class DhallSelectionsTest
     )
   }
 
+  def testDoubleQuoteInterpolationRecovery(): Unit = {
+    this
+      .assertSelectionInText(
+        """<caret>"${hello!}"""",
+        """<selection><caret>"${hello!}"</selection>"""
+      )
+  }
+
   def testInterpolation(): Unit = {
     this.assertSelectionInText(
       """"text <caret>${variable}"""",
       """"text <selection><caret>${variable}</selection>""""
+    )
+  }
+
+  def testWithinInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"text ${<caret>variable}"""",
+      """"text ${<selection><caret>variable</selection>}""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAdjacentToInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"riverr<caret>un${variable}"""",
+      """"<selection>riverr<caret>un</selection>${variable}""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionExactlyBetweenInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """"riverrun<caret>${variable}"""",
+      """"riverrun<selection>${variable}</selection>""""
+    )
+  }
+
+  // test word selection adjacent to escape
+  // test word selection adjacent to block comment
+
+  def testDoubleQuoteWordSelectionAtWordStart(): Unit = {
+    this.assertSelectionInText(
+      """"pet <caret>the dog"""",
+      """"pet <selection><caret>the</selection> dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionInWordMiddle(): Unit = {
+    this.assertSelectionInText(
+      """"pet th<caret>e dog"""",
+      """"pet <selection>th<caret>e</selection> dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtWordEnd(): Unit = {
+    this.assertSelectionInText(
+      """"pet the<caret> dog"""",
+      """"pet <selection>the<caret></selection> dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtStringStart(): Unit = {
+    this.assertSelectionInText(
+      """"<caret>pet the dog"""",
+      """"<caret><selection>pet</selection> the dog""""
+    )
+  }
+
+  def testDoubleQuoteWordSelectionAtStringEnd(): Unit = {
+    this.assertSelectionInText(
+      """"pet the dog<caret>"""",
+      """"pet the <selection>dog<caret></selection>""""
+    )
+  }
+
+  def testSingleQuoteWordSelectionAtWordStart(): Unit = {
+    this.assertSelectionInText("""''
+     | word-sel <caret>inco ntent
+     | string''
+     |""".stripMargin, """''
+     | word-sel <selection><caret>inco</selection> ntent
+     | string''
+     |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAtWordEnd(): Unit = {
+    this.assertSelectionInText("""''
+     | word-sel inco ntent<caret>
+     | string''
+     |""".stripMargin, """''
+     | word-sel inco <selection>ntent<caret></selection>
+     | string''
+     |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionInWordMiddle(): Unit = {
+    this.assertSelectionInText("""''
+        | word-<caret>sel in
+        | string''
+        |""".stripMargin, """''
+        | <selection>word-<caret>sel</selection> in
+        | string''
+        |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAtStringStart(): Unit = {
+    this.assertSelectionInText("""''<caret>
+       | word-sel in
+       | string''
+       |""".stripMargin, """<selection>''<caret>
+       | word-sel in
+       | string''</selection>
+       |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAtStringEnd(): Unit = {
+    this.assertSelectionInText("""''
+       | word-sel in
+       | string<caret>''
+       |""".stripMargin, """''
+       | word-sel in
+       | <selection>string<caret></selection>''
+       |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAdjacentToInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """''
+       | word interpol<caret>ated${variable}
+       | string''
+       |""".stripMargin,
+      """''
+       | word <selection>interpol<caret>ated</selection>${variable}
+       | string''
+       |""".stripMargin
+    )
+  }
+
+  def testSingleQuoteWordSelectionExactlyBetweenInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """''
+        | word interpolated<caret>${variable}
+        | string''
+        |""".stripMargin,
+      """''
+        | word interpolated<selection><caret>${variable}</selection>
+        | string''
+        |""".stripMargin
+    )
+  }
+
+  def testSingleQuoteEscapedInterpolation(): Unit = {
+    this.assertSelectionInText("""''
+      | con ''${var<caret>iable}es''
+      |""".stripMargin, """''
+      | con <selection>''${var<caret>iable}es</selection>''
+      |""".stripMargin)
+    this.assertSelectionInText("""''
+      | con ''<caret>${variable}es''
+      |""".stripMargin, """''
+      | con <selection>''<caret>${</selection>variable}es''
+      |""".stripMargin)
+  }
+
+  def testSingleQuoteEscapedTwoSingleQuotes(): Unit = {
+    this.assertSelectionInText("""''
+       | pers<caret>on'''s''
+       |""".stripMargin, """''
+       | <selection>pers<caret>on'''s</selection>''
+       |""".stripMargin)
+  }
+
+  def testDoubleQuoteEscapeSequence(): Unit = {
+    this.assertSelectionInText(
+      """"this """ + """\""" + """u<caret>{2931}"""",
+      """"this """ + """<selection>\""" + """u<caret>{2931}</selection>""""
     )
   }
 }

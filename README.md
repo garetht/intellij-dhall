@@ -83,3 +83,7 @@ Resetting State
 The default location where `sbt` stores the downloaded development `IDEA` is `~/.intellij-dhall...`. This folder can be deleted for `sbt` to download the plugin again on its next run.
 
 To reset `sbt` caches, run `reload` or `clean` or `clearCaches` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
+
+FIRST Set Conflicts
+===
+When two FIRST sets conflict in subrules, and no backtracking is specified, we must be sure to pin the first rule that matches to agree with the expected semantics of the ABNF grammar. Three cases of this are double-quote interpolation, single-quote interpolation, and block comment nesting.

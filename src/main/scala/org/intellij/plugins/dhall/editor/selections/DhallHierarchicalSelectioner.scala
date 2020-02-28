@@ -11,6 +11,7 @@ import org.intellij.plugins.dhall.psi.{
   DhallBuiltin,
   DhallCharacter,
   DhallDigit,
+  DhallDoubleQuoteChunk,
   DhallDoubleQuoteEscaped,
   DhallHexdig,
   DhallKeyword,
@@ -29,11 +30,7 @@ import org.intellij.plugins.dhall.psi.{
 
 import scala.jdk.CollectionConverters.SeqHasAsJava
 
-class DhallSelectioner extends ExtendWordSelectionHandlerBase {
-  override def canSelect(psiElement: PsiElement): Boolean = {
-    psiElement.getLanguage == DhallLanguage
-  }
-
+class DhallHierarchicalSelectioner extends BaseDhallSelectioner {
   override def select(psiElement: PsiElement,
                       allEditorBufferText: CharSequence,
                       cursorOffset: Int,
@@ -60,6 +57,7 @@ class DhallSelectioner extends ExtendWordSelectionHandlerBase {
         // Double Quote Escaping
         case _: DhallUnicodeEscape      => true
         case _: DhallDoubleQuoteEscaped => true
+        case _: DhallDoubleQuoteChunk   => true
 
         // Path Component Escaping
         case _: DhallPathComponent         => true
@@ -70,6 +68,8 @@ class DhallSelectioner extends ExtendWordSelectionHandlerBase {
 
         // Handle keywords that are prefixes of labels
         // and builtins that are prefixes of reserved labels
+        // If a keyword is part of a label, then extend the
+        // selection to the parent, i.e. the label
         case kw: DhallKeyword =>
           kw.getParent match {
             case _: DhallSimpleLabel => true

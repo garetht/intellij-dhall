@@ -13,7 +13,7 @@ import org.intellij.plugins.dhall.psi.DhallElementType
   *
   * Without this, single characters will automatically get selected.
   */
-class DhallWordSelectionFilter extends Condition[PsiElement] {
+class DhallBasicWordSelectionFilter extends Condition[PsiElement] {
   override def value(t: PsiElement): Boolean = {
     t.getLanguage != DhallLanguage && (t match {
       case _: DhallElementType => false

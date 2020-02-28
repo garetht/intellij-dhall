@@ -52,6 +52,18 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
+  def testDoubleQuoteInterpolationRecovery(): Unit = {
+    this.assertHighlight(
+      """"${hello!}"""",
+      List(
+        HighlightAssert(text = """"${hello!}"""", C.STRING),
+        HighlightAssert(text = "${hello", C.TEMPLATE_LANGUAGE_COLOR),
+        HighlightAssert(text = "hello", C.IDENTIFIER),
+        HighlightAssert.assertError(text = "!"),
+      )
+    )
+  }
+
   def testSelectorDot(): Unit = {
     this.assertHighlight(
       """
@@ -262,6 +274,55 @@ class SyntaxHighlightAnnotatorTest
           key = C.TEMPLATE_LANGUAGE_COLOR
         ),
         HighlightAssert(text = "variable", key = C.IDENTIFIER),
+      )
+    )
+  }
+
+  def testWithinInterpolation(): Unit = {
+    this.assertHighlight(
+      """"${"quote"}"""",
+      List(
+        HighlightAssert(text = """"${"quote"}"""", key = C.STRING),
+        HighlightAssert(
+          text = """${"quote"}""",
+          key = C.TEMPLATE_LANGUAGE_COLOR
+        ),
+        HighlightAssert(text = """"quote"""", key = C.STRING),
+      )
+    )
+  }
+
+  def testSingleQuoteEscapedInterpolation(): Unit = {
+    val str: String = """''
+    | an ''${interp} str''""".stripMargin
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = "''${", C.VALID_STRING_ESCAPE),
+      )
+    )
+  }
+
+  def testSingleQuoteEscapedTwoSingleQuotes(): Unit = {
+    val str: String = """''
+    | person'''s''""".stripMargin
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = "'''", C.VALID_STRING_ESCAPE),
+      )
+    )
+  }
+
+  def testDoubleQuoteEscapeSequence(): Unit = {
+    val str = """"this """ + """\""" + """u{2931}""""
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = """\""" + "u{2931}", C.VALID_STRING_ESCAPE)
       )
     )
   }

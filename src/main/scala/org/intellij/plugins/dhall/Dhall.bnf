@@ -456,7 +456,7 @@ single-quote-char ::= all_ascii_printable
 
 single-quote-literal ::= SINGLE_QUOTE SINGLE_QUOTE end-of-line single-quote-continue
 
-interpolation ::= DOLLAR LEFT_BRACE complete-expression RIGHT_BRACE
+interpolation ::= DOLLAR LEFT_BRACE complete-expression RIGHT_BRACE {pin=2}
 
 unicode-escape ::= unbraced-escape | LEFT_BRACE braced-escape RIGHT_BRACE
 
@@ -561,9 +561,9 @@ annotated-expression ::= operator-expression (whsp COLON whsp1 expression)?
 // be more permissive, so we must manually write a rule to recover the FOLLOW set
 // before pinning - "#auto" will not just work.
 // N.B. Quick Documentation can be used to see the FIRST and FOLLOW sets.
-private let_binding_recover ::= !(let | in)
+private let_binding-recovery ::= !(let | in)
 //  "let x = e1"
-let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile=let_binding_recover}
+let_binding ::= let whsp1 nonreserved-label whsp (COLON whsp1 expression whsp)? EQUALS whsp expression whsp {pin=1 recoverWhile=let_binding-recovery}
 
 //  "[] : t"
 empty-list-literal ::=
