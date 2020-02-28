@@ -274,19 +274,31 @@ class DhallSelectionsTest
     )
   }
 
-  def testSingleQuoteWordSelectionInterpolationEscape(): Unit = {
+  def testSingleQuoteEscapedInterpolation(): Unit = {
     this.assertSelectionInText("""''
-        | con ''${var<caret>iable}es''
-        |""".stripMargin, """''
-        | con <selection>''${var<caret>iable}es</selection>''
-        |""".stripMargin)
+      | con ''${var<caret>iable}es''
+      |""".stripMargin, """''
+      | con <selection>''${var<caret>iable}es</selection>''
+      |""".stripMargin)
+    this.assertSelectionInText("""''
+      | con ''<caret>${variable}es''
+      |""".stripMargin, """''
+      | con <selection>''<caret>${</selection>variable}es''
+      |""".stripMargin)
   }
 
-  def testSingleQuoteWordSelectionQuoteEscape(): Unit = {
+  def testSingleQuoteEscapedTwoSingleQuotes(): Unit = {
     this.assertSelectionInText("""''
        | pers<caret>on'''s''
        |""".stripMargin, """''
        | <selection>pers<caret>on'''s</selection>''
        |""".stripMargin)
+  }
+
+  def testDoubleQuoteEscapeSequence(): Unit = {
+    this.assertSelectionInText(
+      """"this """ + """\""" + """u<caret>{2931}"""",
+      """"this """ + """<selection>\""" + """u<caret>{2931}</selection>""""
+    )
   }
 }

@@ -8,4 +8,6 @@ trait RecoverySyntaxTesting {
   def testForallRecovery(): Unit
   // test forall | if | assert  -> pinning
 
+//  def testDoubleQuoteInterpolationRecovery(): Unit
+//  "${hello!}"
 }

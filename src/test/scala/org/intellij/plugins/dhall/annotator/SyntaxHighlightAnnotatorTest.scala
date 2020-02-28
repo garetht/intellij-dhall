@@ -279,4 +279,39 @@ class SyntaxHighlightAnnotatorTest
       )
     )
   }
+
+  def testSingleQuoteEscapedInterpolation(): Unit = {
+    val str: String = """''
+    | an ''${interp} str''""".stripMargin
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = "''${", C.VALID_STRING_ESCAPE),
+      )
+    )
+  }
+
+  def testSingleQuoteEscapedTwoSingleQuotes(): Unit = {
+    val str: String = """''
+    | person'''s''""".stripMargin
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = "'''", C.VALID_STRING_ESCAPE),
+      )
+    )
+  }
+
+  def testDoubleQuoteEscapeSequence(): Unit = {
+    val str = """"this """ + """\""" + """u{2931}""""
+    this.assertHighlight(
+      str,
+      List(
+        HighlightAssert(text = str, C.STRING),
+        HighlightAssert(text = """\""" + "u{2931}", C.VALID_STRING_ESCAPE)
+      )
+    )
+  }
 }

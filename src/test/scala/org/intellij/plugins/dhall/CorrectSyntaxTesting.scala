@@ -16,6 +16,10 @@ trait CorrectSyntaxTesting {
   def testInterpolation(): Unit
   def testWithinInterpolation(): Unit
 
+  def testSingleQuoteEscapedInterpolation(): Unit
+  def testSingleQuoteEscapedTwoSingleQuotes(): Unit
+
+  def testDoubleQuoteEscapeSequence(): Unit
   // testImport
   // testAssertApplicationExpression
   // testMergeApplicationExpression
