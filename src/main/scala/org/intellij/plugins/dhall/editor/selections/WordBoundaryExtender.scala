@@ -8,7 +8,9 @@ import scala.util.Try
 
 // given a PsiElement, extend the selection both ends
 // until we get to word boundaries
-trait WordBoundaryExtender {
+abstract class WordBoundaryExtender[T <: PsiElement](rootElement: T) {
+  def rootElementEligibleForWordSelection(): Boolean = true
+
   // the full boundary
   def wordBoundary(): Option[TextRange]
 
@@ -17,8 +19,8 @@ trait WordBoundaryExtender {
   // If it is not a word character, return false. This
   // stops iteration.
   def isWordCharToDrop(element: PsiElement): Boolean
-  def entireLiteral(element: PsiElement): TextRange = {
-    element.getParent.getTextRange
+  def entireLiteral(): TextRange = {
+    this.rootElement.getParent.getTextRange
   }
   def iterateDropWordChars(element: PsiElement,
                            direction: (PsiElement) => PsiElement,
@@ -32,12 +34,25 @@ trait WordBoundaryExtender {
     ).toOption.map(nw => offsetEdge(nw.getTextRange))
   }
 
-  def boundaryTextRange(element: PsiElement): Option[TextRange] = {
-    val wholeLiteralRange = this.entireLiteral(element)
+  def boundaryTextRange(): Option[TextRange] = {
+    val wholeLiteralRange = this.entireLiteral()
+
+    if (!this.rootElementEligibleForWordSelection) {
+      return None
+    }
+
     val previousWordEdge =
-      this.iterateDropWordChars(element, _.getPrevSibling, _.getEndOffset)
+      this.iterateDropWordChars(
+        this.rootElement,
+        _.getPrevSibling,
+        _.getEndOffset
+      )
     val nextWordEdge =
-      this.iterateDropWordChars(element, _.getNextSibling, _.getStartOffset)
+      this.iterateDropWordChars(
+        this.rootElement,
+        _.getNextSibling,
+        _.getStartOffset
+      )
 
     Some(
       new TextRange(

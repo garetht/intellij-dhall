@@ -227,4 +227,50 @@ class DhallSelectionsTest
         | string''
         |""".stripMargin)
   }
+
+  def testSingleQuoteWordSelectionAtStringStart(): Unit = {
+    this.assertSelectionInText("""''<caret>
+       | word-sel in
+       | string''
+       |""".stripMargin, """<selection>''<caret>
+       | word-sel in
+       | string''</selection>
+       |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAtStringEnd(): Unit = {
+    this.assertSelectionInText("""''
+       | word-sel in
+       | string<caret>''
+       |""".stripMargin, """''
+       | word-sel in
+       | <selection>string<caret></selection>''
+       |""".stripMargin)
+  }
+
+  def testSingleQuoteWordSelectionAdjacentToInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """''
+       | word interpol<caret>ated${variable}
+       | string''
+       |""".stripMargin,
+      """''
+       | word <selection>interpol<caret>ated</selection>${variable}
+       | string''
+       |""".stripMargin
+    )
+  }
+
+  def testSingleQuoteWordSelectionExactlyBetweenInterpolation(): Unit = {
+    this.assertSelectionInText(
+      """''
+        | word interpolated<caret>${variable}
+        | string''
+        |""".stripMargin,
+      """''
+        | word interpolated<selection><caret>${variable}</selection>
+        | string''
+        |""".stripMargin
+    )
+  }
 }

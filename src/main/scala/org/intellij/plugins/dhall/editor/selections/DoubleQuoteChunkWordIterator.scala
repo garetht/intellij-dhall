@@ -5,12 +5,17 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.intellij.plugins.dhall.psi.DhallDoubleQuoteChunk
 
-class DoubleQuoteChunkWordIterator(element: PsiElement)
-    extends WordBoundaryExtender {
+class DoubleQuoteChunkWordIterator(rootElement: DhallDoubleQuoteChunk)
+    extends WordBoundaryExtender(rootElement) {
   // wrapper method that feeds constructor parameters into
   // pre-implemented word boundary methods
   def wordBoundary(): Option[TextRange] = {
-    this.boundaryTextRange(element)
+    this.boundaryTextRange()
+  }
+
+  override def rootElementEligibleForWordSelection(): Boolean = {
+    // do not perform word expansion if cursor is at interpolation
+    Option(this.rootElement.getInterpolation).isEmpty
   }
 
   def isWordCharToDrop(element: PsiElement): Boolean = {
@@ -30,7 +35,7 @@ class DoubleQuoteChunkWordIterator(element: PsiElement)
 }
 
 object DoubleQuoteChunkWordIterator {
-  def apply(element: PsiElement): DoubleQuoteChunkWordIterator =
+  def apply(element: DhallDoubleQuoteChunk): DoubleQuoteChunkWordIterator =
     new DoubleQuoteChunkWordIterator(element)
 
   // The element provided here is any PSI element, and it is the task
@@ -42,9 +47,7 @@ object DoubleQuoteChunkWordIterator {
       .flatMap(par => Option(par.getParent))
       .flatMap {
         case elem: DhallDoubleQuoteChunk =>
-          // do not perform word expansion if cursor is at interpolation
-          if (Option(elem.getInterpolation).isDefined) None
-          else DoubleQuoteChunkWordIterator(elem).wordBoundary()
+          DoubleQuoteChunkWordIterator(elem).wordBoundary()
         case _ => None
       }
   }

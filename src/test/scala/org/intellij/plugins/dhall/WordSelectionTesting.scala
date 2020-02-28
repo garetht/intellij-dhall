@@ -11,11 +11,13 @@ trait WordSelectionTesting {
   def testDoubleQuoteWordSelectionInWordMiddle(): Unit
   def testDoubleQuoteWordSelectionAtWordEnd(): Unit
 
-//  def testSingleQuoteWordSelectionAdjacentToInterpolation(): Unit
-//  def testSingleQuoteWordSelectionExactlyBetweenInterpolation(): Unit
+  // test double quote escape sequence
+  // test single quote escape sequences (quote escapes and interpolation escapes)
+  def testSingleQuoteWordSelectionAdjacentToInterpolation(): Unit
+  def testSingleQuoteWordSelectionExactlyBetweenInterpolation(): Unit
 //
-//  def testSingleQuoteWordSelectionAtStringStart(): Unit
-//  def testSingleQuoteWordSelectionAtStringEnd(): Unit
+  def testSingleQuoteWordSelectionAtStringStart(): Unit
+  def testSingleQuoteWordSelectionAtStringEnd(): Unit
 //
   def testSingleQuoteWordSelectionAtWordStart(): Unit
   def testSingleQuoteWordSelectionInWordMiddle(): Unit
