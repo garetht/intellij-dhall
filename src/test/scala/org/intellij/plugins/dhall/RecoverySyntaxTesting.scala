@@ -9,4 +9,5 @@ trait RecoverySyntaxTesting {
   // test forall | if | assert  -> pinning
 
   def testDoubleQuoteInterpolationRecovery(): Unit
+  // single quote interpolation recovery
 }

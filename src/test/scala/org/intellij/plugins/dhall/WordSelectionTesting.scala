@@ -11,9 +11,6 @@ trait WordSelectionTesting {
   def testDoubleQuoteWordSelectionInWordMiddle(): Unit
   def testDoubleQuoteWordSelectionAtWordEnd(): Unit
 
-  // test double quote escape sequence
-  // test single quote escape sequences (quote escapes and interpolation escapes)
-
   def testSingleQuoteWordSelectionAdjacentToInterpolation(): Unit
   def testSingleQuoteWordSelectionExactlyBetweenInterpolation(): Unit
 
