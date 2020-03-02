@@ -17,6 +17,11 @@ abstract class WordIterator[T <: PsiElement](rootElement: T) {
   // when the cursor is at an interpolation.
   def wordBoundary(): Option[TextRange]
 
+  def isWordSeparator(e: PsiElement): Boolean = {
+    val t = e.getText
+    t.length > 0 && !t.charAt(0).isWhitespace
+  }
+
   /**
     * If the examined element is a word character, return
     * true.

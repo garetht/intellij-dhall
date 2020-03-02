@@ -20,4 +20,11 @@ trait WordSelectionTesting {
   def testSingleQuoteWordSelectionAtWordStart(): Unit
   def testSingleQuoteWordSelectionInWordMiddle(): Unit
   def testSingleQuoteWordSelectionAtWordEnd(): Unit
+
+  def testSelectionAtBlockCommentStart(): Unit
+  def testSelectionAtBlockCommentEnd(): Unit
+
+  def testSelectionOfBlockCommentStartSyntax(): Unit
+  def testSelectionOfBlockCommentEndSyntax(): Unit
+  def testSelectionOfNestedBlockComment(): Unit
 }

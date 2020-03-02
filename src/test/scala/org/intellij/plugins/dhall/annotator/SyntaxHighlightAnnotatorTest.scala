@@ -326,4 +326,33 @@ class SyntaxHighlightAnnotatorTest
       )
     )
   }
+
+  def testBlockComment(): Unit = {
+    val comment =
+      """{- multi
+        | line-}1""".stripMargin
+    this
+      .assertHighlight(
+        comment,
+        List(
+          HighlightAssert(text = """{- multi
+                      | line-}""".stripMargin, C.BLOCK_COMMENT),
+          HighlightAssert(text = "1", C.NUMBER)
+        )
+      )
+  }
+
+  def testNestedBlockComment(): Unit = {
+    this.assertHighlight(
+      "{- nested {- block -} comment-}1",
+      List(
+        HighlightAssert(
+          text = """{- nested {- block -} comment-}""".stripMargin,
+          C.BLOCK_COMMENT
+        ),
+        HighlightAssert(text = """{- block -}""".stripMargin, C.BLOCK_COMMENT),
+        HighlightAssert(text = """1""".stripMargin, C.NUMBER)
+      )
+    )
+  }
 }

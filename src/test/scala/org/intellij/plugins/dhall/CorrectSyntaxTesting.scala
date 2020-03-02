@@ -20,6 +20,10 @@ trait CorrectSyntaxTesting {
   def testSingleQuoteEscapedTwoSingleQuotes(): Unit
 
   def testDoubleQuoteEscapeSequence(): Unit
+
+  def testBlockComment(): Unit
+  def testNestedBlockComment(): Unit
+//  def testSingleLineComment(): Unit
   // testImport
   // testAssertApplicationExpression
   // testMergeApplicationExpression
