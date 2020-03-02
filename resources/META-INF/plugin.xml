@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>org.intellij.plugins.dhall</id>
     <name>Dhall</name>
-    <version>0.1</version>
+    <version>0</version>
     <vendor email="garethwtan@gmail.com" url="https://github.com/garetht">Gareth T</vendor>
 
-    <description>Provides Dhall language support. https://dhall-lang.org/</description>
+    <description>Provides basic Dhall language support. https://dhall-lang.org/</description>
 
     <change-notes>
-        This plugin continues to be under development.
+        This initial release adds syntax highlighting and custom selection support.
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->

@@ -35,6 +35,7 @@ lazy val dhall = project
 
     patchPluginXml := pluginXmlOptions { xml =>
       xml.version = version.value
+      xml.sinceBuild = (intellijBuild in ThisBuild).value
     },
     intellijExternalPlugins += IntellijPlugin
       .Id("PsiViewer", Some("193-SNAPSHOT"), None),
