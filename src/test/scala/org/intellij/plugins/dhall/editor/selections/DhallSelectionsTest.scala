@@ -226,6 +226,60 @@ class DhallSelectionsTest
      |""".stripMargin)
   }
 
+  def testSelectionAtBlockCommentStart(): Unit = {
+    this.assertSelectionInText(
+      "{-<caret>text content-}1",
+      "{-<selection><caret>text</selection> content-}1"
+    )
+  }
+
+  def testSelectionAtBlockCommentEnd(): Unit = {
+    this.assertSelectionInText(
+      "{-text content<caret>-}1",
+      "{-text <selection>content<caret></selection>-}1"
+    )
+  }
+
+  def testSelectionOfBlockCommentStartSyntax(): Unit = {
+    this.assertSelectionInText(
+      "{<caret>-text content-}1",
+      "<selection>{<caret>-text content-}</selection>1"
+    )
+  }
+
+  def testSelectionOfBlockCommentEndSyntax(): Unit = {
+    this.assertSelectionInText(
+      "{-text content-<caret>}1",
+      "<selection>{-text content-<caret>}</selection>1"
+    )
+  }
+
+  def testSelectionOfNestedBlockComment(): Unit = {
+    this.assertSelectionInText(
+      "{-text {-<selection> n<caret>ested </selection>-} content-}1",
+      "{-text <selection>{- n<caret>ested -}</selection> content-}1"
+    )
+  }
+
+  def testSelectionAtLineCommentStart(): Unit = {
+    this.assertSelectionInText(
+      """
+        | let x = 2 --<caret>assign variable
+        | in x""".stripMargin,
+      """
+        | let x = 2 --<selection><caret>assign</selection> variable
+        | in x""".stripMargin
+    )
+  }
+
+  def testSelectionOfLineCommentSyntax(): Unit = {
+    this.assertSelectionInText("""
+        | let x = 2 -<caret>-assign variable
+        | in x""".stripMargin, """
+        | let x = 2 <selection>-<caret>-assign variable
+        |</selection> in x""".stripMargin)
+  }
+
   def testSingleQuoteWordSelectionInWordMiddle(): Unit = {
     this.assertSelectionInText("""''
         | word-<caret>sel in
@@ -307,6 +361,39 @@ class DhallSelectionsTest
     this.assertSelectionInText(
       """"this """ + """\""" + """u<caret>{2931}"""",
       """"this """ + """<selection>\""" + """u<caret>{2931}</selection>""""
+    )
+  }
+
+  def testBlockComment(): Unit = {
+    this.assertSelectionInText(
+      """
+         |{- hello
+         | wor<caret>ld -}1""".stripMargin,
+      """
+         |{- hello
+         | <selection>wor<caret>ld</selection> -}1""".stripMargin
+    )
+  }
+
+  def testNestedBlockComment(): Unit = {
+    this.assertSelectionInText(
+      """
+        |{- hello
+        | wor{- inn<caret>er world -} ld -}1""".stripMargin,
+      """
+        |{- hello
+        | wor{- <selection>inn<caret>er</selection> world -} ld -}1""".stripMargin
+    )
+  }
+
+  def testSingleLineComment(): Unit = {
+    this.assertSelectionInText(
+      """let x = 2 --<caret>assign variable
+        |in x
+        |""".stripMargin,
+      """let x = 2 --<selection><caret>assign</selection> variable
+        |in x
+        |""".stripMargin
     )
   }
 }

@@ -7,10 +7,11 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.intellij.plugins.dhall.editor.selections.worditerators.{
+  BlockCommentWordIterator,
   DoubleQuoteChunkWordIterator,
+  LineCommentWordIterator,
   SingleQuoteChunkWordIterator
 }
-import org.intellij.plugins.dhall.psi.DhallSingleQuoteLiteral
 
 import scala.jdk.CollectionConverters.SeqHasAsJava
 
@@ -30,6 +31,8 @@ class DhallWordSelectioner extends BaseDhallSelectioner {
         SingleQuoteChunkWordIterator
           .generateRange(psiElement)
       )
+      .orElse(BlockCommentWordIterator.generateRange(psiElement))
+      .orElse(LineCommentWordIterator.generateRange(psiElement))
 
     (if (range.isDefined && range.get.getLength > 0)
        List(range.get)

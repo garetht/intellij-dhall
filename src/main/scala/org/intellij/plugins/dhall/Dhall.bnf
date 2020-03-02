@@ -864,7 +864,7 @@ private block-comment-continue ::= MINUS RIGHT_BRACE
 
 not-end-of-line ::= all_ascii_printable
                   | VALID_NON_ASCII
-                  | TAB
+                  | TAB {extends = character elementType = character}
 
 line-comment ::= MINUS MINUS not-end-of-line* end-of-line
 

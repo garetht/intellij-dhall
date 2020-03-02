@@ -29,10 +29,7 @@ class SingleQuoteChunkWordIterator(rootElement: PsiElement)
 
   def isWordCharToDrop(element: PsiElement): Boolean = {
     element match {
-      case c: DhallCharacter => {
-        val t = c.getText
-        t.length > 0 && !t.charAt(0).isWhitespace
-      }
+      case c: DhallCharacter                                       => this.isWordSeparator(c)
       case _: DhallEscapedInterpolation | _: DhallEscapedQuotePair => true
       case _                                                       => false
     }

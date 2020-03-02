@@ -6,8 +6,15 @@ import com.intellij.psi.PsiElement
 
 import scala.util.Try
 
-// given a PsiElement, extend the selection both ends
-// until we get to word boundaries
+/**
+  * Given a PsiElement with previous and next siblings representing a string,
+  *  extends the word boundary forwards and backwards until we reach a word.
+  *
+  * @param rootElement A PsiElement that has previous siblings and next siblings that
+  *                    can be iterated to produce the full length of the word. The level
+  *                    at which a string can be found in the grammar.
+  * @tparam T The type of the root element.
+  */
 abstract class WordIterator[T <: PsiElement](rootElement: T) {
   def rootElementEligibleForWordSelection(): Boolean = true
 
@@ -16,6 +23,11 @@ abstract class WordIterator[T <: PsiElement](rootElement: T) {
   // to offer a word selection. This may happen, for example,
   // when the cursor is at an interpolation.
   def wordBoundary(): Option[TextRange]
+
+  def isWordSeparator(e: PsiElement): Boolean = {
+    val t = e.getText
+    t.length > 0 && !t.charAt(0).isWhitespace
+  }
 
   /**
     * If the examined element is a word character, return
