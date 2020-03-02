@@ -17,14 +17,6 @@ class LineCommentWordIterator(rootElement: PsiElement)
     this.boundaryTextRange()
   }
 
-  override def rootElementEligibleForWordSelection(): Boolean = {
-    // do not perform word expansion if cursor is at interpolation
-    this.rootElement match {
-      case _: DhallBlockComment => false
-      case _                    => true
-    }
-  }
-
   def isWordCharToDrop(element: PsiElement): Boolean = {
     element match {
       case c: DhallCharacter => this.isWordSeparator(c)
