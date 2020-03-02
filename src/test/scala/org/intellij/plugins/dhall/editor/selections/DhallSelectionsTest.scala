@@ -261,6 +261,25 @@ class DhallSelectionsTest
     )
   }
 
+  def testSelectionAtLineCommentStart(): Unit = {
+    this.assertSelectionInText(
+      """
+        | let x = 2 --<caret>assign variable
+        | in x""".stripMargin,
+      """
+        | let x = 2 --<selection><caret>assign</selection> variable
+        | in x""".stripMargin
+    )
+  }
+
+  def testSelectionOfLineCommentSyntax(): Unit = {
+    this.assertSelectionInText("""
+        | let x = 2 -<caret>-assign variable
+        | in x""".stripMargin, """
+        | let x = 2 <selection>-<caret>-assign variable
+        |</selection> in x""".stripMargin)
+  }
+
   def testSingleQuoteWordSelectionInWordMiddle(): Unit = {
     this.assertSelectionInText("""''
         | word-<caret>sel in
@@ -364,6 +383,17 @@ class DhallSelectionsTest
       """
         |{- hello
         | wor{- <selection>inn<caret>er</selection> world -} ld -}1""".stripMargin
+    )
+  }
+
+  def testSingleLineComment(): Unit = {
+    this.assertSelectionInText(
+      """let x = 2 --<caret>assign variable
+        |in x
+        |""".stripMargin,
+      """let x = 2 --<selection><caret>assign</selection> variable
+        |in x
+        |""".stripMargin
     )
   }
 }

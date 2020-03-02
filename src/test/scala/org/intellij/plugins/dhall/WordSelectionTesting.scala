@@ -27,4 +27,7 @@ trait WordSelectionTesting {
   def testSelectionOfBlockCommentStartSyntax(): Unit
   def testSelectionOfBlockCommentEndSyntax(): Unit
   def testSelectionOfNestedBlockComment(): Unit
+
+  def testSelectionAtLineCommentStart(): Unit
+  def testSelectionOfLineCommentSyntax(): Unit
 }

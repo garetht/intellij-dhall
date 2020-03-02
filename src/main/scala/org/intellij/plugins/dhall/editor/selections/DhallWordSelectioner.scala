@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement
 import org.intellij.plugins.dhall.editor.selections.worditerators.{
   BlockCommentWordIterator,
   DoubleQuoteChunkWordIterator,
+  LineCommentWordIterator,
   SingleQuoteChunkWordIterator
 }
 
@@ -31,6 +32,7 @@ class DhallWordSelectioner extends BaseDhallSelectioner {
           .generateRange(psiElement)
       )
       .orElse(BlockCommentWordIterator.generateRange(psiElement))
+      .orElse(LineCommentWordIterator.generateRange(psiElement))
 
     (if (range.isDefined && range.get.getLength > 0)
        List(range.get)

@@ -23,7 +23,7 @@ trait CorrectSyntaxTesting {
 
   def testBlockComment(): Unit
   def testNestedBlockComment(): Unit
-//  def testSingleLineComment(): Unit
+  def testSingleLineComment(): Unit
   // testImport
   // testAssertApplicationExpression
   // testMergeApplicationExpression

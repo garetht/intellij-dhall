@@ -19,7 +19,6 @@ import org.intellij.plugins.dhall.psi.{
   DhallNonEmptyRecordType,
   DhallNonEmptyRecordTypeOrLiteral,
   DhallNonreservedLabel,
-  DhallNotEndOfLine,
   DhallPathComponent,
   DhallQuotedPathComponent,
   DhallRecordTypeOrLiteral,
@@ -63,8 +62,6 @@ class DhallHierarchicalSelectioner extends BaseDhallSelectioner {
         case _: DhallPathComponent         => true
         case _: DhallQuotedPathComponent   => true
         case _: DhallUnquotedPathComponent => true
-
-        case _: DhallNotEndOfLine => true
 
         // Handle keywords that are prefixes of labels
         // and builtins that are prefixes of reserved labels

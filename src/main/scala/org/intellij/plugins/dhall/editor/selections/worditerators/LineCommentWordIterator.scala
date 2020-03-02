@@ -3,9 +3,13 @@ package editor.selections.worditerators
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import org.intellij.plugins.dhall.psi.{DhallBlockComment, DhallCharacter}
+import org.intellij.plugins.dhall.psi.{
+  DhallBlockComment,
+  DhallCharacter,
+  DhallLineComment
+}
 
-class BlockCommentWordIterator(rootElement: PsiElement)
+class LineCommentWordIterator(rootElement: PsiElement)
     extends WordIterator(rootElement) {
   // wrapper method that feeds constructor parameters into
   // pre-implemented word boundary methods
@@ -29,9 +33,9 @@ class BlockCommentWordIterator(rootElement: PsiElement)
   }
 }
 
-object BlockCommentWordIterator {
-  def apply(element: PsiElement): BlockCommentWordIterator =
-    new BlockCommentWordIterator(element)
+object LineCommentWordIterator {
+  def apply(element: PsiElement): LineCommentWordIterator =
+    new LineCommentWordIterator(element)
 
   // The element provided here is any PSI element, and it is the task
   // of the iterator to decide if it should apply, by checking for example
@@ -40,8 +44,8 @@ object BlockCommentWordIterator {
   def generateRange(element: PsiElement): Option[TextRange] = {
     Option(element.getParent).flatMap(par => {
       Option(par.getParent).flatMap {
-        case _: DhallBlockComment =>
-          BlockCommentWordIterator(par).wordBoundary()
+        case _: DhallLineComment =>
+          LineCommentWordIterator(par).wordBoundary()
         case _ => None
       }
     })
