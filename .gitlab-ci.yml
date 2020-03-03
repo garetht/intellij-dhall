@@ -22,7 +22,7 @@ deploy:
   stage: deploy
   image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
   script:
-    - sbt packageArtifactZip
+    - sbt reload && sbt packageArtifactZip
   artifacts:
     name: "intellij-dhall-release-$CI_COMMIT_TAG"
     paths:
