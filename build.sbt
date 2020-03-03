@@ -31,10 +31,10 @@ lazy val dhall = project
     unmanagedSourceDirectories in Compile += baseDirectory.value / "gen",
     resourceDirectory in Compile := baseDirectory.value / "resources",
 
-    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${version.value}.jar"),
+    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${(version in ThisBuild).value}.jar"),
 
     patchPluginXml := pluginXmlOptions { xml =>
-      xml.version = version.value
+      xml.version = (version in ThisBuild).value
       xml.sinceBuild = (intellijBuild in ThisBuild).value
     },
     intellijExternalPlugins += IntellijPlugin
