@@ -16,9 +16,10 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
 )
 
-releaseTagComment        := s"[auto-package] Release ${(version in ThisBuild).value}"
-releaseCommitMessage     := s"[auto-package] Set release version to ${(version in ThisBuild).value}"
-releaseNextCommitMessage := s"[auto-package] Set next development version to ${(version in ThisBuild).value}"
+releaseUseGlobalVersion  := false
+releaseTagComment        := s"[auto-package] Release ${version.value}"
+releaseCommitMessage     := s"[auto-package] Set release version to ${version.value}"
+releaseNextCommitMessage := s"[auto-package] Set next development version to ${version.value}"
 
 lazy val dhall = project
   .in(file("."))
@@ -31,10 +32,10 @@ lazy val dhall = project
     unmanagedSourceDirectories in Compile += baseDirectory.value / "gen",
     resourceDirectory in Compile := baseDirectory.value / "resources",
 
-    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${(version in ThisBuild).value}.jar"),
+    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${version.value}.jar"),
 
     patchPluginXml := pluginXmlOptions { xml =>
-      xml.version = (version in ThisBuild).value
+      xml.version = version.value
       xml.sinceBuild = (intellijBuild in ThisBuild).value
     },
     intellijExternalPlugins += IntellijPlugin
