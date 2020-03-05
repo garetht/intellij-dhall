@@ -16,4 +16,4 @@ RUN ["sbt", "updateIntellij"]
 COPY --from=generate /home/gradle/gen gen/
 COPY . .
 
-ENTRYPOINT ["sbt", "test"]
+ENTRYPOINT ["sbt"]
