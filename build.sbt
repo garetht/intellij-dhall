@@ -30,7 +30,6 @@ lazy val dhall = project
     ideBasePackages := Seq("org.intellij.plugins.dhall"),
     unmanagedSourceDirectories in Compile += baseDirectory.value / "gen",
     resourceDirectory in Compile := baseDirectory.value / "resources",
-
     packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${(ThisBuild / version).value}.jar"),
 
     patchPluginXml := pluginXmlOptions { xml =>

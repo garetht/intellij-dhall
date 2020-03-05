@@ -22,7 +22,14 @@ deploy:
   stage: deploy
   image: hseeberger/scala-sbt:8u242_1.3.7_2.13.1
   script:
-    - sbt packageArtifactZip && sbt packageArtifactZip
+    # The patchPluginXML task only works on files in the SBT settings key
+    # called productDirectories.
+    # The first packageArtifact creates the files in the
+    # productDirectories path. The second packageArtifact allows the
+    # patchPluginXML task to run on the files that now exist in the
+    # productDirectories path. And the packageArtifactZip zips them
+    # into a single file.
+    - sbt packageArtifact && sbt packageArtifact && sbt packageArtifactZip
   artifacts:
     name: "intellij-dhall-release-$CI_COMMIT_TAG"
     paths:
