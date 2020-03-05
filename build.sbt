@@ -16,9 +16,9 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
 )
 
-releaseTagComment        := s"[auto-package] Release ${(version in ThisBuild).value}"
-releaseCommitMessage     := s"[auto-package] Set release version to ${(version in ThisBuild).value}"
-releaseNextCommitMessage := s"[auto-package] Set next development version to ${(version in ThisBuild).value}"
+releaseTagComment        := s"[auto-package] Release ${(ThisBuild / version).value}"
+releaseCommitMessage     := s"[auto-package] Set release version to ${(ThisBuild / version).value}"
+releaseNextCommitMessage := s"[auto-package] Set next development version to ${(ThisBuild / version).value}"
 
 lazy val dhall = project
   .in(file("."))
@@ -30,11 +30,11 @@ lazy val dhall = project
     ideBasePackages := Seq("org.intellij.plugins.dhall"),
     unmanagedSourceDirectories in Compile += baseDirectory.value / "gen",
     resourceDirectory in Compile := baseDirectory.value / "resources",
-
-    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${version.value}.jar"),
+    packageMethod := PackagingMethod.Standalone(targetPath = s"lib/${name.value}-${(ThisBuild / version).value}.jar"),
 
     patchPluginXml := pluginXmlOptions { xml =>
-      xml.version = version.value
+      xml.version = (ThisBuild / version).value
+      xml.sinceBuild = (ThisBuild / intellijBuild).value
     },
     intellijExternalPlugins += IntellijPlugin
       .Id("PsiViewer", Some("193-SNAPSHOT"), None),

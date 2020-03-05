@@ -82,8 +82,14 @@ Resetting State
 
 The default location where `sbt` stores the downloaded development `IDEA` is `~/.intellij-dhall...`. This folder can be deleted for `sbt` to download the plugin again on its next run.
 
-To reset `sbt` caches, run `reload` or `clean` or `clearCaches` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
+To reset `sbt` caches, run `clean` in the `sbt` shell. This may be useful after regenerating parser classes if new classes are unable to be found.
 
 FIRST Set Conflicts
 ===
 When two FIRST sets conflict in subrules, and no backtracking is specified, we must be sure to pin the first rule that matches to agree with the expected semantics of the ABNF grammar. Three cases of this are double-quote interpolation, single-quote interpolation, and block comment nesting.
+
+
+Releasing
+===
+
+To make a new release, run `sbt release`. This will run the tests, bump the version in `version.sbt` from a snapshot to a numbered release, commit and tag the version bump, push it to the upstream (triggering a build of the artifact on Gitlab, which can be downloaded from the jobs page), and make a final commit bumping the numbered release to the next snapshot release.  

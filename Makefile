@@ -1,7 +1,4 @@
-.PHONY: test
-test:
-	docker build -t intellij-dhall-test .
-	docker run intellij-dhall-test
+include docker.Makefile
 
 .PHONY: clean-parser-gen
 clean-parser-gen:
