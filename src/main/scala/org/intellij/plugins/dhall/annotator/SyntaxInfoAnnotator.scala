@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import org.intellij.plugins.dhall.psi.{DhallBashEnvironmentVariable, DhallBlockComment, DhallBuiltin, DhallDotOp, DhallDoubleLiteral, DhallDoubleQuoteChunk, DhallDoubleQuoteLiteral, DhallEnv, DhallEscapedInterpolation, DhallEscapedQuotePair, DhallExpression, DhallHttp, DhallIntegerLiteral, DhallInterpolation, DhallIpLiteral, DhallIpv4Address, DhallKeyword, DhallLambda, DhallLetBinding, DhallLineComment, DhallLocal, DhallNaturalLiteral, DhallNonEmptyRecordTypeOrLiteral, DhallNonreservedLabel, DhallOperator, DhallPosixEnvironmentVariable, DhallRecordLiteralEntry, DhallRecordTypeEntry, DhallSelector, DhallSimpleLabel, DhallSingleQuoteLiteral, DhallUnionTypeEntry, DhallVariable}
+import org.intellij.plugins.dhall.psi.{DhallBashEnvironmentVariable, DhallBlockComment, DhallBuiltin, DhallDotOp, DhallDoubleLiteral, DhallDoubleQuoteChunk, DhallDoubleQuoteLiteral, DhallEnv, DhallEscapedInterpolation, DhallEscapedQuotePair, DhallExpression, DhallHttp, DhallIntegerLiteral, DhallInterpolation, DhallIpLiteral, DhallIpv4Address, DhallKeyword, DhallLabel, DhallLambda, DhallLetBinding, DhallLineComment, DhallLocal, DhallNaturalLiteral, DhallNonEmptyRecordTypeOrLiteral, DhallNonreservedLabel, DhallOperator, DhallPosixEnvironmentVariable, DhallQuotedLabel, DhallRecordLiteralEntry, DhallRecordTypeEntry, DhallSelector, DhallSimpleLabel, DhallSingleQuoteLiteral, DhallUnionTypeEntry, DhallVariable}
 
 object SyntaxInfoAnnotator {
   private def textRange(element: PsiElement): TextRange = {
@@ -85,6 +85,15 @@ object SyntaxInfoAnnotator {
             case _: DhallNonreservedLabel => true
             case _ => false
           }) None else Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL))
+      case dl: DhallLabel =>
+        (
+          defaultTextRange,
+          Option(dl.getParent).flatMap {
+            case _: DhallRecordLiteralEntry => Some(DhallSyntaxHighlighter.RECORD_VALUE_KEY)
+            case _: DhallRecordTypeEntry => Some(DhallSyntaxHighlighter.RECORD_TYPE_KEY)
+            case _ => None
+          }
+        )
       case _: DhallVariable | _: DhallSelector =>
         (defaultTextRange, Some(DefaultLanguageHighlighterColors.IDENTIFIER))
       case _: DhallDoubleLiteral | _: DhallNaturalLiteral |
@@ -97,27 +106,8 @@ object SyntaxInfoAnnotator {
           defaultTextRange,
           Some(DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR)
         )
-      case ne: DhallNonEmptyRecordTypeOrLiteral =>
-        (
-          this.textRange(ne.getLabel),
-          Some(
-            if (ne.getNonEmptyRecordLiteral == null)
-              DhallSyntaxHighlighter.RECORD_TYPE_KEY
-            else DhallSyntaxHighlighter.RECORD_VALUE_KEY
-          )
-        )
       case _: DhallUnionTypeEntry =>
         (defaultTextRange, Some(DhallSyntaxHighlighter.UNION_TYPE_ENTRY))
-      case rle: DhallRecordLiteralEntry =>
-        (
-          this.textRange(rle.getLabel),
-          Some(DhallSyntaxHighlighter.RECORD_VALUE_KEY)
-        )
-      case rle: DhallRecordTypeEntry =>
-        (
-          this.textRange(rle.getLabel),
-          Some(DhallSyntaxHighlighter.RECORD_TYPE_KEY)
-        )
       case lb: DhallLetBinding =>
         (
           this.textRange(lb.getNonreservedLabel),

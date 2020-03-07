@@ -231,7 +231,7 @@ private tomap-expression ::= toMap whsp1 import-expression whsp COLON whsp1 appl
 fake character ::= all_ascii_printable | VALID_NON_ASCII
 
 simple-label ::= keyword simple-label-next-char+
-               | !keyword (simple-label-first-char simple-label-next-char*)
+               | !keyword (simple-label-first-char simple-label-next-char*) {extends = label}
 simple-label-first-char ::= alpha | UNDERSCORE { extends = character elementType = character }
 simple-label-next-char ::= alphanum | MINUS | SLASH | UNDERSCORE { extends = character elementType = character }
 
@@ -248,7 +248,7 @@ quoted-label-char ::= pre_digit_printable
               | between_upper_lower_alpha_no_grave
               | alphanum { extends = character elementType = character }
 
-quoted-label ::= quoted-label-char+
+quoted-label ::= quoted-label-char+ {extends = label}
 
 nonreserved-label ::= builtin simple-label-next-char+
                     | !builtin label
@@ -528,13 +528,13 @@ record-type-or-literal ::=
 empty-record-literal ::= EQUALS
 empty-record-type ::=
 
-non-empty-record-type-or-literal ::= any-label-or-some whsp (non-empty-record-literal | non-empty-record-type)
+non-empty-record-type-or-literal ::= non-empty-record-literal | non-empty-record-type
 
-non-empty-record-type ::= COLON whsp1 expression (whsp COMMA whsp record-type-entry)*
-record-type-entry ::= any-label-or-some whsp COLON whsp1 expression
+non-empty-record-type ::= record-type-entry (whsp COMMA whsp record-type-entry)*
+record-type-entry ::= any-label-or-some whsp COLON whsp1 expression {pin=3}
 
-non-empty-record-literal ::= EQUALS whsp expression (whsp COMMA whsp record-literal-entry)*
-record-literal-entry ::= any-label-or-some whsp EQUALS whsp expression
+non-empty-record-literal ::= record-literal-entry (whsp COMMA whsp record-literal-entry)*
+record-literal-entry ::= any-label-or-some (whsp dot-op whsp any-label-or-some)* whsp EQUALS whsp expression {pin=4}
 
 union-type ::=
       non-empty-union-type
@@ -808,7 +808,7 @@ left completion-expression ::= whsp complete whsp selector-primary {extends = op
 
 selector-primary ::= primitive-expression selector-expression* {extends = operator-expression}
 
-left selector-expression::= whsp dot-op whsp selector {extends = operator-expression}
+left selector-expression::= whsp dot-op whsp selector {extends = operator-expression pin=2}
 
 selector ::= any-label
             | labels
