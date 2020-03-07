@@ -22,7 +22,7 @@ object DhallSyntaxHighlighter {
       "ENVIRONMENT_IMPORT_NAME",
       DefaultLanguageHighlighterColors.IDENTIFIER
     )
-  val UNION_TYPE_ENTRY: TextAttributesKey = createTextAttributesKey(
+  val UNION_TYPE_DATA_CONSTRUCTOR: TextAttributesKey = createTextAttributesKey(
     "UNION_TYPE_ENTRY",
     DefaultLanguageHighlighterColors.CLASS_NAME
   )
