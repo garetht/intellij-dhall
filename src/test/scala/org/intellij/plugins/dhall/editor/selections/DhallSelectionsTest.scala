@@ -97,14 +97,21 @@ class DhallSelectionsTest
     )
   }
 
-  override def testRecordNewFieldRecovery(): Unit = {
+  def testRecordLiteralNewFieldRecovery(): Unit = {
     this.assertSelectionInText(
       "{place = 2, <caret>world =}",
       "{place = 2, <selection><caret>world</selection> =}"
     )
   }
 
-  override def testPropertyAccessRecovery(): Unit = {
+  def testRecordTypeNewFieldRecovery(): Unit = {
+    this.assertSelectionInText(
+      "{place: Text, <caret>world :}",
+      "{place: Text, <selection><caret>world</selection> :}"
+    )
+  }
+
+  def testPropertyAccessRecovery(): Unit = {
     this.assertSelectionInText(
       "first.se<caret>cond.third.",
       "first.<selection>se<caret>cond</selection>.third."

@@ -9,6 +9,7 @@ trait CorrectSyntaxTesting {
   def testKeywordPrefix(): Unit
   def testUnionType(): Unit
   def testRecordValueKey(): Unit
+//  def testRecordTypeKey(): Unit
   def testOperatorPrecedence(): Unit
   def testSelectorDot(): Unit
   def testIpV6Literal(): Unit

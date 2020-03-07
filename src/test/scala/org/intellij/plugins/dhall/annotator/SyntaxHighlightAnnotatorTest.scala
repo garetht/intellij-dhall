@@ -126,13 +126,25 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
-  def testRecordNewFieldRecovery(): Unit = {
+  def testRecordLiteralNewFieldRecovery(): Unit = {
     this.assertHighlight(
       "{ first = 14, second = }",
       List(
         HighlightAssert("first", D.RECORD_VALUE_KEY),
         HighlightAssert("14", C.NUMBER),
         HighlightAssert("second", D.RECORD_VALUE_KEY),
+        HighlightAssert.assertError("}")
+      )
+    )
+  }
+
+  def testRecordTypeNewFieldRecovery(): Unit = {
+    this.assertHighlight(
+      "{ first : Text, second : }",
+      List(
+        HighlightAssert("first", D.RECORD_TYPE_KEY),
+        HighlightAssert("Text", C.PREDEFINED_SYMBOL),
+        HighlightAssert("second", D.RECORD_TYPE_KEY),
         HighlightAssert.assertError("}")
       )
     )
@@ -146,7 +158,8 @@ class SyntaxHighlightAnnotatorTest
         HighlightAssert("prop", C.IDENTIFIER),
         HighlightAssert(".", C.DOT),
         HighlightAssert("access", C.IDENTIFIER),
-        HighlightAssert.assertError(".")
+        HighlightAssert(".", C.DOT),
+        HighlightAssert.assertError("}")
       )
     )
   }
@@ -248,8 +261,12 @@ class SyntaxHighlightAnnotatorTest
 
   def testRecordValueKey(): Unit = {
     this.assertHighlight(
-      "{ record = 14 }",
+      "{ Some = 8, `quoted` = 18, record = 14 }",
       List(
+        HighlightAssert(text = "Some", key = C.KEYWORD),
+        HighlightAssert(text = "8", key = C.NUMBER),
+        HighlightAssert(text = "`quoted`", key = D.RECORD_VALUE_KEY),
+        HighlightAssert(text = "18", key = C.NUMBER),
         HighlightAssert(text = "record", key = D.RECORD_VALUE_KEY),
         HighlightAssert(text = "14", key = C.NUMBER),
       )

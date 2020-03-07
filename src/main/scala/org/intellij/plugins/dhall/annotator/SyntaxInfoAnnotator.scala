@@ -85,16 +85,15 @@ object SyntaxInfoAnnotator {
             case _: DhallNonreservedLabel => true
             case _ => false
           }) None else Some(DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL))
-      case di: DhallSimpleLabel => {
+      case dl: DhallLabel =>
         (
           defaultTextRange,
-          Option(di.getParent).map(_.getParent).flatMap {
+          Option(dl.getParent).flatMap {
             case _: DhallRecordLiteralEntry => Some(DhallSyntaxHighlighter.RECORD_VALUE_KEY)
             case _: DhallRecordTypeEntry => Some(DhallSyntaxHighlighter.RECORD_TYPE_KEY)
             case _ => None
           }
         )
-      }
       case _: DhallVariable | _: DhallSelector =>
         (defaultTextRange, Some(DefaultLanguageHighlighterColors.IDENTIFIER))
       case _: DhallDoubleLiteral | _: DhallNaturalLiteral |
@@ -106,11 +105,6 @@ object SyntaxInfoAnnotator {
         (
           defaultTextRange,
           Some(DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR)
-        )
-      case rte: DhallRecordTypeEntry =>
-        (
-          this.textRange(rte.getLabel),
-          Some(DhallSyntaxHighlighter.RECORD_TYPE_KEY)
         )
       case _: DhallUnionTypeEntry =>
         (defaultTextRange, Some(DhallSyntaxHighlighter.UNION_TYPE_ENTRY))
