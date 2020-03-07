@@ -126,6 +126,31 @@ class SyntaxHighlightAnnotatorTest
     )
   }
 
+  def testRecordNewFieldRecovery(): Unit = {
+    this.assertHighlight(
+      "{ first = 14, second = }",
+      List(
+        HighlightAssert("first", D.RECORD_VALUE_KEY),
+        HighlightAssert("14", C.NUMBER),
+        HighlightAssert("second", D.RECORD_VALUE_KEY),
+        HighlightAssert.assertError("}")
+      )
+    )
+  }
+
+  def testPropertyAccessRecovery(): Unit = {
+    this.assertHighlight(
+      "{ second = prop.access.}",
+      List(
+        HighlightAssert("second", D.RECORD_VALUE_KEY),
+        HighlightAssert("prop", C.IDENTIFIER),
+        HighlightAssert(".", C.DOT),
+        HighlightAssert("access", C.IDENTIFIER),
+        HighlightAssert.assertError(".")
+      )
+    )
+  }
+
   def testKeywordPrefix(): Unit = {
     this.assertHighlight(
       "let assertive = 14 in 1",

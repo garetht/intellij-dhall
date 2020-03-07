@@ -2,6 +2,8 @@ package org.intellij.plugins.dhall
 
 trait RecoverySyntaxTesting {
   def testRecordLiteralRecovery(): Unit
+  def testRecordNewFieldRecovery(): Unit
+  def testPropertyAccessRecovery(): Unit
   def testLetChainRecovery(): Unit
   def testDoubleQuoteEscapeRecovery(): Unit
 

@@ -528,13 +528,13 @@ record-type-or-literal ::=
 empty-record-literal ::= EQUALS
 empty-record-type ::=
 
-non-empty-record-type-or-literal ::= any-label-or-some whsp (non-empty-record-literal | non-empty-record-type)
+non-empty-record-type-or-literal ::= (non-empty-record-literal | non-empty-record-type)
 
-non-empty-record-type ::= COLON whsp1 expression (whsp COMMA whsp record-type-entry)*
-record-type-entry ::= any-label-or-some whsp COLON whsp1 expression
+non-empty-record-type ::= record-type-entry (whsp COMMA whsp record-type-entry)*
+record-type-entry ::= any-label-or-some whsp COLON whsp1 expression {pin=1}
 
-non-empty-record-literal ::= EQUALS whsp expression (whsp COMMA whsp record-literal-entry)*
-record-literal-entry ::= any-label-or-some whsp EQUALS whsp expression
+non-empty-record-literal ::= record-literal-entry (whsp COMMA whsp record-literal-entry)*
+record-literal-entry ::= any-label-or-some (whsp dot-op whsp any-label-or-some)* whsp EQUALS whsp expression {pin=1}
 
 union-type ::=
       non-empty-union-type
@@ -808,7 +808,7 @@ left completion-expression ::= whsp complete whsp selector-primary {extends = op
 
 selector-primary ::= primitive-expression selector-expression* {extends = operator-expression}
 
-left selector-expression::= whsp dot-op whsp selector {extends = operator-expression}
+left selector-expression::= whsp dot-op whsp selector {extends = operator-expression pin=2}
 
 selector ::= any-label
             | labels
