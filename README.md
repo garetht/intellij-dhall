@@ -93,3 +93,5 @@ Releasing
 ===
 
 To make a new release, run `sbt release`. This will run the tests, bump the version in `version.sbt` from a snapshot to a numbered release, commit and tag the version bump, push it to the upstream (triggering a build of the artifact on Gitlab, which can be downloaded from the jobs page), and make a final commit bumping the numbered release to the next snapshot release.  
+
+Note that the raw ZIP file contains the zipped `target` repository, and it is the zip file within that target repository that should be uploaded.
