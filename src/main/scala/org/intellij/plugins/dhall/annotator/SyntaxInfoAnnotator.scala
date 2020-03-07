@@ -107,7 +107,7 @@ object SyntaxInfoAnnotator {
           Some(DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR)
         )
       case _: DhallUnionTypeEntry =>
-        (defaultTextRange, Some(DhallSyntaxHighlighter.UNION_TYPE_ENTRY))
+        (defaultTextRange, Some(DhallSyntaxHighlighter.UNION_TYPE_DATA_CONSTRUCTOR))
       case lb: DhallLetBinding =>
         (
           this.textRange(lb.getNonreservedLabel),

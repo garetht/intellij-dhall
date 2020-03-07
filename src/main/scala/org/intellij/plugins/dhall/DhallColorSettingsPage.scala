@@ -40,6 +40,10 @@ object DhallColorSettingsPage {
       DhallSyntaxHighlighter.RECORD_TYPE_KEY
     ),
     new AttributesDescriptor(
+      "Union Type Data Constructor",
+      DhallSyntaxHighlighter.UNION_TYPE_DATA_CONSTRUCTOR
+    ),
+    new AttributesDescriptor(
       "Block Comment",
       DefaultLanguageHighlighterColors.BLOCK_COMMENT
     ),
@@ -61,6 +65,26 @@ object DhallColorSettingsPage {
       "Interpolation",
       DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR
     ),
+    new AttributesDescriptor(
+      "Keyword",
+      DefaultLanguageHighlighterColors.KEYWORD
+    ),
+    new AttributesDescriptor(
+      "Builtin",
+      DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL
+    ),
+    new AttributesDescriptor(
+      "Dot Access",
+      DefaultLanguageHighlighterColors.DOT
+    ),
+    new AttributesDescriptor(
+      "Identifier",
+      DefaultLanguageHighlighterColors.IDENTIFIER
+    ),
+    new AttributesDescriptor(
+      "Lambda Parameter",
+      DefaultLanguageHighlighterColors.PARAMETER
+    )
   )
 }
 
@@ -107,7 +131,7 @@ class DhallColorSettingsPage extends ColorSettingsPage {
       "path" -> DhallSyntaxHighlighter.PATH,
       "env-import" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT,
       "env-import-name" -> DhallSyntaxHighlighter.ENVIRONMENT_IMPORT_NAME,
-      "union-type" -> DhallSyntaxHighlighter.UNION_TYPE_ENTRY,
+      "union-type" -> DhallSyntaxHighlighter.UNION_TYPE_DATA_CONSTRUCTOR,
       "ip-literal" -> DhallSyntaxHighlighter.IP_LITERAL,
       "dot" -> DefaultLanguageHighlighterColors.DOT,
       "lambda" -> DefaultLanguageHighlighterColors.FUNCTION_DECLARATION,

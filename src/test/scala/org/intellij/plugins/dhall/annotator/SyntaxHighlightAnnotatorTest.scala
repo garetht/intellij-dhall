@@ -90,9 +90,9 @@ class SyntaxHighlightAnnotatorTest
     this.assertHighlight(
       "<Hello|World|There>",
       List(
-        HighlightAssert(text = "Hello", key = D.UNION_TYPE_ENTRY),
-        HighlightAssert(text = "World", key = D.UNION_TYPE_ENTRY),
-        HighlightAssert(text = "There", key = D.UNION_TYPE_ENTRY),
+        HighlightAssert(text = "Hello", key = D.UNION_TYPE_DATA_CONSTRUCTOR),
+        HighlightAssert(text = "World", key = D.UNION_TYPE_DATA_CONSTRUCTOR),
+        HighlightAssert(text = "There", key = D.UNION_TYPE_DATA_CONSTRUCTOR),
       )
     )
   }
