@@ -2,7 +2,7 @@
     <id>org.intellij.plugins.dhall</id>
     <name>Dhall</name>
     <version>0</version>
-    <vendor email="garethwtan@gmail.com" url="https://github.com/garetht">Gareth T</vendor>
+    <vendor url="https://github.com/garetht">Gareth T</vendor>
 
     <description>Provides basic Dhall language support. https://dhall-lang.org/</description>
 
